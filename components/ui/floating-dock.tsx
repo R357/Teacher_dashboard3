@@ -16,7 +16,7 @@ export const FloatingDock = ({
   desktopClassName,
   mobileClassName,
 }: {
-  items: { title: string; icon: React.ReactNode; href: string }[];
+  items: { title: string; icon: React.ReactNode; href: string; onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void }[];
   desktopClassName?: string;
   mobileClassName?: string;
 }) => {
@@ -32,7 +32,7 @@ const FloatingDockMobile = ({
   items,
   className,
 }: {
-  items: { title: string; icon: React.ReactNode; href: string }[];
+  items: { title: string; icon: React.ReactNode; href: string; onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void }[];
   className?: string;
 }) => {
   const [open, setOpen] = useState(false);
@@ -64,6 +64,7 @@ const FloatingDockMobile = ({
                 <a
                   href={item.href}
                   key={item.title}
+                  onClick={item.onClick}
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-900"
                 >
                   <div className="h-4 w-4">{item.icon}</div>
@@ -87,7 +88,7 @@ const FloatingDockDesktop = ({
   items,
   className,
 }: {
-  items: { title: string; icon: React.ReactNode; href: string }[];
+  items: { title: string; icon: React.ReactNode; href: string; onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void }[];
   className?: string;
 }) => {
   let mouseX = useMotionValue(Infinity);
@@ -101,7 +102,7 @@ const FloatingDockDesktop = ({
       )}
     >
       {items.map((item) => (
-        <IconContainer mouseX={mouseX} key={item.title} {...item} />
+        <IconContainer mouseX={mouseX} key={item.title} {...item} onClick={item.onClick} />
       ))}
     </motion.div>
   );
@@ -112,11 +113,13 @@ function IconContainer({
   title,
   icon,
   href,
+  onClick,
 }: {
   mouseX: MotionValue;
   title: string;
   icon: React.ReactNode;
   href: string;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }) {
   let ref = useRef<HTMLDivElement>(null);
 
@@ -161,7 +164,7 @@ function IconContainer({
   const [hovered, setHovered] = useState(false);
 
   return (
-    <a href={href}>
+    <a href={href} onClick={onClick}>
       <motion.div
         ref={ref}
         style={{ width, height }}

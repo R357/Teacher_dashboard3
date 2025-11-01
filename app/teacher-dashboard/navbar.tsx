@@ -11,6 +11,7 @@ import {
   Users,
   GraduationCap,
   LayoutGrid,
+  ClipboardCheck,
   ChevronDown,
   Bell,
   LogOut,
@@ -21,6 +22,8 @@ import { FloatingDock } from "@/components/ui/floating-dock";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicked outside
@@ -35,14 +38,60 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Read username from common client-side storage locations (localStorage, cookie)
+  useEffect(() => {
+    try {
+      const direct = localStorage.getItem('username');
+      if (direct) {
+        setUsername(direct);
+        // also check for an avatar key
+        const av = localStorage.getItem('avatar') || localStorage.getItem('avatarUrl');
+        if (av) setAvatarUrl(av);
+        return;
+      }
+
+      const userJson = localStorage.getItem('user') || localStorage.getItem('currentUser');
+      if (userJson) {
+        try {
+          const parsed = JSON.parse(userJson);
+          if (parsed && (parsed.name || parsed.username)) {
+            setUsername(parsed.name || parsed.username);
+            // try common avatar fields
+            const possibleAvatar = parsed.avatar || parsed.avatarUrl || parsed.image || parsed.photo || parsed.picture;
+            if (possibleAvatar) setAvatarUrl(possibleAvatar);
+            return;
+          }
+        } catch (e) {
+          // not JSON, ignore
+        }
+      }
+
+      const cookies = document.cookie.split(';').map(c => c.trim());
+      for (const c of cookies) {
+        if (c.startsWith('username=')) {
+          setUsername(decodeURIComponent(c.split('=')[1]));
+          return;
+        }
+        if (c.startsWith('avatar=')) {
+          setAvatarUrl(decodeURIComponent(c.split('=')[1]));
+        }
+      }
+
+      setUsername('Teacher');
+    } catch (err) {
+      setUsername('Teacher');
+    }
+  }, []);
+
   const navItems = [
-    { title: "Home", icon: <Home className="w-5 h-5" />, href: "/teacher/home" },
-    { title: "Classes", icon: <LayoutGrid className="w-5 h-5" />, href: "/teacher/classes" },
-    { title: "Students", icon: <Users className="w-5 h-5" />, href: "/teacher/students" },
-    { title: "Notes", icon: <BookOpen className="w-5 h-5" />, href: "/teacher/notes" },
-    { title: "Assignments", icon: <FileText className="w-5 h-5" />, href: "/teacher/assignments" },
-    { title: "Exams", icon: <GraduationCap className="w-5 h-5" />, href: "/teacher/exams" },
-    { title: "Announcements", icon: <Megaphone className="w-5 h-5" />, href: "/teacher/announcements" },
+  { title: "Home", icon: <Home className="w-5 h-5" />, href: "/teacher-dashboard" },
+    { title: "Classes", icon: <LayoutGrid className="w-5 h-5" />, href: "/teacher-dashboard/classes" },
+    { title: "Students", icon: <Users className="w-5 h-5" />, href: "/teacher-dashboard/students" },
+    { title: "Attendance", icon: <ClipboardCheck className="w-5 h-5" />, href: "/teacher-dashboard/attendance" },
+    { title: "Notes", icon: <BookOpen className="w-5 h-5" />, href: "/teacher-dashboard/notes" },
+    { title: "Assignments", icon: <FileText className="w-5 h-5" />, href: "/teacher-dashboard/assignments" },
+    { title: "Exams", icon: <GraduationCap className="w-5 h-5" />, href: "/teacher-dashboard/exams" },
+    { title: "Announcements", icon: <Megaphone className="w-5 h-5" />, href: "/teacher-dashboard/announcements" },
   ];
 
   return (
@@ -76,7 +125,7 @@ export default function Navbar() {
         >
           {/* Profile Icon */}
           <motion.div
-            className="w-8 h-8 bg-white-600 flex items-center justify-center rounded-full text-black shadow-md"
+            className="w-8 h-8 bg-white flex items-center justify-center rounded-full text-black shadow-md"
             animate={{ scale: isClicked ? 1.2 : 1 }}
             transition={{ type: "spring", stiffness: 200, damping: 10 }}
           >
@@ -102,11 +151,21 @@ export default function Navbar() {
             >
               {/* Profile Header */}
               <div className="flex items-center gap-3 px-4 pb-3 border-b border-gray-100">
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
-                  T
-                </div>
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt={username ?? 'User avatar'}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+                    {username ? username.charAt(0).toUpperCase() : 'T'}
+                  </div>
+                )}
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">Raghav MJ</p>
+                  <Link href="/teacher/profile" className="text-sm font-semibold text-gray-800 hover:underline">
+                    {username ?? 'Teacher'}
+                  </Link>
                   <p className="text-xs text-gray-500">Teacher</p>
                 </div>
               </div>

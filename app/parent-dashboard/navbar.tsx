@@ -15,14 +15,13 @@ import {FloatingDock} from "@/components/ui/floating-dock";
 
 export default function ParentNavbar() {
   const navItems = [
-    { title: "Home", icon: <Home className="w-5 h-5" />, href: "#" },
-    { title: "Assignment", icon: <FileText className="w-5 h-5" />, href: "#" },
-    { title: "Exam", icon: <ClipboardList className="w-5 h-5" />, href: "#" },
-    { title: "Report", icon: <BarChart3 className="w-5 h-5" />, href: "#" },
-    { title: "Attendance", icon: <CheckSquare className="w-5 h-5" />, href: "#" },
-    { title: "Notification", icon: <Bell className="w-5 h-5" />, href: "#" },
-    { title: "Profile", icon: <User className="w-5 h-5" />, href: "#" },
-    { title: "Logout", icon: <LogOut className="w-5 h-5" />, href: "#" },
+    { title: "Home", icon: <Home className="w-5 h-5" />, href: "#home" },
+    { title: "Assignment", icon: <FileText className="w-5 h-5" />, href: "#assignment" },
+    { title: "Exam", icon: <ClipboardList className="w-5 h-5" />, href: "#exam" },
+    { title: "Attendance", icon: <CheckSquare className="w-5 h-5" />, href: "#attendance" },
+    { title: "Feedback", icon: <Bell className="w-5 h-5" />, href: "#feedback" },
+    { title: "Profile", icon: <User className="w-5 h-5" />, href: "#profile" },
+    { title: "Logout", icon: <LogOut className="w-5 h-5" />, href: "/auth" },
   ];
 
   return (
