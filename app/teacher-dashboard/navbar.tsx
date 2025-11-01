@@ -100,9 +100,9 @@ export default function Navbar() {
       {/* Left Section */}
       <div className="flex items-center gap-2 select-none">
         {/* Logo: place your image at public/teacher-logo.png */}
-        <div className="w-10 h-10 rounded-lg overflow-hidden bg-transparent">
+        <div className="w-10 h-10 rounded-full overflow-hidden bg-white ring-1 ring-gray-200">
           {logoAvailable ? (
-            // use native img so missing file doesn't cause Next's image validation error
+            // show the PNG/JPG directly; we copied your image to public/teacher-logo.png
             <img
               src="/teacher-logo.png"
               alt="EduLearn logo"
@@ -110,7 +110,7 @@ export default function Navbar() {
               onError={() => setLogoAvailable(false)}
             />
           ) : (
-            <div className="w-10 h-10 bg-blue-600 text-white flex items-center justify-center font-bold text-lg rounded-lg">T</div>
+            <div className="w-10 h-10 bg-blue-600 text-white flex items-center justify-center font-bold text-lg">T</div>
           )}
         </div>
         <h1 className="text-xl font-semibold text-jetblack-800">EduLearn</h1>
