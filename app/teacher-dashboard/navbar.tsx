@@ -24,6 +24,7 @@ export default function Navbar() {
   const [isClicked, setIsClicked] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [logoAvailable, setLogoAvailable] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicked outside
@@ -98,10 +99,22 @@ export default function Navbar() {
     <nav className="w-full bg-white py-3 px-6 flex items-center justify-between fixed top-0 left-0 z-50 border-b border-gray-200">
       {/* Left Section */}
       <div className="flex items-center gap-2 select-none">
-        <div className="w-10 h-10 bg-blue-600 text-white flex items-center justify-center font-bold text-lg rounded-lg">
-          T
+        {/* Logo: place your image at public/teacher-logo.png */}
+        <div className="w-10 h-10 rounded-lg overflow-hidden bg-transparent">
+          {logoAvailable ? (
+            <Image
+              src="/teacher-logo.png"
+              alt="EduLearn logo"
+              width={40}
+              height={40}
+              className="object-cover w-full h-full"
+              onError={() => setLogoAvailable(false)}
+            />
+          ) : (
+            <div className="w-10 h-10 bg-blue-600 text-white flex items-center justify-center font-bold text-lg rounded-lg">T</div>
+          )}
         </div>
-        <h1 className="text-xl font-semibold text-gray-800">Teacher Dashboard</h1>
+        <h1 className="text-xl font-semibold text-jetblack-800">EduLearn</h1>
       </div>
 
       {/* Center - Floating Dock */}
