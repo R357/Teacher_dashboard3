@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ScrollAnimator } from './components/ScrollAnimator';
+import { Attendance } from './sections/Attendance';
 import { 
   ChevronDown, 
   Phone, 
@@ -568,8 +569,8 @@ export default function ParentDashboard() {
         >
           <div className="max-w-[1920px] mx-auto px-6 py-4">
             <div className="bg-white rounded-2xl p-8 shadow-sm dashboard-card">
-              <h2 className="text-3xl font-bold text-[#1A1A1A] mb-4">Student Attendance</h2>
-              <p className="text-base text-[#6B7280]">Attendance timeline coming soon...</p>
+              {/* Import and use Attendance component */}
+              <Attendance />
             </div>
           </div>
         </section>
