@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #F8F9FA;
+            color: #1A1A1A;
+            line-height: 1.5;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #E9ECEF;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 350px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 36px 8px 12px;
+            border: 1px solid #E9ECEF;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #F8F9FA;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            opacity: 0.5;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .dropdown-btn {
+            background: none;
+            border: none;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #1A1A1A;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            color: #6C757D;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 65% 35%;
+            gap: 20px;
+        }
+
+        /* Greeting Section */
+        .greeting-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .greeting-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1A1A1A;
+        }
+
+        .greeting-text p {
+            font-size: 15px;
+            color: #6C757D;
+            margin-bottom: 10px;
+        }
+
+        .greeting-text a {
+            color: #5D5FEF;
+            text-decoration: underline;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .character-3d {
+            width: 200px;
+            height: 200px;
+            flex-shrink: 0;
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+
+        .section-link {
+            color: #5D5FEF;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Performance Section */
+        .performance-header {
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .performance-score {
+            font-size: 42px;
+            font-weight: 700;
+            color: #5D5FEF;
+            line-height: 1;
+        }
+
+        .performance-subtitle {
+            font-size: 15px;
+            color: #6C757D;
+            flex: 1;
+        }
+
+        .bar-chart {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+            margin-top: 16px;
+        }
+
+        .bar-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bar-value {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #1A1A1A;
+        }
+
+        .bar {
+            width: 100%;
+            background: linear-gradient(to top, #5D5FEF 0%, #5D5FEF 60%, #A5A6F6 60%, #A5A6F6 100%);
+            border-radius: 4px 4px 0 0;
+            min-height: 15px;
+        }
+
+        .bar-label {
+            font-size: 9px;
+            color: #6C757D;
+            margin-top: 5px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* My Visit Section - Progress Rings */
+        .progress-rings {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .progress-ring-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .ring-container {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            margin-bottom: 6px;
+        }
+
+        .ring-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .ring-circle-bg {
+            fill: none;
+            stroke: #E9ECEF;
+            stroke-width: 7;
+        }
+
+        .ring-circle {
+            fill: none;
+            stroke: #5D5FEF;
+            stroke-width: 7;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .ring-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 11px;
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+
+        .ring-label {
+            font-size: 9px;
+            color: #6C757D;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Teachers Section */
+        .teacher-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .teacher-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: #F8F9FA;
+            border-radius: 12px;
+        }
+
+        .teacher-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .teacher-avatar.purple {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        }
+
+        .teacher-avatar.blue {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        }
+
+        .teacher-info {
+            flex: 1;
+        }
+
+        .teacher-name {
+            font-weight: 600;
+            color: #1A1A1A;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+
+        .teacher-role {
+            font-size: 13px;
+            color: #6C757D;
+        }
+
+        .teacher-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Calendar Section */
+        .calendar-subtitle {
+            font-size: 13px;
+            color: #6C757D;
+            margin-bottom: 14px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 28px;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 14px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #E9ECEF;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 14px;
+        }
+
+        .timeline-time {
+            position: absolute;
+            left: -28px;
+            font-size: 11px;
+            color: #6C757D;
+            top: 6px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -20px;
+            top: 6px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #E9ECEF;
+            border: 2px solid white;
+        }
+
+        .event-card {
+            background: #F8F9FA;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-card.active {
+            background: #5D5FEF;
+            color: white;
+        }
+
+        .event-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .event-card:not(.active) .event-icon {
+            background: #E9ECEF;
+        }
+
+        .event-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .event-info p {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        /* Events Section */
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px;
+            background: #F8F9FA;
+            border-radius: 12px;
+        }
+
+        .event-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .event-avatar.orange {
+            background: linear-gradient(135deg, #f97316, #ef4444);
+        }
+
+        .event-avatar.green {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .event-content {
+            flex: 1;
+        }
+
+        .event-title {
+            font-weight: 600;
+            color: #1A1A1A;
+            margin-bottom: 4px;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+
+        .event-date {
+            font-size: 11px;
+            color: #6C757D;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .greeting-card {
+                flex-direction: column;
+            }
+
+            .character-3d {
+                width: 160px;
+                height: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <div class="header-right">
+                <button class="dropdown-btn">ENG <span>▼</span></button>
+                <button class="icon-btn">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                </button>
+                <div class="user-profile">
+                    <div class="avatar">GS</div>
+                    <span style="font-size: 13px; font-weight: 500;">Grace Stanley</span>
+                    <span style="font-size: 11px;">▼</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Greeting Section -->
+            <div class="greeting-card">
+                <div class="greeting-text">
+                    <h1>Hello Grace!</h1>
+                    <p>You have 3 new tasks. It is a lot of work for today! So let's start!</p>
+                    <a href="#">review it</a>
+                </div>
+                <div class="character-3d">
+                    <svg viewBox="0 0 400 400">
+                        <defs>
+                            <linearGradient id="deskGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#5D5FEF" />
+                                <stop offset="100%" stop-color="#4C4ED8" />
+                            </linearGradient>
+                            <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FEE3CC" />
+                                <stop offset="100%" stop-color="#FBD5B8" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="50" y="280" width="300" height="20" fill="url(#deskGrad)" rx="4"/>
+                        <rect x="80" y="250" width="60" height="80" fill="#5D5FEF" rx="8"/>
+                        <rect x="75" y="320" width="70" height="8" fill="#4C4ED8" rx="4"/>
+                        <rect x="80" y="240" width="60" height="15" fill="#5D5FEF" rx="4"/>
+                        <circle cx="200" cy="140" r="35" fill="url(#skinGrad)"/>
+                        <rect x="175" y="175" width="50" height="80" fill="#FFFFFF" rx="4"/>
+                        <rect x="165" y="250" width="70" height="60" fill="#5D5FEF" rx="6"/>
+                        <ellipse cx="200" cy="110" rx="40" ry="25" fill="#dc2626"/>
+                        <rect x="170" y="120" width="60" height="15" fill="#b91c1c" rx="2"/>
+                        <rect x="160" y="240" width="80" height="8" fill="#D1D5DB" rx="2"/>
+                        <rect x="162" y="220" width="76" height="22" fill="#E5E7EB" rx="2"/>
+                        <rect x="165" y="223" width="70" height="16" fill="#1A1A1A" rx="1"/>
+                        <ellipse cx="195" cy="248" rx="8" ry="10" fill="url(#skinGrad)"/>
+                        <ellipse cx="240" cy="200" rx="8" ry="18" fill="url(#skinGrad)"/>
+                        <line x1="245" y1="185" x2="245" y2="205" stroke="#FBD5B8" stroke-width="3" stroke-linecap="round"/>
+                        <line x1="250" y1="190" x2="250" y2="200" stroke="#FBD5B8" stroke-width="3" stroke-linecap="round"/>
+                        <rect x="313" y="275" width="14" height="20" fill="#8B4513" rx="2"/>
+                        <ellipse cx="320" cy="260" rx="18" ry="25" fill="#22C55E"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <!-- Left Column -->
+                <div class="left-column">
+                    <!-- Performance Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Performance</h2>
+                            <button class="dropdown-btn">December <span>▼</span></button>
+                        </div>
+                        <div class="performance-header">
+                            <div class="performance-score">95.4</div>
+                            <div class="performance-subtitle">The best lessons: Introduction to programming</div>
+                            <button class="dropdown-btn" style="background: #F8F9FA; border-radius: 8px; padding: 6px 12px;">All lessons</button>
+                        </div>
+                        
+                        <!-- Bar Chart -->
+                        <div class="bar-chart">
+                            <div class="bar-item">
+                                <div class="bar-value">85.3</div>
+                                <div class="bar" style="height: 68px;"></div>
+                                <div class="bar-label">Algorithms structures</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-value">64.7</div>
+                                <div class="bar" style="height: 52px;"></div>
+                                <div class="bar-label">Object program.</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-value">84.2</div>
+                                <div class="bar" style="height: 67px;"></div>
+                                <div class="bar-label">Database program.</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-value">45.6</div>
+                                <div class="bar" style="height: 36px;"></div>
+                                <div class="bar-label">Web develop.</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-value">43.5</div>
+                                <div class="bar" style="height: 35px;"></div>
+                                <div class="bar-label">Mobile application</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-value">74.4</div>
+                                <div class="bar" style="height: 60px;"></div>
+                                <div class="bar-label">Machine learning</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Linked Teachers Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Linked Teachers</h2>
+                            <a href="#" class="section-link">See all</a>
+                        </div>
+                        <div class="teacher-list">
+                            <div class="teacher-item">
+                                <div class="teacher-avatar purple">MJ</div>
+                                <div class="teacher-info">
+                                    <div class="teacher-name">Mary Johnson (mentor)</div>
+                                    <div class="teacher-role">Science</div>
+                                </div>
+                                <div class="teacher-actions">
+                                    <button class="icon-btn">
+                                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </button>
+                                    <button class="icon-btn">
+                                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="teacher-item">
+                                <div class="teacher-avatar blue">JB</div>
+                                <div class="teacher-info">
+                                    <div class="teacher-name">James Brown</div>
+                                    <div class="teacher-role">Foreign language (Chinese)</div>
+                                </div>
+                                <div class="teacher-actions">
+                                    <button class="icon-btn">
+                                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </button>
+                                    <button class="icon-btn">
+                                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="right-column">
+                    <!-- My Visit Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">My visit</h2>
+                            <button class="dropdown-btn">December <span>▼</span></button>
+                        </div>
+                        <div class="progress-rings">
+                            <div class="progress-ring-item">
+                                <div class="ring-container">
+                                    <svg class="ring-svg" viewBox="0 0 40 40">
+                                        <circle class="ring-circle-bg" cx="20" cy="20" r="14"></circle>
+                                        <circle class="ring-circle" cx="20" cy="20" r="14" stroke-dasharray="87.96" stroke-dashoffset="7"></circle>
+                                    </svg>
+                                    <div class="ring-text">92%</div>
+                                </div>
+                                <div class="ring-label">Algorithms structures</div>
+                            </div>
+                            <div class="progress-ring-item">
+                                <div class="ring-container">
+                                    <svg class="ring-svg" viewBox="0 0 40 40">
+                                        <circle class="ring-circle-bg" cx="20" cy="20" r="14"></circle>
+                                        <circle class="ring-circle" cx="20" cy="20" r="14" stroke-dasharray="87.96" stroke-dashoffset="15"></circle>
+                                    </svg>
+                                    <div class="ring-text">83%</div>
+                                </div>
+                                <div class="ring-label">Object program.</div>
+                            </div>
+                            <div class="progress-ring-item">
+                                <div class="ring-container">
+                                    <svg class="ring-svg" viewBox="0 0 40 40">
+                                        <circle class="ring-circle-bg" cx="20" cy="20" r="14"></circle>
+                                        <circle class="ring-circle" cx="20" cy="20" r="14" stroke-dasharray="87.96" stroke-dashoffset="19"></circle>
+                                    </svg>
+                                    <div class="ring-text">78%</div>
+                                </div>
+                                <div class="ring-label">Database program.</div>
+                            </div>
+                            <div class="progress-ring-item">
+                                <div class="ring-container">
+                                    <svg class="ring-svg" viewBox="0 0 40 40">
+                                        <circle class="ring-circle-bg" cx="20" cy="20" r="14"></circle>
+                                        <circle class="ring-circle" cx="20" cy="20" r="14" stroke-dasharray="87.96" stroke-dashoffset="2.6"></circle>
+                                    </svg>
+                                    <div class="ring-text">97%</div>
+                                </div>
+                                <div class="ring-label">Web develop.</div>
+                            </div>
+                            <div class="progress-ring-item">
+                                <div class="ring-container">
+                                    <svg class="ring-svg" viewBox="0 0 40 40">
+                                        <circle class="ring-circle-bg" cx="20" cy="20" r="14"></circle>
+                                        <circle class="ring-circle" cx="20" cy="20" r="14" stroke-dasharray="87.96" stroke-dashoffset="3.5"></circle>
+                                    </svg>
+                                    <div class="ring-text">96%</div>
+                                </div>
+                                <div class="ring-label">Mobile application</div>
+                            </div>
+                            <div class="progress-ring-item">
+                                <div class="ring-container">
+                                    <svg class="ring-svg" viewBox="0 0 40 40">
+                                        <circle class="ring-circle-bg" cx="20" cy="20" r="14"></circle>
+                                        <circle class="ring-circle" cx="20" cy="20" r="14" stroke-dasharray="87.96" stroke-dashoffset="9.7"></circle>
+                                    </svg>
+                                    <div class="ring-text">89%</div>
+                                </div>
+                                <div class="ring-label">Machine learning</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Calendar</h2>
+                                <div class="calendar-subtitle">6 events today</div>
+                            </div>
+                            <button class="dropdown-btn">Today <span>▼</span></button>
+                        </div>
+                        <div class="timeline">
+                            <div class="timeline-line"></div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">10:00</div>
+                                <div class="timeline-dot"></div>
+                                <div class="event-card active">
+                                    <div class="event-icon">
+                                        <svg width="14" height="14" fill="white" viewBox="0 0 24 24">
+                                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="event-info">
+                                        <h4>Electronics lesson</h4>
+                                        <p>9.45-10.30, 21 lesson</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">11:00</div>
+                                <div class="timeline-dot"></div>
+                                <div class="event-card">
+                                    <div class="event-icon">
+                                        <svg width="14" height="14" fill="#6C757D" viewBox="0 0 24 24">
+                                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="event-info">
+                                        <h4>Electronics lesson</h4>
+                                        <p>11.00-11.40, 23 lesson</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">12:00</div>
+                                <div class="timeline-dot"></div>
+                                <div class="event-card">
+                                    <div class="event-icon">
+                                        <svg width="14" height="14" fill="#6C757D" viewBox="0 0 24 24">
+                                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="event-info">
+                                        <h4>Robotics lesson</h4>
+                                        <p>12.00-12.45, 23 lesson</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">13:30</div>
+                                <div class="timeline-dot"></div>
+                                <div class="event-card">
+                                    <div class="event-icon">
+                                        <svg width="14" height="14" fill="#6C757D" viewBox="0 0 24 24">
+                                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="event-info">
+                                        <h4>C++ lesson</h4>
+                                        <p>13.45-14.30, 21 lesson</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Events Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Upcoming events</h2>
+                            <a href="#" class="section-link">See all</a>
+                        </div>
+                        <div class="event-list">
+                            <div class="event-item">
+                                <div class="event-avatar orange">
+                                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                    </svg>
+                                </div>
+                                <div class="event-content">
+                                    <div class="event-title">The main event in your life "Robot Fest" will coming soon in...</div>
+                                    <div class="event-date">14 December 2023 12.00 pm</div>
+                                </div>
+                                <button class="icon-btn">
+                                    <svg width="18" height="18" fill="#6C757D" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="5" r="2"></circle>
+                                        <circle cx="12" cy="12" r="2"></circle>
+                                        <circle cx="12" cy="19" r="2"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="event-item">
+                                <div class="event-avatar green">
+                                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                                        <path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7.01 5 5 7.01 5 9.5S7.01 14 9.5 14 14 11.99 14 9.5 11.99 5 9.5 5z"/>
+                                    </svg>
+                                </div>
+                                <div class="event-content">
+                                    <div class="event-title">Webinar of new tools in Minecraft</div>
+                                    <div class="event-date">21 December 2023 11.00 pm</div>
+                                </div>
+                                <button class="icon-btn">
+                                    <svg width="18" height="18" fill="#6C757D" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="5" r="2"></circle>
+                                        <circle cx="12" cy="12" r="2"></circle>
+                                        <circle cx="12" cy="19" r="2"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Animate progress rings on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const rings = document.querySelectorAll('.ring-circle');
+            rings.forEach(ring => {
+                const circumference = 2 * Math.PI * 14;
+                const percent = parseInt(ring.parentElement.parentElement.querySelector('.ring-text').textContent);
+                const offset = circumference - (percent / 100) * circumference;
+                ring.style.strokeDasharray = circumference;
+                ring.style.strokeDashoffset = circumference;
+                setTimeout(() => {
+                    ring.style.strokeDashoffset = offset;
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

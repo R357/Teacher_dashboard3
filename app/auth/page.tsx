@@ -6,6 +6,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Lottie from 'lottie-react';
 import studentAnimation from '../../login(animations)/Student.json';
+import teacherAnimation from '../../login(animations)/Teacher.json';
+import parentAnimation from '../../login(animations)/Parenting.json';
+import adminAnimation from '../../login(animations)/admin.json';
 
 type Role = 'student' | 'parent' | 'teacher' | 'admin';
 type AuthMode = 'login' | 'signup';
@@ -20,6 +23,9 @@ const AuthPage = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const [isInitialMount, setIsInitialMount] = useState(true);
+  const [isTeacherInitialMount, setIsTeacherInitialMount] = useState(false);
+  const [isParentInitialMount, setIsParentInitialMount] = useState(false);
+  const [isAdminInitialMount, setIsAdminInitialMount] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -157,6 +163,42 @@ const AuthPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Track teacher role selection for animation
+  useEffect(() => {
+    if (selectedRole === 'teacher') {
+      setIsTeacherInitialMount(true);
+      // Set to false after animation completes (0.8s animation + buffer)
+      const timer = setTimeout(() => {
+        setIsTeacherInitialMount(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedRole]);
+
+  // Track parent role selection for animation
+  useEffect(() => {
+    if (selectedRole === 'parent') {
+      setIsParentInitialMount(true);
+      // Set to false after animation completes (0.8s animation + buffer)
+      const timer = setTimeout(() => {
+        setIsParentInitialMount(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedRole]);
+
+  // Track admin role selection for animation
+  useEffect(() => {
+    if (selectedRole === 'admin') {
+      setIsAdminInitialMount(true);
+      // Set to false after animation completes (0.8s animation + buffer)
+      const timer = setTimeout(() => {
+        setIsAdminInitialMount(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedRole]);
+
   // Parallax effect based on mouse movement
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -235,7 +277,7 @@ const AuthPage = () => {
                   <span className="text-xs text-blue-300">(Select your role)</span>
                 </label>
                 <div className="grid grid-cols-2 gap-2">
-                  {(['student', 'parent', 'teacher', 'admin'] as Role[]).map((role) => {
+                  {((authMode === 'login' ? ['student', 'parent', 'teacher', 'admin'] : ['student', 'parent', 'teacher']) as Role[]).map((role) => {
                     const config = roleConfig[role];
                     const Icon = config.icon;
                     return (
@@ -437,7 +479,12 @@ const AuthPage = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      setAuthMode(authMode === 'login' ? 'signup' : 'login');
+                      const newAuthMode = authMode === 'login' ? 'signup' : 'login';
+                      setAuthMode(newAuthMode);
+                      // Reset to student if switching to signup and admin is selected (since admin is not available in signup)
+                      if (newAuthMode === 'signup' && selectedRole === 'admin') {
+                        setSelectedRole('student');
+                      }
                       setFormData({ username: '', email: '', password: '', confirmPassword: '' });
                       setErrors({});
                     }}
@@ -503,15 +550,15 @@ const AuthPage = () => {
                   key={selectedRole}
                   className="animate-fade-in transition-transform duration-75 ease-out"
                   style={{ 
-                    transform: selectedRole === 'student' 
+                    transform: selectedRole === 'student' || selectedRole === 'teacher' || selectedRole === 'parent' || selectedRole === 'admin'
                       ? 'none' 
                       : parallaxTransform.illustration 
                   }}
                 >
                   {selectedRole === 'student' && <StudentIllustration isInitialMount={isInitialMount} />}
-                  {selectedRole === 'parent' && <ParentIllustration />}
-                  {selectedRole === 'teacher' && <TeacherIllustration />}
-                  {selectedRole === 'admin' && <AdminIllustration />}
+                  {selectedRole === 'parent' && <ParentIllustration isInitialMount={isParentInitialMount} />}
+                  {selectedRole === 'teacher' && <TeacherIllustration isInitialMount={isTeacherInitialMount} />}
+                  {selectedRole === 'admin' && <AdminIllustration isInitialMount={isAdminInitialMount} />}
                 </div>
               </div>
             </div>
@@ -536,112 +583,40 @@ const StudentIllustration = ({ isInitialMount }: { isInitialMount: boolean }) =>
 };
 
 // Parent Illustration Component
-const ParentIllustration = () => {
+const ParentIllustration = ({ isInitialMount }: { isInitialMount: boolean }) => {
   return (
-    <div className="flex items-end justify-center space-x-6">
-      {/* Parent figure */}
-      <svg width="180" height="280" viewBox="0 0 180 280">
-        <circle cx="90" cy="50" r="22" fill="white" stroke="#1E40AF" strokeWidth="2" />
-        <rect x="68" y="72" width="44" height="75" fill="white" stroke="#1E40AF" strokeWidth="2" rx="5" />
-        <rect x="58" y="72" width="22" height="55" fill="white" stroke="#1E40AF" strokeWidth="2" rx="3" />
-        <rect x="100" y="72" width="22" height="55" fill="white" stroke="#1E40AF" strokeWidth="2" rx="3" />
-        <rect x="78" y="147" width="32" height="55" fill="white" stroke="#1E40AF" strokeWidth="2" rx="5" />
-        <rect x="78" y="202" width="32" height="70" fill="#1E40AF" stroke="#1E40AF" strokeWidth="2" rx="3" />
-      </svg>
-      {/* Child figure (smaller) */}
-      <svg width="120" height="200" viewBox="0 0 120 200">
-        <circle cx="60" cy="40" r="18" fill="white" stroke="#1E40AF" strokeWidth="2" />
-        <rect x="45" y="58" width="30" height="50" fill="white" stroke="#1E40AF" strokeWidth="2" rx="4" />
-        <rect x="38" y="58" width="15" height="40" fill="white" stroke="#1E40AF" strokeWidth="2" rx="2" />
-        <rect x="67" y="58" width="15" height="40" fill="white" stroke="#1E40AF" strokeWidth="2" rx="2" />
-        <rect x="50" y="108" width="20" height="40" fill="white" stroke="#1E40AF" strokeWidth="2" rx="4" />
-        <rect x="50" y="148" width="20" height="50" fill="#1E40AF" stroke="#1E40AF" strokeWidth="2" rx="2" />
-      </svg>
-      {/* Heart symbol */}
-      <div className="flex items-center justify-center">
-        <svg width="60" height="60" viewBox="0 0 60 60" className="animate-pulse">
-          <path
-            d="M30,45 C30,45 15,30 15,20 C15,15 20,10 25,10 C27,10 30,12 30,15 C30,12 33,10 35,10 C40,10 45,15 45,20 C45,30 30,45 30,45 Z"
-            fill="white"
-            stroke="#1E40AF"
-            strokeWidth="2"
-          />
-        </svg>
-      </div>
+    <div className={`flex items-center justify-center ${isInitialMount ? 'animate-pop-up-bottom-left' : ''}`}>
+      <Lottie
+        animationData={parentAnimation}
+        loop={true}
+        className="w-full h-full max-w-md"
+      />
     </div>
   );
 };
 
 // Teacher Illustration Component
-const TeacherIllustration = () => {
+const TeacherIllustration = ({ isInitialMount }: { isInitialMount: boolean }) => {
   return (
-    <div className="flex items-center justify-center space-x-8">
-      {/* Teacher figure */}
-      <div className="flex flex-col items-center">
-        <svg width="200" height="300" viewBox="0 0 200 300">
-          <circle cx="100" cy="60" r="25" fill="white" stroke="#1E40AF" strokeWidth="2" />
-          <rect x="75" y="85" width="50" height="80" fill="white" stroke="#1E40AF" strokeWidth="2" rx="5" />
-          <rect x="65" y="85" width="25" height="60" fill="white" stroke="#1E40AF" strokeWidth="2" rx="3" />
-          <rect x="110" y="85" width="25" height="60" fill="white" stroke="#1E40AF" strokeWidth="2" rx="3" />
-          <rect x="85" y="165" width="30" height="60" fill="white" stroke="#1E40AF" strokeWidth="2" rx="5" />
-          <rect x="85" y="225" width="30" height="60" fill="#1E40AF" stroke="#1E40AF" strokeWidth="2" rx="3" />
-          {/* Pointer/stick */}
-          <line x1="125" y1="100" x2="170" y2="80" stroke="white" strokeWidth="3" strokeLinecap="round" />
-          <circle cx="170" cy="80" r="5" fill="white" stroke="#1E40AF" strokeWidth="2" />
-        </svg>
-      </div>
-      {/* Whiteboard */}
-      <div className="flex flex-col items-center">
-        <svg width="180" height="180" viewBox="0 0 180 180">
-          <rect x="20" y="20" width="140" height="100" fill="white" stroke="#1E40AF" strokeWidth="3" rx="3" />
-          {/* Board writing lines */}
-          <line x1="30" y1="40" x2="150" y2="40" stroke="#1E40AF" strokeWidth="2" />
-          <line x1="30" y1="55" x2="150" y2="55" stroke="#1E40AF" strokeWidth="2" />
-          <line x1="30" y1="70" x2="120" y2="70" stroke="#1E40AF" strokeWidth="2" />
-          <line x1="30" y1="85" x2="140" y2="85" stroke="#1E40AF" strokeWidth="2" />
-          {/* Board stand */}
-          <rect x="75" y="120" width="30" height="40" fill="#1E40AF" stroke="#1E40AF" strokeWidth="2" rx="2" />
-        </svg>
-      </div>
+    <div className={`flex items-center justify-center ${isInitialMount ? 'animate-pop-up-bottom-left' : ''}`}>
+      <Lottie
+        animationData={teacherAnimation}
+        loop={true}
+        className="w-full h-full max-w-3xl"
+      />
     </div>
   );
 };
 
 // Admin Illustration Component
-const AdminIllustration = () => {
+const AdminIllustration = ({ isInitialMount }: { isInitialMount: boolean }) => {
   return (
-    <div className="flex items-center justify-center space-x-6">
-      {/* Admin figure */}
-      <div className="flex flex-col items-center">
-        <svg width="180" height="280" viewBox="0 0 180 280">
-          <circle cx="90" cy="50" r="22" fill="white" stroke="#1E40AF" strokeWidth="2" />
-          <rect x="68" y="72" width="44" height="75" fill="white" stroke="#1E40AF" strokeWidth="2" rx="5" />
-          <rect x="58" y="72" width="22" height="55" fill="white" stroke="#1E40AF" strokeWidth="2" rx="3" />
-          <rect x="100" y="72" width="22" height="55" fill="white" stroke="#1E40AF" strokeWidth="2" rx="3" />
-          <rect x="78" y="147" width="32" height="55" fill="white" stroke="#1E40AF" strokeWidth="2" rx="5" />
-          <rect x="78" y="202" width="32" height="70" fill="#1E40AF" stroke="#1E40AF" strokeWidth="2" rx="3" />
-          {/* Tie */}
-          <polygon points="90,85 85,110 90,105 95,110" fill="#1E40AF" stroke="#1E40AF" strokeWidth="1" />
-        </svg>
-      </div>
-      {/* Dashboard/laptop */}
-      <div className="flex flex-col items-center">
-        <svg width="200" height="200" viewBox="0 0 200 200">
-          {/* Laptop base */}
-          <rect x="40" y="80" width="120" height="80" fill="white" stroke="#1E40AF" strokeWidth="3" rx="2" />
-          {/* Screen */}
-          <rect x="50" y="20" width="100" height="70" fill="white" stroke="#1E40AF" strokeWidth="3" rx="2" />
-          {/* Screen content (dashboard charts) */}
-          <rect x="60" y="30" width="20" height="30" fill="#1E40AF" opacity="0.6" rx="1" />
-          <rect x="85" y="35" width="20" height="25" fill="#1E40AF" opacity="0.6" rx="1" />
-          <rect x="110" y="40" width="20" height="20" fill="#1E40AF" opacity="0.6" rx="1" />
-          <line x1="60" y1="50" x2="130" y2="50" stroke="#1E40AF" strokeWidth="1.5" />
-          {/* Keyboard */}
-          <rect x="60" y="90" width="80" height="20" fill="#1E40AF" opacity="0.3" rx="1" />
-          <line x1="70" y1="95" x2="130" y2="95" stroke="#1E40AF" strokeWidth="1" />
-          <line x1="70" y1="100" x2="130" y2="100" stroke="#1E40AF" strokeWidth="1" />
-        </svg>
-      </div>
+    <div className={`flex items-center justify-center ${isInitialMount ? 'animate-pop-up-bottom-left' : ''}`}>
+      <Lottie
+        animationData={adminAnimation}
+        loop={true}
+        className="w-full h-full max-w-md"
+      />
     </div>
   );
 };
