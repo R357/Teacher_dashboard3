@@ -35,7 +35,7 @@ export const ScrollAnimator: React.FC<ScrollAnimatorProps> = ({ children, classN
         // ✅ CHANGED: Updated the hidden state
         hidden: { 
           opacity: 0, 
-          scale: 0.30, // Starts at 50% size (very small)
+          scale: 0.40, // Starts at 50% size (very small)
           y: 200      // Starts 200px down (from the bottom)
         },
         // 'visible' state is unchanged
