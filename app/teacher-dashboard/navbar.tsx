@@ -11,6 +11,7 @@ import {
   Users,
   GraduationCap,
   LayoutGrid,
+  ClipboardCheck,
   ChevronDown,
   Bell,
   LogOut,
@@ -37,12 +38,13 @@ export default function Navbar() {
 
   const navItems = [
     { title: "Home", icon: <Home className="w-5 h-5" />, href: "/teacher/home" },
-    { title: "Classes", icon: <LayoutGrid className="w-5 h-5" />, href: "/teacher/classes" },
+    { title: "Classes", icon: <LayoutGrid className="w-5 h-5" />, href: "/teacher-dashboard/teacher/classes" },
     { title: "Students", icon: <Users className="w-5 h-5" />, href: "/teacher/students" },
     { title: "Notes", icon: <BookOpen className="w-5 h-5" />, href: "/teacher/notes" },
     { title: "Assignments", icon: <FileText className="w-5 h-5" />, href: "/teacher/assignments" },
     { title: "Exams", icon: <GraduationCap className="w-5 h-5" />, href: "/teacher/exams" },
     { title: "Announcements", icon: <Megaphone className="w-5 h-5" />, href: "/teacher/announcements" },
+    { title: "Attendance", icon: <ClipboardCheck className="w-5 h-5" />, href: "/teacher/attendance" }, // ✅ Added
   ];
 
   return (
@@ -76,7 +78,7 @@ export default function Navbar() {
         >
           {/* Profile Icon */}
           <motion.div
-            className="w-8 h-8 bg-white-600 flex items-center justify-center rounded-full text-black shadow-md"
+            className="w-8 h-8 bg-white flex items-center justify-center rounded-full text-black shadow-md"
             animate={{ scale: isClicked ? 1.2 : 1 }}
             transition={{ type: "spring", stiffness: 200, damping: 10 }}
           >
