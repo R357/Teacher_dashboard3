@@ -3,6 +3,9 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+  devIndicators: {
+    buildActivity: false,
+  },
 }
 
 module.exports = nextConfig

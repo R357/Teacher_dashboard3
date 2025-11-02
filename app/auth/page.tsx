@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Eye, EyeOff, GraduationCap, Users, UserCog, Shield, Loader2, CheckCircle2, XCircle, AlertCircle, Mail, User, Lock } from 'lucide-react';
+import { Eye, EyeOff, GraduationCap, Users, UserCog, Shield, Loader2, CheckCircle2, XCircle, AlertCircle, Mail, User, Lock, Phone, Calendar, MapPin, BookOpen, School, UserCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Lottie from 'lottie-react';
@@ -53,6 +53,118 @@ const AuthPage = () => {
   const [isTeacherInitialMount, setIsTeacherInitialMount] = useState(false);
   const [isParentInitialMount, setIsParentInitialMount] = useState(false);
   const [isAdminInitialMount, setIsAdminInitialMount] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
+  const [formProgress, setFormProgress] = useState(0);
+  
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    fullName: '',
+    dateOfBirth: '',
+    phone: '',
+    academicRegion: '',
+    class: '',
+    relationship: '',
+    country: '',
+    region: '',
+    subjectSpecialization: '',
+    qualification: '',
+  });
+
+  // Helper function to calculate password strength
+  const calculatePasswordStrength = (password: string): number => {
+    let strength = 0;
+    if (password.length >= 6) strength += 1;
+    if (password.length >= 8) strength += 1;
+    if (/[a-z]/.test(password)) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+    return Math.min(strength, 4); // Max 4 levels
+  };
+
+  // Helper function to calculate form progress
+  const calculateFormProgress = (): number => {
+    if (authMode !== 'signup') return 0;
+    
+    let totalFields = 0;
+    let filledFields = 0;
+
+    if (selectedRole === 'student') {
+      const requiredFields = ['fullName', 'dateOfBirth', 'email', 'phone', 'academicRegion', 'class', 'username', 'password', 'confirmPassword'];
+      totalFields = requiredFields.length;
+      requiredFields.forEach(field => {
+        if (formData[field as keyof typeof formData]?.toString().trim()) {
+          filledFields++;
+        }
+      });
+    } else if (selectedRole === 'parent') {
+      const requiredFields = ['fullName', 'email', 'country', 'phone', 'username', 'relationship', 'password', 'confirmPassword'];
+      totalFields = requiredFields.length;
+      requiredFields.forEach(field => {
+        if (formData[field as keyof typeof formData]?.toString().trim()) {
+          filledFields++;
+        }
+      });
+    } else if (selectedRole === 'teacher') {
+      const requiredFields = ['fullName', 'email', 'country', 'phone', 'region', 'subjectSpecialization', 'qualification', 'username', 'password', 'confirmPassword'];
+      totalFields = requiredFields.length;
+      requiredFields.forEach(field => {
+        if (formData[field as keyof typeof formData]?.toString().trim()) {
+          filledFields++;
+        }
+      });
+    }
+
+    return totalFields > 0 ? Math.round((filledFields / totalFields) * 100) : 0;
+  };
+
+  // Update password strength when password changes
+  useEffect(() => {
+    if (authMode === 'signup') {
+      setPasswordStrength(calculatePasswordStrength(formData.password));
+    }
+  }, [formData.password, authMode]);
+
+  // Update form progress when form data changes
+  useEffect(() => {
+    if (authMode === 'signup') {
+      setFormProgress(calculateFormProgress());
+    }
+  }, [formData, authMode, selectedRole]);
+
+  // Auto-save form data to localStorage
+  useEffect(() => {
+    if (authMode === 'signup' && typeof window !== 'undefined') {
+      const saveData = {
+        ...formData,
+        role: selectedRole,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('signupFormData', JSON.stringify(saveData));
+    }
+  }, [formData, authMode, selectedRole]);
+
+  // Load saved form data on mount (signup mode)
+  useEffect(() => {
+    if (authMode === 'signup' && typeof window !== 'undefined') {
+      const saved = localStorage.getItem('signupFormData');
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          // Only restore if saved less than 24 hours ago
+          if (data.timestamp && Date.now() - data.timestamp < 24 * 60 * 60 * 1000 && data.role === selectedRole) {
+            const { role, timestamp, ...formDataToRestore } = data;
+            setFormData(prev => ({ ...prev, ...formDataToRestore }));
+          }
+        } catch (e) {
+          // Invalid data, ignore
+        }
+      }
+    }
+  }, [authMode, selectedRole]);
   
   // Load remembered user data on mount (for login)
   useEffect(() => {
@@ -87,29 +199,46 @@ const AuthPage = () => {
     }
   }, [authMode, selectedRole]);
 
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    fullName: '',
-    dateOfBirth: '',
-    phone: '',
-    academicRegion: '',
-    class: '',
-    relationship: '',
-    country: '',
-    region: '',
-    subjectSpecialization: '',
-    qualification: '',
-  });
+  // Format phone number with proper spacing
+  const formatPhoneNumber = (value: string, countryCode?: string): string => {
+    // Remove all non-digit characters except +
+    let cleaned = value.replace(/[^\d+]/g, '');
+    
+    // If country code is provided and phone doesn't start with it, add it
+    if (countryCode && !cleaned.startsWith(countryCode.replace(/\s/g, ''))) {
+      cleaned = countryCode.replace(/\s/g, '') + cleaned.replace(/^\+?\d{1,4}/, '');
+    }
+    
+    // Format: +XX XXX XXX XXXX (example: +91 123 456 7890)
+    if (cleaned.length > 4) {
+      const code = cleaned.substring(0, cleaned.length - 10);
+      const number = cleaned.substring(cleaned.length - 10);
+      if (number.length > 6) {
+        return `${code} ${number.substring(0, 5)} ${number.substring(5)}`;
+      } else if (number.length > 3) {
+        return `${code} ${number.substring(0, 3)} ${number.substring(3)}`;
+      }
+      return `${code} ${number}`;
+    }
+    
+    return cleaned;
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => {
+      let updatedValue = value;
+      
+      // Format phone number on input
+      if (name === 'phone') {
+        const country = prev.country || prev.academicRegion;
+        const countryCode = country && countryCodes[country] ? countryCodes[country] : '';
+        updatedValue = formatPhoneNumber(value, countryCode);
+      }
+      
       const updated = {
         ...prev,
-        [name]: value
+        [name]: updatedValue
       };
       
       // Auto-update phone number with country code when country/academicRegion is selected
@@ -120,6 +249,9 @@ const AuthPage = () => {
           const countryCodePattern = /^\+?\d{1,4}\s*/;
           if (!currentPhone.trim() || countryCodePattern.test(currentPhone)) {
             updated.phone = countryCodes[value] + ' ';
+          } else {
+            // Format existing phone with new country code
+            updated.phone = formatPhoneNumber(prev.phone, countryCodes[value]);
           }
         } else if (!value) {
           // If country is cleared, remove the country code from phone if it exists
@@ -439,6 +571,11 @@ const AuthPage = () => {
         localStorage.removeItem('rememberedUser');
       }
       
+      // Clear saved form data on successful submission
+      if (authMode === 'signup' && typeof window !== 'undefined') {
+        localStorage.removeItem('signupFormData');
+      }
+      
       // Redirect to respective dashboard based on role
       const dashboardRoutes = {
         student: '/student-dashboard',
@@ -677,6 +814,22 @@ const AuthPage = () => {
                 </div>
               </div>
 
+              {/* Form Progress Indicator (Signup only) */}
+              {authMode === 'signup' && (
+                <div className="mb-4 space-y-2 animate-fade-in">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-blue-200 font-medium">Form Progress</span>
+                    <span className="text-blue-300">{formProgress}%</span>
+                  </div>
+                  <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-500 ease-out rounded-full"
+                      style={{ width: `${formProgress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
                 {errors.submit && (
@@ -698,6 +851,9 @@ const AuthPage = () => {
                           Full Name
                         </label>
                         <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300">
+                            <User className="w-5 h-5" />
+                          </div>
                           <input
                             type="text"
                             id="fullName"
@@ -706,13 +862,18 @@ const AuthPage = () => {
                             onChange={handleInputChange}
                             required
                             placeholder="Enter your full name"
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.fullName ? 'border-red-500' : 'border-blue-500'
-                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-colors`}
+                            className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
+                              errors.fullName ? 'border-red-500' : formData.fullName.trim() && !errors.fullName ? 'border-green-500' : 'border-blue-500'
+                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-200`}
                           />
                           {errors.fullName && (
                             <div className="absolute right-3 top-1/2 -translate-y-1/2">
                               <XCircle className="w-5 h-5 text-red-500" />
+                            </div>
+                          )}
+                          {!errors.fullName && formData.fullName.trim() && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle2 className="w-5 h-5 text-green-500" />
                             </div>
                           )}
                         </div>
@@ -729,6 +890,9 @@ const AuthPage = () => {
                           Date of Birth
                         </label>
                         <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300 pointer-events-none z-10">
+                            <Calendar className="w-5 h-5" />
+                          </div>
                           <input
                             type="date"
                             id="dateOfBirth"
@@ -737,13 +901,18 @@ const AuthPage = () => {
                             onChange={handleInputChange}
                             required
                             max={new Date(new Date().setFullYear(new Date().getFullYear() - 5)).toISOString().split('T')[0]}
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.dateOfBirth ? 'border-red-500' : 'border-blue-500'
-                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-colors [color-scheme:dark]`}
+                            className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
+                              errors.dateOfBirth ? 'border-red-500' : formData.dateOfBirth && !errors.dateOfBirth ? 'border-green-500' : 'border-blue-500'
+                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-200 [color-scheme:dark]`}
                           />
                           {errors.dateOfBirth && (
                             <div className="absolute right-3 top-1/2 -translate-y-1/2">
                               <XCircle className="w-5 h-5 text-red-500" />
+                            </div>
+                          )}
+                          {!errors.dateOfBirth && formData.dateOfBirth && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle2 className="w-5 h-5 text-green-500" />
                             </div>
                           )}
                         </div>
@@ -765,6 +934,9 @@ const AuthPage = () => {
                           Email
                         </label>
                         <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300">
+                            <Mail className="w-5 h-5" />
+                          </div>
                           <input
                             type="email"
                             id="email"
@@ -773,13 +945,18 @@ const AuthPage = () => {
                             onChange={handleInputChange}
                             required
                             placeholder="Enter your email"
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.email ? 'border-red-500' : 'border-blue-500'
-                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-colors`}
+                            className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
+                              errors.email ? 'border-red-500' : formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && !errors.email ? 'border-green-500' : 'border-blue-500'
+                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-200`}
                           />
                           {errors.email && (
                             <div className="absolute right-3 top-1/2 -translate-y-1/2">
                               <XCircle className="w-5 h-5 text-red-500" />
+                            </div>
+                          )}
+                          {!errors.email && formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle2 className="w-5 h-5 text-green-500" />
                             </div>
                           )}
                         </div>
@@ -796,15 +973,18 @@ const AuthPage = () => {
                           Academic Region
                         </label>
                         <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300 pointer-events-none z-10">
+                            <MapPin className="w-5 h-5" />
+                          </div>
                           <select
                             id="academicRegion"
                             name="academicRegion"
                             value={formData.academicRegion}
                             onChange={handleInputChange}
                             required
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.academicRegion ? 'border-red-500' : 'border-blue-500'
-                            } text-white focus:outline-none focus:border-blue-400 transition-colors appearance-none cursor-pointer`}
+                            className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
+                              errors.academicRegion ? 'border-red-500' : formData.academicRegion && !errors.academicRegion ? 'border-green-500' : 'border-blue-500'
+                            } text-white focus:outline-none focus:border-blue-400 transition-all duration-200 appearance-none cursor-pointer`}
                           >
                             <option value="" className="bg-slate-800">Select your country</option>
                             {countries.map((country) => (
@@ -823,6 +1003,11 @@ const AuthPage = () => {
                               <XCircle className="w-5 h-5 text-red-500" />
                             </div>
                           )}
+                          {!errors.academicRegion && formData.academicRegion && (
+                            <div className="absolute right-10 top-1/2 -translate-y-1/2">
+                              <CheckCircle2 className="w-5 h-5 text-green-500" />
+                            </div>
+                          )}
                         </div>
                         {errors.academicRegion && (
                           <p className="text-red-400 text-xs mt-1 flex items-center gap-1 animate-fade-in transition-all duration-200">
@@ -837,6 +1022,9 @@ const AuthPage = () => {
                           Phone
                         </label>
                         <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300">
+                            <Phone className="w-5 h-5" />
+                          </div>
                           <input
                             type="tel"
                             id="phone"
@@ -845,13 +1033,18 @@ const AuthPage = () => {
                             onChange={handleInputChange}
                             required
                             placeholder="Enter your phone number"
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.phone ? 'border-red-500' : 'border-blue-500'
-                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-colors`}
+                            className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
+                              errors.phone ? 'border-red-500' : formData.phone.trim().replace(/\D/g, '').length >= 10 && !errors.phone ? 'border-green-500' : 'border-blue-500'
+                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-200`}
                           />
                           {errors.phone && (
                             <div className="absolute right-3 top-1/2 -translate-y-1/2">
                               <XCircle className="w-5 h-5 text-red-500" />
+                            </div>
+                          )}
+                          {!errors.phone && formData.phone.trim().replace(/\D/g, '').length >= 10 && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle2 className="w-5 h-5 text-green-500" />
                             </div>
                           )}
                         </div>
@@ -873,6 +1066,9 @@ const AuthPage = () => {
                           Class
                         </label>
                         <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300">
+                            <BookOpen className="w-5 h-5" />
+                          </div>
                           <input
                             type="text"
                             id="class"
@@ -881,13 +1077,18 @@ const AuthPage = () => {
                             onChange={handleInputChange}
                             required
                             placeholder="Enter your class"
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.class ? 'border-red-500' : 'border-blue-500'
-                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-colors`}
+                            className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
+                              errors.class ? 'border-red-500' : formData.class.trim() && !errors.class ? 'border-green-500' : 'border-blue-500'
+                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-200`}
                           />
                           {errors.class && (
                             <div className="absolute right-3 top-1/2 -translate-y-1/2">
                               <XCircle className="w-5 h-5 text-red-500" />
+                            </div>
+                          )}
+                          {!errors.class && formData.class.trim() && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle2 className="w-5 h-5 text-green-500" />
                             </div>
                           )}
                         </div>
@@ -914,6 +1115,9 @@ const AuthPage = () => {
                           Full Name
                         </label>
                         <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300">
+                            <User className="w-5 h-5" />
+                          </div>
                           <input
                             type="text"
                             id="fullName"
@@ -922,13 +1126,18 @@ const AuthPage = () => {
                             onChange={handleInputChange}
                             required
                             placeholder="Enter your full name"
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.fullName ? 'border-red-500' : 'border-blue-500'
+                            className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
+                              errors.fullName ? 'border-red-500' : formData.fullName.trim() && !errors.fullName ? 'border-green-500' : 'border-blue-500'
                             } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-300 hover:border-blue-400/80`}
                           />
                           {errors.fullName && (
                             <div className="absolute right-3 top-1/2 -translate-y-1/2 animate-fade-in">
                               <XCircle className="w-5 h-5 text-red-500" />
+                            </div>
+                          )}
+                          {!errors.fullName && formData.fullName.trim() && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle2 className="w-5 h-5 text-green-500" />
                             </div>
                           )}
                         </div>
@@ -945,6 +1154,9 @@ const AuthPage = () => {
                           Email
                         </label>
                         <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300">
+                            <Mail className="w-5 h-5" />
+                          </div>
                           <input
                             type="email"
                             id="email"
@@ -953,13 +1165,18 @@ const AuthPage = () => {
                             onChange={handleInputChange}
                             required
                             placeholder="Enter your email"
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.email ? 'border-red-500' : 'border-blue-500'
+                            className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
+                              errors.email ? 'border-red-500' : formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && !errors.email ? 'border-green-500' : 'border-blue-500'
                             } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-300 hover:border-blue-400/80`}
                           />
                           {errors.email && (
                             <div className="absolute right-3 top-1/2 -translate-y-1/2 animate-fade-in">
                               <XCircle className="w-5 h-5 text-red-500" />
+                            </div>
+                          )}
+                          {!errors.email && formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle2 className="w-5 h-5 text-green-500" />
                             </div>
                           )}
                         </div>
@@ -1017,6 +1234,9 @@ const AuthPage = () => {
                           Phone
                         </label>
                         <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300">
+                            <Phone className="w-5 h-5" />
+                          </div>
                           <input
                             type="tel"
                             id="phone"
@@ -1025,13 +1245,18 @@ const AuthPage = () => {
                             onChange={handleInputChange}
                             required
                             placeholder="Enter your phone number"
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.phone ? 'border-red-500' : 'border-blue-500'
+                            className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
+                              errors.phone ? 'border-red-500' : formData.phone.trim().replace(/\D/g, '').length >= 10 && !errors.phone ? 'border-green-500' : 'border-blue-500'
                             } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-300 hover:border-blue-400/80`}
                           />
                           {errors.phone && (
                             <div className="absolute right-3 top-1/2 -translate-y-1/2 animate-fade-in">
                               <XCircle className="w-5 h-5 text-red-500" />
+                            </div>
+                          )}
+                          {!errors.phone && formData.phone.trim().replace(/\D/g, '').length >= 10 && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle2 className="w-5 h-5 text-green-500" />
                             </div>
                           )}
                         </div>
@@ -1053,6 +1278,9 @@ const AuthPage = () => {
                           Student ID
                         </label>
                         <div className="relative">
+                          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300">
+                            <UserCheck className="w-5 h-5" />
+                          </div>
                           <input
                             type="text"
                             id="username"
@@ -1061,13 +1289,18 @@ const AuthPage = () => {
                             onChange={handleInputChange}
                             required
                             placeholder="Enter student ID"
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.username ? 'border-red-500' : 'border-blue-500'
+                            className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
+                              errors.username ? 'border-red-500' : formData.username.trim() && /^[A-Za-z0-9]+$/.test(formData.username.trim()) && !errors.username ? 'border-green-500' : 'border-blue-500'
                             } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-300 hover:border-blue-400/80`}
                           />
                           {errors.username && (
                             <div className="absolute right-3 top-1/2 -translate-y-1/2 animate-fade-in">
                               <XCircle className="w-5 h-5 text-red-500" />
+                            </div>
+                          )}
+                          {!errors.username && formData.username.trim() && /^[A-Za-z0-9]+$/.test(formData.username.trim()) && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle2 className="w-5 h-5 text-green-500" />
                             </div>
                           )}
                         </div>
@@ -1493,8 +1726,8 @@ const AuthPage = () => {
                       required
                       placeholder="Enter your password"
                       className={`w-full pl-11 pr-10 py-3 bg-slate-800 border-b-2 ${
-                        errors.password ? 'border-red-500' : 'border-blue-500'
-                      } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-colors`}
+                        errors.password ? 'border-red-500' : formData.password && !errors.password && (authMode === 'login' || passwordStrength >= 2) ? 'border-green-500' : 'border-blue-500'
+                      } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-200`}
                       aria-label="Password"
                       aria-invalid={!!errors.password}
                       aria-describedby={errors.password ? 'password-error' : undefined}
@@ -1508,6 +1741,42 @@ const AuthPage = () => {
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
+                  
+                  {/* Password Strength Indicator (Signup only) */}
+                  {authMode === 'signup' && formData.password && (
+                    <div className="mt-2 space-y-1 animate-fade-in">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                          <div 
+                            className={`h-full transition-all duration-300 ${
+                              passwordStrength === 0 ? 'w-0' :
+                              passwordStrength === 1 ? 'w-1/4 bg-red-500' :
+                              passwordStrength === 2 ? 'w-1/2 bg-orange-500' :
+                              passwordStrength === 3 ? 'w-3/4 bg-yellow-500' :
+                              'w-full bg-green-500'
+                            }`}
+                          />
+                        </div>
+                        <span className={`text-xs font-medium ${
+                          passwordStrength === 0 ? 'text-slate-400' :
+                          passwordStrength === 1 ? 'text-red-400' :
+                          passwordStrength === 2 ? 'text-orange-400' :
+                          passwordStrength === 3 ? 'text-yellow-400' :
+                          'text-green-400'
+                        }`}>
+                          {passwordStrength === 0 ? 'Weak' :
+                           passwordStrength === 1 ? 'Weak' :
+                           passwordStrength === 2 ? 'Fair' :
+                           passwordStrength === 3 ? 'Good' :
+                           'Strong'}
+                        </span>
+                      </div>
+                      {formData.password.length > 0 && formData.password.length < 6 && (
+                        <p className="text-yellow-400 text-xs">Password must be at least 6 characters</p>
+                      )}
+                    </div>
+                  )}
+                  
                   {errors.password && (
                     <p id="password-error" className="text-red-400 text-xs mt-1 flex items-center gap-1 animate-fade-in transition-all duration-200">
                       <AlertCircle className="w-3 h-3" />
