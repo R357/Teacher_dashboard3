@@ -404,7 +404,6 @@ html {
   scroll-behavior: smooth;
 }
 
-```css
 /* Custom styles for parent dashboard - pixel perfect matching */
 
 /* Smooth scroll behavior */
@@ -709,6 +708,4 @@ html {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
- 
-```
 
