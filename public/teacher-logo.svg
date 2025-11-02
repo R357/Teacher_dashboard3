@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Embedded wrapper SVG that references the provided raster logo placed at public/teacher-logo.png -->
-<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="EduLearn logo">
-  <title>EduLearn logo</title>
-  <!-- Use the raster image placed in the same public folder. This keeps a single canonical path for the logo while
-       allowing the project to reference an SVG file that simply wraps the PNG/JPG. -->
-  <image href="/teacher-logo.png" x="0" y="0" width="120" height="120" preserveAspectRatio="xMidYMid slice" />
-</svg>
