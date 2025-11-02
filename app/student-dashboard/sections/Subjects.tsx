@@ -412,7 +412,7 @@ export default function Subjects() {
   }, []);
 
   return (
-    <section id="subjects" className="py-20 bg-gray-50">
+    <section id="subjects" className="py-20">
       <div className="max-w-7xl mx-auto px-6">
         {/* Subjects Section - Top Left with Horizontal Scroll */}
         <div className="mb-12">

@@ -307,7 +307,7 @@ export default function Exams() {
   const filteredExams = getFilteredExams();
 
   return (
-    <section id="exams" className="py-20 bg-gray-50">
+    <section id="exams" className="py-20">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <div className="mb-10">

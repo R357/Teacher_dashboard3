@@ -494,7 +494,7 @@ export default function Assignments() {
   };
 
   return (
-    <section id="assignments" className="py-20 bg-gray-50 min-h-screen">
+    <section id="assignments" className="py-20 min-h-screen">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
           Assignments Timeline

@@ -75,7 +75,7 @@ export default function Results() {
   ];
 
   return (
-    <section id="results" className="py-20 bg-gray-50"> 
+    <section id="results" className="py-20"> 
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">
           Results

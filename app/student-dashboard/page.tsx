@@ -31,6 +31,7 @@ import Assignments from './sections/Assignments';
 import Results from './sections/Results';
 import Attendance from './sections/Attendance';
 import Exams from './sections/Exams';
+import Silk from './components/Silk';
 
 export default function StudentDashboard() {
   // Mock data for performance chart
@@ -86,12 +87,23 @@ export default function StudentDashboard() {
   ];
 
   return (
-    <div className="bg-gray-50 relative z-0 font-sans" style={{ fontFamily: 'var(--font-montserrat), Montserrat, sans-serif' }}>
+    <div className="relative min-h-screen font-sans" style={{ fontFamily: 'var(--font-montserrat), Montserrat, sans-serif' }}>
+      {/* Silk Background */}
+      <div className="fixed inset-0 -z-10 w-full h-full">
+        <Silk
+          speed={5}
+          scale={1}
+          color="#4b84af"
+          noiseIntensity={1.5}
+          rotation={0}
+        />
+      </div>
+      
       {/* Floating Dock Navbar */}
       <Navbar />
 
       {/* Dashboard Content Wrapper */}
-      <div className="pt-24">
+      <div className="pt-24 relative z-0">
         
         {/* === START OF EXISTING LAYOUT === */}
         <div className="max-w-7xl mx-auto px-6">
