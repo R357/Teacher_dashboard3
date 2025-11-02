@@ -43,12 +43,32 @@ export default function StudentDashboard() {
     { name: 'Machine learning', score: 74.4 },
   ];
 
-  // Calendar events
+  // Calendar events - Today, Tomorrow, Day after tomorrow
   const calendarEvents = [
-    { time: '10:00', title: 'Electronics lesson', duration: '9.45-10.30', lesson: '21 lesson', color: 'bg-blue-500' },
-    { time: '11:00', title: 'Electronics lesson', duration: '11.00-11.40', lesson: '23 lesson', color: 'bg-gray-200' },
-    { time: '12:00', title: 'Robotics lesson', duration: '12.00-12.45', lesson: '23 lesson', color: 'bg-gray-200' },
-    { time: '13:00', title: 'C++ lesson', duration: '13.45-14.30', lesson: '21 lesson', color: 'bg-gray-200' },
+    { 
+      day: 'Today', 
+      title: 'Electronics lesson', 
+      duration: '9.45-10.30', 
+      lesson: '21 lesson', 
+      color: 'bg-blue-500',
+      isActive: true 
+    },
+    { 
+      day: 'Tomorrow', 
+      title: 'Robotics lesson', 
+      duration: '12.00-12.45', 
+      lesson: '23 lesson', 
+      color: 'bg-gray-200',
+      isActive: false 
+    },
+    { 
+      day: 'Day after tomorrow', 
+      title: 'C++ lesson', 
+      duration: '13.45-14.30', 
+      lesson: '21 lesson', 
+      color: 'bg-gray-200',
+      isActive: false 
+    },
   ];
 
   // Upcoming events
@@ -66,7 +86,7 @@ export default function StudentDashboard() {
   ];
 
   return (
-    <div className="bg-gray-50 relative z-0">
+    <div className="bg-gray-50 relative z-0 font-sans" style={{ fontFamily: 'var(--font-montserrat), Montserrat, sans-serif' }}>
       {/* Floating Dock Navbar */}
       <Navbar />
 
@@ -74,7 +94,7 @@ export default function StudentDashboard() {
       <div className="pt-24">
         
         {/* === START OF EXISTING LAYOUT === */}
-        <div className="p-6">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Left Column - Spans 2 columns */}
@@ -202,15 +222,8 @@ export default function StudentDashboard() {
               {/* Calendar Section - SLIDES FROM RIGHT */}
               <SlideIn direction="right" delay={0}>
                 <div className="bg-gray-100 rounded-xl p-6 shadow-sm">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-800">Calendar</h3>
-                      <p className="text-sm text-gray-600 mt-1">6 events today</p>
-                    </div>
-                    <div className="flex items-center gap-2 bg-white rounded-lg px-3 py-1 cursor-pointer hover:bg-gray-50 transition">
-                      <span className="text-gray-700 text-sm">Today</span>
-                      <ChevronDown className="w-4 h-4 text-gray-500" />
-                    </div>
+                  <div className="mb-4">
+                    <h3 className="text-xl font-semibold text-gray-800">Calendar</h3>
                   </div>
                   {/* Timeline */}
                   <div className="relative mt-6 pl-20">
@@ -219,22 +232,22 @@ export default function StudentDashboard() {
                       {calendarEvents.map((event, index) => (
                         <div key={index} className="flex items-start gap-4 relative">
                           <div className="absolute -left-12 top-0 z-10">
-                            <div className="text-xs text-gray-600 font-medium">{event.time}</div>
+                            <div className="text-xs text-gray-600 font-medium">{event.day}</div>
                           </div>
                           <div
                             className={`${event.color} ${
-                              event.time === '10:00' ? 'text-white' : 'text-gray-800'
+                              event.isActive ? 'text-white' : 'text-gray-800'
                             } rounded-lg p-3 flex-1 shadow-sm`}
                           >
                             <div className="flex items-center gap-2 mb-1">
-                              {event.time === '10:00' ? (
+                              {event.isActive ? (
                                 <Home className="w-4 h-4" />
                               ) : (
                                 <div className="w-4 h-4 rounded-full bg-gray-400"></div>
                               )}
                               <h4
                                 className={`font-semibold ${
-                                  event.time === '10:00' ? 'text-white' : 'text-gray-800'
+                                  event.isActive ? 'text-white' : 'text-gray-800'
                                 }`}
                               >
                                 {event.title}
@@ -242,7 +255,7 @@ export default function StudentDashboard() {
                             </div>
                             <p
                               className={`text-xs ${
-                                event.time === '10:00' ? 'text-white/90' : 'text-gray-600'
+                                event.isActive ? 'text-white/90' : 'text-gray-600'
                               }`}
                             >
                               {event.duration}, {event.lesson}
