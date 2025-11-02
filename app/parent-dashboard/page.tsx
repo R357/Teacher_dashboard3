@@ -19,6 +19,7 @@ import {
   User,
   LogOut,
   Bell,
+  Download,
 } from 'lucide-react';
 import { FloatingDock } from '@/components/ui/floating-dock';
 import {
@@ -464,19 +465,19 @@ export default function ParentDashboard() {
         {/* SECTION 2: PERFORMANCE */}
         <section 
           id="performance" 
-          className="dashboard-section performance-section py-16"
+          className="dashboard-section"
           ref={(el) => { sectionsRef.current['performance'] = el; }}
         >
-          <div className="max-w-[1920px] mx-auto px-6 py-4">
-            <div className="bg-white rounded-2xl p-8 shadow-sm dashboard-card w-full">
-              {/* Subject-wise Performance */}
-              <div className="w-full">
+          <div className="w-full px-4 py-4 h-full">
+            <div className="grid grid-cols-2 gap-4 h-full">
+              {/* Left Half - Subject Performance (unchanged) */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm dashboard-card overflow-y-auto">
                 <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
                   📊 Subject Performance
                 </h2>
                 
-                {/* Bar Chart */}
-                <div className="h-[220px] mb-4">
+                {/* Bar Chart - Horizontal */}
+                <div className="h-[300px] mb-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={[
@@ -487,17 +488,23 @@ export default function ParentDashboard() {
                         { name: 'HTML/CSS', score: 95, color: '#E17055' },
                         { name: 'C++', score: 82, color: '#A0AEC0' },
                       ]}
-                      margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+                      layout="vertical"
+                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                     >
                       <XAxis 
-                        dataKey="name" 
+                        type="number"
+                        domain={[0, 100]}
                         tick={{ fill: '#636E72', fontSize: 11, fontWeight: 500 }}
                         axisLine={{ stroke: '#DFE6E9' }}
                         tickLine={{ stroke: '#DFE6E9' }}
                       />
                       <YAxis 
-                        domain={[0, 100]} 
-                        hide
+                        type="category"
+                        dataKey="name"
+                        tick={{ fill: '#1A1A1A', fontSize: 12, fontWeight: 500 }}
+                        axisLine={false}
+                        tickLine={false}
+                        width={100}
                       />
                       <Tooltip 
                         contentStyle={{ 
@@ -509,7 +516,7 @@ export default function ParentDashboard() {
                         }}
                         formatter={(value: number) => `${value}%`}
                       />
-                      <Bar dataKey="score" radius={[8, 8, 0, 0]}>
+                      <Bar dataKey="score" radius={[0, 8, 8, 0]}>
                         {[
                           { name: 'Python', score: 92, color: '#6C5CE7' },
                           { name: 'Java', score: 88, color: '#0984E3' },
@@ -522,7 +529,7 @@ export default function ParentDashboard() {
                         ))}
                         <LabelList 
                           dataKey="score" 
-                          position="top" 
+                          position="right" 
                           style={{ fill: '#2D3436', fontSize: '12px', fontWeight: '600' }}
                         />
                       </Bar>
@@ -565,6 +572,92 @@ export default function ParentDashboard() {
                 </div>
               </div>
 
+              {/* Right Half - Report Card */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm dashboard-card overflow-y-auto">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-[#1A1A1A]">Report Card</h2>
+                  <button 
+                    onClick={() => {
+                      // PDF download functionality would go here
+                      window.print();
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#5D5FEF] text-white rounded-lg hover:bg-[#4C4ED8] transition-colors text-sm font-medium"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download PDF
+                  </button>
+                </div>
+
+                {/* Congratulatory Message */}
+                <div className="text-center mb-6">
+                  <p className="text-base text-[#1A1A1A] leading-relaxed">
+                    Congratulations, Sarah! Your hard work and dedication have paid off. Here&apos;s a detailed overview of your academic performance this semester.
+                  </p>
+                </div>
+
+                {/* Academic Performance Section */}
+                <div className="bg-gray-50 rounded-xl p-6 mb-6">
+                  <h3 className="text-lg font-bold text-[#1A1A1A] mb-2">Academic Performance</h3>
+                  <p className="text-sm text-gray-600 mb-4">Semester 1, 2024</p>
+                  <div className="text-4xl font-bold text-[#5D5FEF]">Overall Grade: A</div>
+                </div>
+
+                {/* Subject-wise Performance Table */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-bold text-[#1A1A1A] mb-4">Subject-wise Performance</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b-2 border-gray-300">
+                          <th className="text-left py-3 px-4 font-bold text-[#1A1A1A]">SUBJECT</th>
+                          <th className="text-left py-3 px-4 font-bold text-[#1A1A1A]">GRADE</th>
+                          <th className="text-left py-3 px-4 font-bold text-[#1A1A1A]">MARKS</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-3 px-4 text-[#1A1A1A] font-medium">Python</td>
+                          <td className="py-3 px-4 font-bold text-blue-600">A</td>
+                          <td className="py-3 px-4 text-[#1A1A1A]">92/100</td>
+                        </tr>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-3 px-4 text-[#1A1A1A] font-medium">Java</td>
+                          <td className="py-3 px-4 font-bold text-blue-600">A-</td>
+                          <td className="py-3 px-4 text-[#1A1A1A]">88/100</td>
+                        </tr>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-3 px-4 text-[#1A1A1A] font-medium">JavaScript</td>
+                          <td className="py-3 px-4 font-bold text-blue-600">B+</td>
+                          <td className="py-3 px-4 text-[#1A1A1A]">85/100</td>
+                        </tr>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-3 px-4 text-[#1A1A1A] font-medium">React</td>
+                          <td className="py-3 px-4 font-bold text-blue-600">A-</td>
+                          <td className="py-3 px-4 text-[#1A1A1A]">88/100</td>
+                        </tr>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-3 px-4 text-[#1A1A1A] font-medium">HTML/CSS</td>
+                          <td className="py-3 px-4 font-bold text-blue-600">A</td>
+                          <td className="py-3 px-4 text-[#1A1A1A]">95/100</td>
+                        </tr>
+                        <tr className="border-b border-gray-200">
+                          <td className="py-3 px-4 text-[#1A1A1A] font-medium">C++</td>
+                          <td className="py-3 px-4 font-bold text-blue-600">B</td>
+                          <td className="py-3 px-4 text-[#1A1A1A]">82/100</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Overall Remarks Section */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-bold text-[#1A1A1A] mb-3">Overall Remarks</h3>
+                  <p className="text-base text-[#1A1A1A] leading-relaxed">
+                    Sarah has shown significant improvement throughout the semester. Her dedication to learning and consistent effort are commendable. Keep up the great work!
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
