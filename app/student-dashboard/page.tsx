@@ -296,14 +296,12 @@ export default function StudentDashboard() {
 
             </div>
           </div>
-        </div>
-        
+        </div> 
           <Subjects />
           <Assignments />
           <Exams />
           <Attendance />
           <Results />
-
       </div>
     </div>
   );

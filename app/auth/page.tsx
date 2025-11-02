@@ -749,32 +749,32 @@ const AuthPage = () => {
     }
   }, [selectedRole]);
 
-  // Parallax effect based on mouse movement
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-        setMousePosition({ x, y });
-      }
-    };
+  // Parallax effect based on mouse movement - DISABLED
+  // useEffect(() => {
+  //   const handleMouseMove = (e: MouseEvent) => {
+  //     if (containerRef.current) {
+  //       const rect = containerRef.current.getBoundingClientRect();
+  //       const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+  //       const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+  //       setMousePosition({ x, y });
+  //     }
+  //   };
 
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener('mousemove', handleMouseMove);
-      return () => container.removeEventListener('mousemove', handleMouseMove);
-    }
-  }, []);
+  //   const container = containerRef.current;
+  //   if (container) {
+  //     container.addEventListener('mousemove', handleMouseMove);
+  //     return () => container.removeEventListener('mousemove', handleMouseMove);
+  //   }
+  // }, []);
 
-  // Calculate parallax transforms
+  // Calculate parallax transforms - DISABLED (all set to 0,0 to keep animations static)
   const parallaxTransform = {
-    background: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 30}px)`,
-    illustration: `translate(${mousePosition.x * -20}px, ${mousePosition.y * -20}px)`,
-    wave1: `translate(${mousePosition.x * 15}px, ${mousePosition.y * 15}px)`,
-    wave2: `translate(${mousePosition.x * -10}px, ${mousePosition.y * -10}px)`,
-    floating1: `translate(${mousePosition.x * 25}px, ${mousePosition.y * 25}px)`,
-    floating2: `translate(${mousePosition.x * -15}px, ${mousePosition.y * -15}px)`,
+    background: `translate(0px, 0px)`,
+    illustration: `translate(0px, 0px)`,
+    wave1: `translate(0px, 0px)`,
+    wave2: `translate(0px, 0px)`,
+    floating1: `translate(0px, 0px)`,
+    floating2: `translate(0px, 0px)`,
   };
 
   return (
@@ -802,10 +802,7 @@ const AuthPage = () => {
         <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-pink-300 rounded-full opacity-10 animate-float"></div>
       </div>
       <div 
-        className="w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10 transition-transform duration-75 ease-out"
-        style={{ 
-          transform: `perspective(1000px) rotateY(${mousePosition.x * 0.3}deg) rotateX(${mousePosition.y * -0.3}deg) scale(${1 + (mousePosition.x * mousePosition.x + mousePosition.y * mousePosition.y) * 0.005})`
-        }}
+        className="w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
           {/* Left Panel - Login/Signup Form */}
