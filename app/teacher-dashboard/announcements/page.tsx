@@ -1,168 +1,230 @@
-"use client";
-import React from 'react';
-import Navbar from '../navbar';
-import TableSearch from '../components/TableSearch';
-import Table from '../components/Table';
-import Pagination from '../components/Pagination';
-import FormContainer from '../components/FormContainer';
+'use client';
 
-const ITEM_PER_PAGE = 10; // Items per page for pagination
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Bell, Clock, ArrowLeft, MoreVertical } from 'lucide-react';
+import Link from 'next/link';
+import Navbar from '../navbar';  // Correct path: goes from announcements/ up to teacher-dashboard/
 
-// Mock data for announcements
-const mockAnnouncements = [
-  {
-    id: "1",
-    title: "School Holiday Notice",
-    content: "School will be closed on Monday for a public holiday.",
-    date: new Date("2024-01-15"),
-    class: { name: "Grade 10A" },
-    author: {
-      name: "Admin User",
-      role: "admin"
-    }
-  },
-  {
-    id: "2", 
-    title: "Parent-Teacher Meeting",
-    content: "Parent-teacher meetings are scheduled for next week.",
-    date: new Date("2024-01-14"),
-    class: { name: "All Classes" },
-    author: {
-      name: "Admin User",
-      role: "admin"
-    }
-  },
-  {
-    id: "3",
-    title: "Math Quiz Next Week",
-    content: "There will be a math quiz covering chapters 1-3 next Wednesday.",
-    date: new Date("2024-01-16"),
-    class: { name: "Grade 10A" },
-    author: {
-      name: "John Smith",
-      role: "teacher"
-    }
-  },
-  {
-    id: "4",
-    title: "Science Project Deadline Extended",
-    content: "The deadline for the science project has been extended to next Friday.",
-    date: new Date("2024-01-13"),
-    class: { name: "Grade 11B" },
-    author: {
-      name: "Sarah Wilson",
-      role: "teacher"
-    }
-  }
-];
+export default function AnnouncementsPage() {
+  const [activeFilter, setActiveFilter] = useState('all');
 
-type AnnouncementList = typeof mockAnnouncements[0];
-
-const AnnouncementListPage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
-  // In a real app, you'd get this from your auth system
-  const currentUser = {
-    name: "Sarah Wilson",
-    role: "teacher" // or "admin"
-  };
-  
-  const columns = [
+  const announcements = [
     {
-      header: "Title",
-      accessor: "title",
+      id: 1,
+      title: 'Assesment Schedule Released',
+      date: '14 December 2025',
+      time: '12:00 pm',
+      priority: 'high',
+      description: 'The assessment schedule for the upcoming semester has been released. Please check your respective class schedules and prepare accordingly.'
     },
     {
-      header: "Class",
-      accessor: "class",
+      id: 2,
+      title: 'Submmission date of assignment',
+      date: '18 December 2025',
+      time: '09:00 am',
+      priority: 'medium',
+      description: 'All pending assignments must be submitted by the deadline. Late submissions will incur grade penalties.'
     },
     {
-      header: "Posted By",
-      accessor: "author",
-      className: "hidden md:table-cell",
+      id: 3,
+      title: 'Grading of the assements',
+      date: '21 December 2025',
+      time: '11:00 am',
+      priority: 'high',
+      description: 'Assessment grading will be completed and results will be published on the student portal by the end of this week.'
     },
     {
-      header: "Date",
-      accessor: "date",
-      className: "hidden md:table-cell",
+      id: 4,
+      title: 'Parent-Teacher Meeting',
+      date: '25 December 2025',
+      time: '02:00 pm',
+      priority: 'medium',
+      description: 'Quarterly parent-teacher meetings are scheduled. Please ensure you attend to discuss student progress.'
     },
     {
-      header: "Actions",
-      accessor: "action",
+      id: 5,
+      title: 'Winter Break Schedule',
+      date: '28 December 2025',
+      time: '10:00 am',
+      priority: 'low',
+      description: 'Classes will be suspended for winter break from December 28th to January 5th. Regular classes resume on January 6th.'
     },
+    {
+      id: 6,
+      title: 'New Course Materials Available',
+      date: '30 December 2025',
+      time: '03:00 pm',
+      priority: 'medium',
+      description: 'Updated course materials and study guides are now available on the learning portal.'
+    }
   ];
-  
-  const renderRow = (item: AnnouncementList) => (
-    <tr
-      key={item.id}
-      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-blue-50"
-    >
-      <td className="flex items-center gap-4 p-4">{item.title}</td>
-      <td>{item.class?.name || "-"}</td>
-      <td className="hidden md:table-cell">
-        {item.author.name}
-        <span className="ml-1 text-xs text-gray-500">({item.author.role})</span>
-      </td>
-      <td className="hidden md:table-cell">
-        {new Intl.DateTimeFormat("en-US").format(item.date)}
-      </td>
-      <td>
-        <div className="flex items-center gap-2">
-          {(currentUser.role === "admin" || currentUser.name === item.author.name) && (
-            <>
-              <FormContainer table="announcement" type="update" data={item} />
-              <FormContainer table="announcement" type="delete" id={item.id} />
-            </>
-          )}
-        </div>
-      </td>
-    </tr>
-  );
 
-  // Mock pagination
-  const page = parseInt(searchParams.page || "1");
-  const total = mockAnnouncements.length;
-  const totalPages = Math.ceil(total / ITEM_PER_PAGE);
-  const start = (page - 1) * ITEM_PER_PAGE;
-  const end = start + ITEM_PER_PAGE;
-  const announcements = mockAnnouncements.slice(start, end);
+  const filteredAnnouncements = announcements.filter(announcement => {
+    if (activeFilter === 'all') return true;
+    return announcement.priority === activeFilter;
+  });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div
-        className="fixed inset-0 -z-10 bg-fixed"
-        style={{
-          backgroundImage:
-            "radial-gradient( circle at 20% 20%, rgba(59,130,246,0.10), transparent 40% ), radial-gradient( circle at 80% 30%, rgba(6,182,212,0.08), transparent 45% ), radial-gradient( circle at 40% 80%, rgba(99,102,241,0.08), transparent 45% )",
-          backgroundColor: '#f8fafc',
-        }}
-      />
+    <>
       <Navbar />
-      <div className="p-6 mt-20"> {/* Added mt-20 for navbar spacing */}
-        <div className="max-w-7xl mx-auto bg-slate-50 p-4 rounded-lg">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold text-gray-800">Announcements</h1>
-            {/* Both admin and teachers can create announcements */}
-            <FormContainer table="announcement" type="create" />
+      
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="max-w-5xl mx-auto p-6">
+          {/* Header */}
+          <div className="mb-6">
+            
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                  <Bell className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900">Announcements</h1>
+                  <p className="text-gray-600 text-sm">Stay updated with all announcements</p>
+                </div>
+              </div>
+              
+              <span className="text-sm text-gray-600 font-medium">
+                {filteredAnnouncements.length} announcements
+              </span>
+            </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm">
-            <div className="p-4 border-b border-gray-200">
-              <TableSearch />
-            </div>
-
-            <Table data={announcements} columns={columns} renderRow={renderRow} />
-
-            <div className="p-4 border-t border-gray-200">
-              <Pagination page={page} count={total} />
+          {/* Filter Buttons */}
+          <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="text-sm font-medium text-gray-700">Filter by:</span>
+              <button
+                onClick={() => setActiveFilter('all')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeFilter === 'all'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => setActiveFilter('high')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeFilter === 'high'
+                    ? 'bg-red-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Important
+              </button>
+              <button
+                onClick={() => setActiveFilter('medium')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeFilter === 'medium'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Medium
+              </button>
+              <button
+                onClick={() => setActiveFilter('low')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeFilter === 'low'
+                    ? 'bg-gray-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Low
+              </button>
             </div>
           </div>
+
+          {/* Announcements List */}
+          <div className="space-y-4">
+            {filteredAnnouncements.map((announcement, index) => (
+              <motion.div
+                key={announcement.id}
+                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <div className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start gap-4 flex-1">
+                      {/* Icon */}
+                      <div className={`w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center ${
+                        announcement.priority === 'high' 
+                          ? 'bg-red-100' 
+                          : announcement.priority === 'medium'
+                          ? 'bg-blue-100'
+                          : 'bg-gray-100'
+                      }`}>
+                        <Bell className={`w-7 h-7 ${
+                          announcement.priority === 'high' 
+                            ? 'text-red-600' 
+                            : announcement.priority === 'medium'
+                            ? 'text-blue-600'
+                            : 'text-gray-600'
+                        }`} />
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          {announcement.title}
+                        </h3>
+                        <div className="flex items-center text-sm text-gray-600 mb-3">
+                          <Clock className="w-4 h-4 mr-1" />
+                          {announcement.date} {announcement.time}
+                        </div>
+                        <p className="text-gray-600 text-sm leading-relaxed">
+                          {announcement.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right Side */}
+                    <div className="flex flex-col items-end gap-3 ml-4">
+                      <button className="text-gray-400 hover:text-gray-600">
+                        <MoreVertical className="w-5 h-5" />
+                      </button>
+                      
+                      {announcement.priority === 'high' && (
+                        <span className="px-3 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">
+                          Important
+                        </span>
+                      )}
+                      {announcement.priority === 'medium' && (
+                        <span className="px-3 py-1 bg-blue-100 text-blue-600 text-xs font-medium rounded-full">
+                          Medium
+                        </span>
+                      )}
+                      {announcement.priority === 'low' && (
+                        <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
+                          Low
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Empty State */}
+          {filteredAnnouncements.length === 0 && (
+            <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+              <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                <Bell className="w-10 h-10 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No announcements found</h3>
+              <p className="text-gray-600 text-sm">
+                There are no announcements matching your filter criteria.
+              </p>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
-};
-
-export default AnnouncementListPage;
+}
