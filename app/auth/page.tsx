@@ -113,7 +113,7 @@ const AuthPage = () => {
       });
     } else if (selectedRole === 'teacher') {
       // For teacher, username is not shown (email is used as username)
-      const requiredFields = ['fullName', 'email', 'country', 'phone', 'region', 'subjectSpecialization', 'qualification', 'password', 'confirmPassword'];
+      const requiredFields = ['fullName', 'email', 'country', 'phone', 'qualification', 'password', 'confirmPassword'];
       totalFields = requiredFields.length;
       requiredFields.forEach(field => {
         if (formData[field as keyof typeof formData]?.toString().trim()) {
@@ -486,15 +486,6 @@ const AuthPage = () => {
         newErrors.country = 'Country is required';
       }
 
-      // Region validation
-      if (!formData.region.trim()) {
-        newErrors.region = 'Region is required';
-      }
-
-      // Subject specialization validation
-      if (!formData.subjectSpecialization.trim()) {
-        newErrors.subjectSpecialization = 'Subject specialization is required';
-      }
 
       // Qualification validation
       if (!formData.qualification.trim()) {
@@ -1542,93 +1533,11 @@ const AuthPage = () => {
                       </div>
                     </div>
 
-                    {/* Location Information Section */}
-                    <div className="space-y-4 pb-2 border-b border-slate-700/50 animate-fade-in" style={{ animationDelay: '100ms' }}>
-                      <h3 className="text-blue-200 text-xs font-semibold uppercase tracking-wider">Location Information</h3>
-
-                      <div className="transform transition-all duration-300 hover:scale-[1.01]">
-                        <label htmlFor="region" className="block text-blue-200 text-sm font-medium mb-2 transition-colors">
-                          Region
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="text"
-                            id="region"
-                            name="region"
-                            value={formData.region}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="Enter your region"
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.region ? 'border-red-500' : 'border-blue-500'
-                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-300 hover:border-blue-400/80`}
-                          />
-                          {errors.region && (
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 animate-fade-in">
-                              <XCircle className="w-5 h-5 text-red-500" />
-                            </div>
-                          )}
-                        </div>
-                        {errors.region && (
-                          <p className="text-red-400 text-xs mt-1 flex items-center gap-1 animate-fade-in transition-all duration-200">
-                            <AlertCircle className="w-3 h-3" />
-                            {errors.region}
-                          </p>
-                        )}
-                      </div>
-                    </div>
 
                     {/* Professional Information Section */}
                     <div className="space-y-4 pb-2 border-b border-slate-700/50 animate-fade-in" style={{ animationDelay: '200ms' }}>
                       <h3 className="text-blue-200 text-xs font-semibold uppercase tracking-wider">Professional Information</h3>
                       
-                      <div className="transform transition-all duration-300 hover:scale-[1.01]">
-                        <label htmlFor="subjectSpecialization" className="block text-blue-200 text-sm font-medium mb-2 transition-colors">
-                          Subject Specialization
-                        </label>
-                        <div className="relative">
-                          <select
-                            id="subjectSpecialization"
-                            name="subjectSpecialization"
-                            value={formData.subjectSpecialization}
-                            onChange={handleInputChange}
-                            required
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.subjectSpecialization ? 'border-red-500' : 'border-blue-500'
-                            } text-white focus:outline-none focus:border-blue-400 transition-all duration-300 hover:border-blue-400/80 appearance-none cursor-pointer`}
-                          >
-                            <option value="" className="bg-slate-800">Select subject specialization</option>
-                            <option value="English" className="bg-slate-800">English</option>
-                            <option value="Mathematics" className="bg-slate-800">Mathematics</option>
-                            <option value="Environmental Studies" className="bg-slate-800">Environmental Studies</option>
-                            <option value="Social Studies" className="bg-slate-800">Social Studies</option>
-                            <option value="Art and Craft" className="bg-slate-800">Art and Craft</option>
-                            <option value="Physical and Health Education" className="bg-slate-800">Physical and Health Education</option>
-                            <option value="General Science" className="bg-slate-800">General Science</option>
-                            <option value="Signs" className="bg-slate-800">Signs</option>
-                            <option value="Physics" className="bg-slate-800">Physics</option>
-                            <option value="Chemistry" className="bg-slate-800">Chemistry</option>
-                            <option value="Biology" className="bg-slate-800">Biology</option>
-                          </select>
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <svg className="w-5 h-5 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </div>
-                          {errors.subjectSpecialization && (
-                            <div className="absolute right-10 top-1/2 -translate-y-1/2 animate-fade-in">
-                              <XCircle className="w-5 h-5 text-red-500" />
-                            </div>
-                          )}
-                        </div>
-                        {errors.subjectSpecialization && (
-                          <p className="text-red-400 text-xs mt-1 flex items-center gap-1 animate-fade-in transition-all duration-200">
-                            <AlertCircle className="w-3 h-3" />
-                            {errors.subjectSpecialization}
-                          </p>
-                        )}
-                      </div>
-
                       <div className="transform transition-all duration-300 hover:scale-[1.01]">
                         <label htmlFor="qualification" className="block text-blue-200 text-sm font-medium mb-2 transition-colors">
                           Qualification
