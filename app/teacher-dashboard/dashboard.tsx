@@ -6,8 +6,7 @@ import Link from 'next/link';
 import Navbar from './navbar';
 
 export default function TeacherDashboard() {
-  const [selectedMonth, setSelectedMonth] = useState('December');
-  const [selectedDay, setSelectedDay] = useState('Today');
+  const [selectedDay, setSelectedDay] = useState<'Today' | 'Tomorrow' | 'Wednesday'>('Today');
   const [isLoaded, setIsLoaded] = useState(true);
 
   const teacherData = {
@@ -212,10 +211,11 @@ export default function TeacherDashboard() {
     ]
   };
 
-  const currentClasses = teacherData.scheduleByDay[selectedDay] || [];
+  type DayKey = 'Today' | 'Tomorrow' | 'Wednesday';
+  const currentClasses = teacherData.scheduleByDay[selectedDay as DayKey] || [];
 
   // Helper function to get icon component
-  const getActivityIcon = (iconName) => {
+  const getActivityIcon = (iconName: string) => {
     switch(iconName) {
       case 'FileText':
         return <FileText className="w-5 h-5" />;
@@ -275,7 +275,7 @@ export default function TeacherDashboard() {
                   <h2 className="text-xl font-bold text-gray-900">Classes</h2>
                   <select
                     value={selectedDay}
-                    onChange={(e) => setSelectedDay(e.target.value)}
+                    onChange={(e) => setSelectedDay(e.target.value as 'Today' | 'Tomorrow' | 'Wednesday')}
                     className="text-sm text-blue-600 bg-transparent border-none cursor-pointer font-medium focus:outline-none"
                   >
                     <option value="Today">Today </option>
