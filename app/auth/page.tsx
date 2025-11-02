@@ -1472,15 +1472,6 @@ const AuthPage = () => {
                         {errors.username}
                       </p>
                     )}
-                    {/* Helper text for login */}
-                    {authMode === 'login' && !errors.username && (
-                      <p className="text-blue-300/70 text-xs mt-1">
-                        {selectedRole === 'student' && 'Enter your Student ID or email address'}
-                        {selectedRole === 'teacher' && 'Enter your registered email address'}
-                        {selectedRole === 'admin' && 'Enter your admin email address'}
-                        {selectedRole === 'parent' && 'Enter your child\'s Student ID'}
-                      </p>
-                    )}
                   </div>
                 )}
 
