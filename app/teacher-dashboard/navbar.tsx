@@ -85,6 +85,16 @@ export default function Navbar() {
   }, []);
 
   const navItems = [
+<<<<<<< HEAD
+    { title: "Home", icon: <Home className="w-5 h-5" />, href: "/teacher/home" },
+    { title: "Classes", icon: <LayoutGrid className="w-5 h-5" />, href: "/teacher-dashboard/teacher/classes" },
+    { title: "Students", icon: <Users className="w-5 h-5" />, href: "/teacher/students" },
+    { title: "Notes", icon: <BookOpen className="w-5 h-5" />, href: "/teacher/notes" },
+    { title: "Assignments", icon: <FileText className="w-5 h-5" />, href: "/teacher/assignments" },
+    { title: "Exams", icon: <GraduationCap className="w-5 h-5" />, href: "/teacher/exams" },
+    { title: "Announcements", icon: <Megaphone className="w-5 h-5" />, href: "/teacher/announcements" },
+    { title: "Attendance", icon: <ClipboardCheck className="w-5 h-5" />, href: "/teacher/attendance" }, // ✅ Added
+=======
   { title: "Home", icon: <Home className="w-5 h-5" />, href: "/teacher-dashboard" },
     { title: "Classes", icon: <LayoutGrid className="w-5 h-5" />, href: "/teacher-dashboard/classes" },
     { title: "Students", icon: <Users className="w-5 h-5" />, href: "/teacher-dashboard/students" },
@@ -93,6 +103,7 @@ export default function Navbar() {
     { title: "Assignments", icon: <FileText className="w-5 h-5" />, href: "/teacher-dashboard/assignments" },
     { title: "Exams", icon: <GraduationCap className="w-5 h-5" />, href: "/teacher-dashboard/exams" },
     { title: "Announcements", icon: <Megaphone className="w-5 h-5" />, href: "/teacher-dashboard/announcements" },
+>>>>>>> 6c66df812ccffc3cb3e6ca4b9685d03e7f3289ef
   ];
 
   return (
@@ -139,7 +150,11 @@ export default function Navbar() {
         >
           {/* Profile Icon */}
           <motion.div
+<<<<<<< HEAD
+            className="w-8 h-8 bg-white flex items-center justify-center rounded-full text-black shadow-md"
+=======
             className="w-8 h-8 bg-white flex items-center justify-center rounded-full text-black border-2 border-transparent transition-colors group-hover:border-blue-500"
+>>>>>>> 6c66df812ccffc3cb3e6ca4b9685d03e7f3289ef
             animate={{ scale: isClicked ? 1.2 : 1 }}
             transition={{ type: "spring", stiffness: 200, damping: 10 }}
           >

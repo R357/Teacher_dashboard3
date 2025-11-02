@@ -1,28 +1,12 @@
-"use client";
-// @ts-ignore - react-vertical-timeline-component doesn't have TypeScript types
 import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 import { useState, useRef, useEffect } from "react";
-import {
-  IconClipboardList,
-  IconClipboardCheck,
-  IconClipboardX,
-} from "@tabler/icons-react";
-import {
-  Upload,
-  X,
-  FileText,
-  CheckCircle2,
-  AlertCircle,
-  Clock,
-  User,
-} from "lucide-react";
+import { Upload } from "lucide-react";
 
-// Subject icons mapping
-const subjectIcons: { [key: string]: string } = {
+const subjectEmojis: { [key: string]: string } = {
   "Algorithms": "🔢",
   "Web Dev": "💻",
   "Database": "🗄️",
@@ -37,80 +21,72 @@ const subjectIcons: { [key: string]: string } = {
   "Social Studies": "🌍",
 };
 
-// Assignment data with subject info
 const assignmentsData = [
   {
     id: "A-01",
-      title: "Algorithms (A-01)",
+    title: "Sorting Algorithms Implementation",
     subject: "Algorithms",
     subjectId: "CS301",
-    description: "Implement sorting algorithms (Bubble, Quick, Merge) and analyze their time complexity. Submit code with test cases and complexity analysis.",
-    dueDate: "Nov 5, 2024",
+    description: "Implement sorting algorithms and analyze time complexity with test cases.",
+    dueDate: "Nov 5",
+    year: "2024",
     status: "pending",
-      icon: <IconClipboardList />,
-    date: "2024-11-01",
-    },
-    {
+  },
+  {
     id: "Project-01",
-      title: "Web Dev (Project-01)",
+    title: "Responsive Portfolio Website",
     subject: "Web Dev",
     subjectId: "CS401",
-    description: "Build a responsive portfolio website using HTML, CSS, and JavaScript. Include at least 3 sections: About, Projects, and Contact.",
-    dueDate: "Nov 8, 2024",
+    description: "Build a responsive portfolio with About, Projects, and Contact sections.",
+    dueDate: "Nov 8",
+    year: "2024",
     status: "pending",
-      icon: <IconClipboardList />,
-    date: "2024-11-03",
-    },
-    {
+  },
+  {
     id: "Lab-03",
-      title: "Database (Lab-03)",
+    title: "E-commerce Database Design",
     subject: "Database",
     subjectId: "CS201",
-    description: "Design and implement a database schema for an e-commerce system. Create ER diagrams and write SQL queries for basic operations.",
-    dueDate: "Nov 2, 2024",
+    description: "Design database schema with ER diagrams and SQL queries.",
+    dueDate: "Nov 2",
+    year: "2024",
     status: "graded",
-      icon: <IconClipboardCheck />,
-    date: "2024-10-28",
     grade: "A",
-    },
-    {
+  },
+  {
     id: "Quiz-04",
-      title: "OOP (Quiz-04)",
+    title: "OOP Concepts Quiz",
     subject: "OOP",
     subjectId: "CS302",
-    description: "Complete quiz on Object-Oriented Programming concepts including inheritance, polymorphism, and encapsulation.",
-    dueDate: "Oct 30, 2024",
+    description: "Quiz on inheritance, polymorphism, and encapsulation.",
+    dueDate: "Oct 30",
+    year: "2024",
     status: "graded",
-      icon: <IconClipboardCheck />,
-    date: "2024-10-25",
     grade: "B+",
-    },
-    {
+  },
+  {
     id: "A-02",
-      title: "Mobile (A-02)",
+    title: "Mobile App Authentication",
     subject: "Mobile",
     subjectId: "CS501",
-    description: "Develop a mobile app with authentication feature. Include login, registration, and password reset functionality.",
-    dueDate: "Oct 28, 2024",
+    description: "Develop authentication with login, registration, and password reset.",
+    dueDate: "Oct 28",
+    year: "2024",
     status: "overdue",
-      icon: <IconClipboardX />,
-    date: "2024-10-20",
-    },
-    {
+  },
+  {
     id: "Lab-02",
-      title: "ML (Lab-02)",
+    title: "Image Classification Model",
     subject: "ML",
     subjectId: "CS601",
-    description: "Train a machine learning model for image classification using TensorFlow. Submit code, model weights, and accuracy report.",
-    dueDate: "Oct 25, 2024",
+    description: "Train ML model for image classification using TensorFlow.",
+    dueDate: "Oct 25",
+    year: "2024",
     status: "graded",
-      icon: <IconClipboardCheck />,
-    date: "2024-10-18",
     grade: "A+",
   },
 ];
 
-// File Upload Modal Component
 function FileUploadModal({
   assignment,
   isOpen,
@@ -145,13 +121,9 @@ function FileUploadModal({
     }
 
     setIsSubmitting(true);
-
-    // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       setShowSuccess(true);
-      
-      // Show success message for 2 seconds, then close
       setTimeout(() => {
         setShowSuccess(false);
         onSuccess();
@@ -169,70 +141,94 @@ function FileUploadModal({
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + " " + sizes[i];
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    console.log("Modal is closed, isOpen:", isOpen);
+    return null;
+  }
+
+  console.log("Rendering modal for assignment:", assignment.title);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b">
-          <div>
-            <h3 className="text-2xl font-bold text-gray-800">Submit Assignment</h3>
-            <p className="text-sm text-gray-600 mt-1">{assignment.title}</p>
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4"
+      style={{ backdropFilter: 'blur(4px)' }}
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div 
+          className="p-6 text-white"
+          style={{ background: 'linear-gradient(135deg, #2563eb 0%, #4f46e5 100%)' }}
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div 
+                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+                style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
+              >
+                {subjectEmojis[assignment.subject] || "📝"}
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold">Submit Assignment</h3>
+                <p className="text-blue-100 text-sm mt-1">{assignment.subject} • {assignment.subjectId}</p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition text-2xl leading-none"
+            >
+              ×
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
-          >
-            <X className="w-6 h-6 text-gray-600" />
-          </button>
         </div>
 
-        {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
           {showSuccess ? (
             <div className="flex flex-col items-center justify-center py-12">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                <CheckCircle2 className="w-12 h-12 text-green-600" />
+              <div 
+                className="w-20 h-20 rounded-full flex items-center justify-center mb-4 shadow-lg text-white text-4xl"
+                style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%)' }}
+              >
+                ✓
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                Assignment Submitted Successfully!
+                Successfully Submitted!
               </h3>
               <p className="text-gray-600 text-center">
-                Your assignment has been submitted. You will receive a confirmation email shortly.
+                Your assignment has been submitted. Check your email for confirmation.
               </p>
             </div>
           ) : (
             <>
-              {/* Assignment Info */}
-              <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="text-3xl">
-                    {subjectIcons[assignment.subject] || "📝"}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800">{assignment.subject}</h4>
-                    <p className="text-sm text-gray-600">Subject ID: {assignment.subjectId}</p>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-700 mt-2">{assignment.description}</p>
-                <div className="flex items-center gap-2 mt-3 text-sm text-gray-600">
-                  <Clock className="w-4 h-4" />
-                  <span>Due: {assignment.dueDate}</span>
+              <div 
+                className="mb-6 p-5 rounded-xl border border-blue-200"
+                style={{ background: 'linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%)' }}
+              >
+                <h4 className="font-semibold text-gray-800 mb-2">{assignment.title}</h4>
+                <p className="text-sm text-gray-700 mb-3">{assignment.description}</p>
+                <div className="flex items-center gap-2 text-sm text-blue-700 font-medium">
+                  <span>🕐</span>
+                  <span>Due: {assignment.dueDate}, {assignment.year}</span>
                 </div>
               </div>
 
-              {/* File Upload Section */}
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-gray-800 mb-3">
                   Upload Files
                 </label>
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition"
+                  className="border-2 border-dashed border-blue-300 rounded-xl p-8 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all duration-300"
                 >
-                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-600 mb-1">
+                  <div 
+                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl"
+                    style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%)' }}
+                  >
+                    ⬆️
+                  </div>
+                  <p className="text-gray-700 mb-1 font-medium">
                     Click to upload or drag and drop
                   </p>
                   <p className="text-xs text-gray-500">
@@ -248,7 +244,6 @@ function FileUploadModal({
                   />
                 </div>
 
-                {/* File List */}
                 {files.length > 0 && (
                   <div className="mt-4 space-y-2">
                     <p className="text-sm font-semibold text-gray-800 mb-2">
@@ -257,10 +252,13 @@ function FileUploadModal({
                     {files.map((file, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200"
+                        className="flex items-center justify-between p-3 rounded-lg border border-blue-200"
+                        style={{ background: 'linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%)' }}
                       >
                         <div className="flex items-center gap-3 flex-1">
-                          <FileText className="w-5 h-5 text-blue-600" />
+                          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
+                            📄
+                          </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-gray-800 truncate">
                               {file.name}
@@ -272,9 +270,9 @@ function FileUploadModal({
                         </div>
                         <button
                           onClick={() => handleRemoveFile(index)}
-                          className="p-1 hover:bg-red-50 rounded text-red-600 transition"
+                          className="p-1.5 hover:bg-red-100 rounded-lg text-red-600 transition text-xl leading-none"
                         >
-                          <X className="w-4 h-4" />
+                          ×
                         </button>
                       </div>
                     ))}
@@ -282,18 +280,18 @@ function FileUploadModal({
                 )}
               </div>
 
-              {/* Submit Button */}
               <div className="flex gap-3">
                 <button
                   onClick={onClose}
-                  className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium"
+                  className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={files.length === 0 || isSubmitting}
-                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 text-white rounded-xl transition font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
+                  style={{ background: 'linear-gradient(135deg, #2563eb 0%, #4f46e5 100%)' }}
                 >
                   {isSubmitting ? (
                     <>
@@ -302,8 +300,8 @@ function FileUploadModal({
                     </>
                   ) : (
                     <>
-                      <Upload className="w-5 h-5" />
-                      Submit Assignment
+                      <span>⬆️</span>
+                      <span>Submit Assignment</span>
                     </>
                   )}
                 </button>
@@ -316,7 +314,6 @@ function FileUploadModal({
   );
 }
 
-// Timeline Card Component with Scroll Animation
 function TimelineCard({
   assignment,
   index,
@@ -333,49 +330,56 @@ function TimelineCard({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => {
-            setInView(true);
-          }, index * 200);
+          setTimeout(() => setInView(true), index * 100);
         }
       },
       { threshold: 0.1 }
     );
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
+    if (cardRef.current) observer.observe(cardRef.current);
     return () => {
-      if (cardRef.current) {
-        observer.unobserve(cardRef.current);
-      }
+      if (cardRef.current) observer.unobserve(cardRef.current);
     };
   }, [index]);
 
-  const getStatusColor = () => {
+  const getStatusInfo = () => {
     switch (assignment.status) {
       case "graded":
-        return "text-green-600 bg-green-50 border-green-200";
+        return {
+          gradient: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
+          icon: "✓",
+          text: assignment.grade
+        };
       case "overdue":
-        return "text-red-600 bg-red-50 border-red-200";
+        return {
+          gradient: "linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)",
+          icon: "⚠",
+          text: "Overdue"
+        };
       default:
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
+        return {
+          gradient: "linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%)",
+          icon: "🕐",
+          text: "Pending"
+        };
     }
   };
 
-  const getStatusIcon = () => {
-    switch (assignment.status) {
-      case "graded":
-        return <CheckCircle2 className="w-5 h-5" />;
-      case "overdue":
-        return <AlertCircle className="w-5 h-5" />;
-      default:
-        return <Clock className="w-5 h-5" />;
-    }
-  };
-
+  const statusInfo = getStatusInfo();
   const isLeft = index % 2 === 0;
   const position = isLeft ? "left" : "right";
+
+  const dateParts = assignment.dueDate.split(' ');
+  const customIcon = (
+    <div className="flex flex-col items-center justify-center h-full w-full text-white px-1">
+      <div className="text-xs font-bold leading-tight">
+        {dateParts[0]}
+      </div>
+      <div className="text-[9px] leading-tight opacity-90">
+        {dateParts[1] || ''}
+      </div>
+    </div>
+  );
 
   return (
     <div
@@ -393,44 +397,57 @@ function TimelineCard({
           boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
           border: "1px solid #e5e7eb",
           borderRadius: "0.75rem",
+          position: 'relative',
         }}
         contentArrowStyle={
-          isLeft
-            ? { borderRight: "7px solid white" }
-            : { borderLeft: "7px solid white" }
+          index % 2 === 0
+            ? { 
+                borderRight: "12px solid #3b82f6",
+              }
+            : { 
+                borderLeft: "12px solid #3b82f6",
+              }
         }
-        date={assignment.dueDate}
+        date=""
         iconStyle={{
-          background: assignment.status === "graded" ? "#10b981" : assignment.status === "overdue" ? "#ef4444" : "#f59e0b",
+          background: assignment.status === "graded" 
+            ? "#2563eb"
+            : assignment.status === "overdue"
+            ? "#1e40af"
+            : "#3b82f6",
           color: "#fff",
+          width: '60px',
+          height: '60px',
         }}
-        icon={assignment.icon}
+        icon={customIcon}
       >
-        <div className="p-4">
-          {/* Subject Header */}
-          <div className="flex items-center gap-3 mb-3">
-            <div className="text-3xl">
-              {subjectIcons[assignment.subject] || "📝"}
+        <div className="p-3">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="text-xl">
+              {subjectEmojis[assignment.subject] || "📝"}
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold text-gray-800">{assignment.subject}</h3>
-              <p className="text-sm text-gray-600">ID: {assignment.subjectId}</p>
+              <h3 className="text-sm font-bold text-gray-800">{assignment.subject}</h3>
+              <p className="text-[10px] text-gray-600">ID: {assignment.subjectId}</p>
             </div>
           </div>
 
-          {/* Assignment Title */}
-          <h4 className="text-xl font-semibold text-gray-800 mb-2">
+          <h4 className="text-base font-semibold text-gray-800 mb-1">
             {assignment.title}
           </h4>
 
-          {/* Description */}
-          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+          <p className="text-xs text-gray-600 mb-2 line-clamp-2">
             {assignment.description}
           </p>
 
-          {/* Status Badge */}
-          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4 ${getStatusColor()}`}>
-            {getStatusIcon()}
+          <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium mb-2 ${
+            assignment.status === "graded"
+              ? "text-blue-700 bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200"
+              : assignment.status === "overdue"
+              ? "text-blue-700 bg-gradient-to-r from-blue-100 to-blue-200 border-blue-300"
+              : "text-blue-700 bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200"
+          }`}>
+            <span>{statusInfo.icon}</span>
             <span>
               {assignment.status === "graded"
                 ? `Graded: ${assignment.grade}`
@@ -440,13 +457,17 @@ function TimelineCard({
             </span>
           </div>
 
-          {/* Submit Button (only for pending/overdue) */}
           {assignment.status !== "graded" && (
             <button
-              onClick={onSubmitClick}
-              className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium flex items-center justify-center gap-2"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("Button clicked!");
+                onSubmitClick();
+              }}
+              className="w-full px-2 py-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition font-medium flex items-center justify-center gap-1.5 text-xs"
             >
-              <Upload className="w-4 h-4" />
+              <Upload className="w-3 h-3" />
               Submit Assignment
             </button>
           )}
@@ -456,31 +477,29 @@ function TimelineCard({
   );
 }
 
-// Main Assignments Component
 export default function Assignments() {
   const [selectedAssignment, setSelectedAssignment] = useState<typeof assignmentsData[0] | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [submittedAssignments, setSubmittedAssignments] = useState<Set<string>>(new Set());
 
   const handleSubmitClick = (assignment: typeof assignmentsData[0]) => {
+    console.log("Submit button clicked for:", assignment.title);
+    console.log("Setting modal state...");
     setSelectedAssignment(assignment);
     setIsUploadModalOpen(true);
+    console.log("Modal should be open now");
   };
 
   const handleUploadSuccess = () => {
-    if (selectedAssignment) {
-      setSubmittedAssignments((prev) => new Set(prev).add(selectedAssignment.id));
-    }
+    console.log("Assignment submitted successfully!");
   };
 
   return (
-    <section id="assignments" className="py-20 bg-gray-50">
+    <section id="assignments" className="py-20 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-gray-800 mb-12 text-center">
-          Assignments
+        <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
+          Assignments Timeline
         </h2>
         
-        {/* Vertical Timeline */}
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
           <VerticalTimeline lineColor="#e5e7eb">
             {assignmentsData.map((assignment, index) => (
@@ -493,8 +512,16 @@ export default function Assignments() {
             ))}
           </VerticalTimeline>
         </div>
+        
+        <style>{`
+          .vertical-timeline-element {
+            margin-bottom: 0 !important;
+          }
+          .vertical-timeline-element-content {
+            min-height: auto !important;
+          }
+        `}</style>
 
-        {/* File Upload Modal */}
         {selectedAssignment && (
           <FileUploadModal
             assignment={selectedAssignment}

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ScrollAnimator } from './components/ScrollAnimator';
 import { Attendance } from './sections/Attendance';
+import TaskSection from './sections/task';
 import { 
   ChevronDown, 
   ChevronUp,
@@ -459,6 +460,18 @@ export default function ParentDashboard() {
 
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* SECTION 3: RECENT TASKS & PRACTICE (copied from Student Dashboard) */}
+        <section 
+          id="tasks" 
+          className="dashboard-section"
+          ref={(el) => { sectionsRef.current['tasks'] = el; }}
+        >
+          <div className="w-full px-4 py-4 h-full">
+            {/* TaskSection already contains its own white cards and max-width container */}
+            <TaskSection />
           </div>
         </section>
 

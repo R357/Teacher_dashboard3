@@ -1,197 +1,236 @@
 "use client";
 import {
   Megaphone,
-  Plus,
-  Edit,
-  Trash2,
-  Calendar,
-  AlertCircle,
+  Send,
+  Users,
+  User,
+  UserCheck, // Replaced Plus
+  Loader2, // For loading spinner
+  CheckCircle, // For success
+  AlertTriangle, // Replaced AlertCircle
   Info,
-  CheckCircle,
 } from "lucide-react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const AnnouncementCard = ({
-  announcement,
-  onEdit,
-  onDelete,
-}: {
-  announcement: {
-    id: string;
-    title: string;
-    message: string;
-    date: string;
-    priority: "low" | "medium" | "high";
-    category: string;
-  };
-  onEdit: () => void;
-  onDelete: () => void;
-}) => {
-  const priorityColors = {
-    low: "bg-blue-100 text-blue-700",
-    medium: "bg-orange-100 text-orange-700",
-    high: "bg-red-100 text-red-700",
-  };
+// Define the audience types
+type Audience = "All" | "Students" | "Teachers" | "Parents";
+type Priority = "low" | "medium" | "high";
 
-  const priorityIcons = {
-    low: Info,
-    medium: AlertCircle,
-    high: CheckCircle,
-  };
-
-  const Icon = priorityIcons[announcement.priority];
-
-  return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-300">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div
-            className={`w-10 h-10 rounded-full flex items-center justify-center ${priorityColors[announcement.priority]}`}
-          >
-            <Icon className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="font-bold text-gray-800">{announcement.title}</h3>
-            <div className="flex items-center gap-2 mt-1">
-              <span
-                className={`px-2 py-1 rounded-full text-xs font-semibold ${priorityColors[announcement.priority]}`}
-              >
-                {announcement.priority.toUpperCase()}
-              </span>
-              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                {announcement.category}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onEdit}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <Edit className="w-5 h-5 text-blue-600" />
-          </button>
-          <button
-            onClick={onDelete}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <Trash2 className="w-5 h-5 text-red-600" />
-          </button>
-        </div>
-      </div>
-
-      <p className="text-gray-700 mb-4 line-clamp-3">{announcement.message}</p>
-
-      <div className="flex items-center gap-2 text-sm text-gray-500">
-        <Calendar className="w-4 h-4" />
-        <span>{announcement.date}</span>
-      </div>
-    </div>
-  );
+// Helper object for tab icons
+const tabDetails = {
+  All: { icon: Users, color: "text-blue-600", border: "border-blue-600" },
+  Students: {
+    icon: User,
+    color: "text-green-600",
+    border: "border-green-600",
+  },
+  Teachers: {
+    icon: UserCheck,
+    color: "text-purple-600",
+    border: "border-purple-600",
+  },
+  Parents: {
+    icon: Users,
+    color: "text-orange-600",
+    border: "border-orange-600",
+  },
 };
 
 export default function AnnouncementSection() {
-  const [announcements, setAnnouncements] = useState([
-    {
-      id: "1",
-      title: "End of Semester Exams Schedule",
-      message:
-        "Dear students, please note that the end of semester exams will begin on January 15th, 2024. Make sure to check the timetable on the portal and prepare accordingly.",
-      date: "Dec 15, 2023",
-      priority: "high" as const,
-      category: "Academics",
-    },
-    {
-      id: "2",
-      title: "Library Hours Extended",
-      message:
-        "The library will have extended hours during exam week. New hours: Monday-Friday 7 AM - 10 PM, Saturday-Sunday 9 AM - 8 PM.",
-      date: "Dec 14, 2023",
-      priority: "medium" as const,
-      category: "Facilities",
-    },
-    {
-      id: "3",
-      title: "Student Portal Maintenance",
-      message:
-        "Scheduled maintenance will be performed on the student portal this Sunday from 2 AM to 6 AM EST. Some services may be temporarily unavailable.",
-      date: "Dec 13, 2023",
-      priority: "low" as const,
-      category: "System",
-    },
-    {
-      id: "4",
-      title: "Holiday Break Notice",
-      message:
-        "The campus will be closed from December 23rd to January 2nd for the holiday season. Classes will resume on January 3rd, 2024.",
-      date: "Dec 12, 2023",
-      priority: "medium" as const,
-      category: "Campus",
-    },
-    {
-      id: "5",
-      title: "Scholarship Applications Open",
-      message:
-        "The new scholarship application cycle is now open. Students with GPA above 3.5 are encouraged to apply before January 31st, 2024.",
-      date: "Dec 11, 2023",
-      priority: "high" as const,
-      category: "Financial Aid",
-    },
-    {
-      id: "6",
-      title: "Sports Day Registration",
-      message:
-        "Registration for the annual Sports Day is now open. Students can register for multiple events at the Student Activities Office.",
-      date: "Dec 10, 2023",
-      priority: "low" as const,
-      category: "Events",
-    },
-  ]);
+  const [activeTab, setActiveTab] = useState<Audience>("All");
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [priority, setPriority] = useState<Priority>("medium");
 
-  const handleDelete = (id: string) => {
-    setAnnouncements(announcements.filter((a) => a.id !== id));
+  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title || !message) {
+      alert("Please fill in both title and message.");
+      return;
+    }
+
+    setStatus("sending");
+
+    const newAnnouncement = {
+      id: crypto.randomUUID(),
+      title,
+      message,
+      priority,
+      targetAudience: activeTab,
+      date: new Date().toISOString(),
+    };
+
+    // --- In a real app, you would send this to your database ---
+    console.log("Sending announcement:", newAnnouncement);
+    // -----------------------------------------------------------
+
+    // Simulate API call
+    setTimeout(() => {
+      setStatus("sent");
+      setTitle("");
+      setMessage("");
+      setPriority("medium");
+
+      // Reset status after a couple of seconds
+      setTimeout(() => setStatus("idle"), 2000);
+    }, 1500);
   };
 
-  const handleEdit = (id: string) => {
-    // In a real app, this would open an edit modal
-    console.log("Edit announcement:", id);
-  };
-
-  const handleAdd = () => {
-    // In a real app, this would open an add modal
-    console.log("Add new announcement");
-  };
+  const tabs: Audience[] = ["All", "Students", "Teachers", "Parents"];
 
   return (
     <section id="announcements" className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-10">
-          <div>
+        {/* Section Header */}
+        <div className="mb-10">
+          <div className="flex items-center gap-3">
+            <Megaphone className="w-8 h-8 text-blue-600" />
             <h2 className="text-3xl font-bold text-gray-800">
-              Announcements
+              Broadcast Announcement
             </h2>
-            <p className="text-gray-600 mt-2">
-              Manage and broadcast important messages to the community
-            </p>
           </div>
-          <button
-            onClick={handleAdd}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
-          >
-            <Plus className="w-5 h-5" />
-            <span className="font-semibold">New Announcement</span>
-          </button>
+          <p className="text-gray-600 mt-2">
+            Select an audience and send an important message.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {announcements.map((announcement) => (
-            <AnnouncementCard
-              key={announcement.id}
-              announcement={announcement}
-              onEdit={() => handleEdit(announcement.id)}
-              onDelete={() => handleDelete(announcement.id)}
-            />
-          ))}
+        {/* Tab Buttons */}
+        <div className="flex border-b border-gray-200 mb-6">
+          {tabs.map((tab) => {
+            const { icon: Icon, color, border } = tabDetails[tab];
+            const isActive = activeTab === tab;
+            return (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex items-center gap-2 py-3 px-5 font-semibold transition-all duration-300 -mb-px ${
+                  isActive
+                    ? `${color} border-b-2 ${border}`
+                    : "text-gray-500 hover:text-gray-800"
+                }`}
+              >
+                <Icon
+                  className={`w-5 h-5 ${
+                    isActive ? color : "text-gray-400"
+                  }`}
+                />
+                <span>Send to {tab}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Announcement Form */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Title Input */}
+              <div className="md:col-span-2">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Announcement Title
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="e.g., End of Semester Exams"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* Priority Select */}
+              <div>
+                <label
+                  htmlFor="priority"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Priority
+                </label>
+                <select
+                  id="priority"
+                  value={priority}
+                  onChange={(e) => setPriority(e.target.value as Priority)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Message Textarea */}
+            <div className="mt-6">
+              <label
+                htmlFor="message"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                rows={6}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder={`Write your announcement for ${activeTab}...`}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Submit Button & Status */}
+            <div className="mt-6 flex items-center justify-between">
+              <div className="text-sm text-gray-500">
+                Sending to:{" "}
+                <span
+                  className={`font-bold ${tabDetails[activeTab].color}`}
+                >
+                  {activeTab}
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <AnimatePresence mode="wait">
+                  {status === "sent" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="flex items-center gap-2 text-green-600"
+                    >
+                      <CheckCircle className="w-5 h-5" />
+                      <span className="font-semibold">Sent!</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-semibold transition-all ${
+                    status === "sending"
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : `bg-blue-600 hover:bg-blue-700`
+                  }`}
+                >
+                  {status === "sending" ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Send className="w-5 h-5" />
+                  )}
+                  <span>
+                    {status === "sending"
+                      ? "Sending..."
+                      : `Send to ${activeTab}`}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </section>

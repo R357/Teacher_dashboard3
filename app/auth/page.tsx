@@ -113,7 +113,7 @@ const AuthPage = () => {
       });
     } else if (selectedRole === 'teacher') {
       // For teacher, username is not shown (email is used as username)
-      const requiredFields = ['fullName', 'email', 'country', 'phone', 'region', 'subjectSpecialization', 'qualification', 'password', 'confirmPassword'];
+      const requiredFields = ['fullName', 'email', 'country', 'phone', 'qualification', 'password', 'confirmPassword'];
       totalFields = requiredFields.length;
       requiredFields.forEach(field => {
         if (formData[field as keyof typeof formData]?.toString().trim()) {
@@ -486,15 +486,6 @@ const AuthPage = () => {
         newErrors.country = 'Country is required';
       }
 
-      // Region validation
-      if (!formData.region.trim()) {
-        newErrors.region = 'Region is required';
-      }
-
-      // Subject specialization validation
-      if (!formData.subjectSpecialization.trim()) {
-        newErrors.subjectSpecialization = 'Subject specialization is required';
-      }
 
       // Qualification validation
       if (!formData.qualification.trim()) {
@@ -749,32 +740,32 @@ const AuthPage = () => {
     }
   }, [selectedRole]);
 
-  // Parallax effect based on mouse movement
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-        setMousePosition({ x, y });
-      }
-    };
+  // Parallax effect based on mouse movement - DISABLED
+  // useEffect(() => {
+  //   const handleMouseMove = (e: MouseEvent) => {
+  //     if (containerRef.current) {
+  //       const rect = containerRef.current.getBoundingClientRect();
+  //       const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+  //       const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+  //       setMousePosition({ x, y });
+  //     }
+  //   };
 
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener('mousemove', handleMouseMove);
-      return () => container.removeEventListener('mousemove', handleMouseMove);
-    }
-  }, []);
+  //   const container = containerRef.current;
+  //   if (container) {
+  //     container.addEventListener('mousemove', handleMouseMove);
+  //     return () => container.removeEventListener('mousemove', handleMouseMove);
+  //   }
+  // }, []);
 
-  // Calculate parallax transforms
+  // Calculate parallax transforms - DISABLED (all set to 0,0 to keep animations static)
   const parallaxTransform = {
-    background: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 30}px)`,
-    illustration: `translate(${mousePosition.x * -20}px, ${mousePosition.y * -20}px)`,
-    wave1: `translate(${mousePosition.x * 15}px, ${mousePosition.y * 15}px)`,
-    wave2: `translate(${mousePosition.x * -10}px, ${mousePosition.y * -10}px)`,
-    floating1: `translate(${mousePosition.x * 25}px, ${mousePosition.y * 25}px)`,
-    floating2: `translate(${mousePosition.x * -15}px, ${mousePosition.y * -15}px)`,
+    background: `translate(0px, 0px)`,
+    illustration: `translate(0px, 0px)`,
+    wave1: `translate(0px, 0px)`,
+    wave2: `translate(0px, 0px)`,
+    floating1: `translate(0px, 0px)`,
+    floating2: `translate(0px, 0px)`,
   };
 
   return (
@@ -802,10 +793,7 @@ const AuthPage = () => {
         <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-pink-300 rounded-full opacity-10 animate-float"></div>
       </div>
       <div 
-        className="w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10 transition-transform duration-75 ease-out"
-        style={{ 
-          transform: `perspective(1000px) rotateY(${mousePosition.x * 0.3}deg) rotateX(${mousePosition.y * -0.3}deg) scale(${1 + (mousePosition.x * mousePosition.x + mousePosition.y * mousePosition.y) * 0.005})`
-        }}
+        className="w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
           {/* Left Panel - Login/Signup Form */}
@@ -1545,93 +1533,11 @@ const AuthPage = () => {
                       </div>
                     </div>
 
-                    {/* Location Information Section */}
-                    <div className="space-y-4 pb-2 border-b border-slate-700/50 animate-fade-in" style={{ animationDelay: '100ms' }}>
-                      <h3 className="text-blue-200 text-xs font-semibold uppercase tracking-wider">Location Information</h3>
-
-                      <div className="transform transition-all duration-300 hover:scale-[1.01]">
-                        <label htmlFor="region" className="block text-blue-200 text-sm font-medium mb-2 transition-colors">
-                          Region
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="text"
-                            id="region"
-                            name="region"
-                            value={formData.region}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="Enter your region"
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.region ? 'border-red-500' : 'border-blue-500'
-                            } text-white placeholder-blue-300 focus:outline-none focus:border-blue-400 transition-all duration-300 hover:border-blue-400/80`}
-                          />
-                          {errors.region && (
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 animate-fade-in">
-                              <XCircle className="w-5 h-5 text-red-500" />
-                            </div>
-                          )}
-                        </div>
-                        {errors.region && (
-                          <p className="text-red-400 text-xs mt-1 flex items-center gap-1 animate-fade-in transition-all duration-200">
-                            <AlertCircle className="w-3 h-3" />
-                            {errors.region}
-                          </p>
-                        )}
-                      </div>
-                    </div>
 
                     {/* Professional Information Section */}
                     <div className="space-y-4 pb-2 border-b border-slate-700/50 animate-fade-in" style={{ animationDelay: '200ms' }}>
                       <h3 className="text-blue-200 text-xs font-semibold uppercase tracking-wider">Professional Information</h3>
                       
-                      <div className="transform transition-all duration-300 hover:scale-[1.01]">
-                        <label htmlFor="subjectSpecialization" className="block text-blue-200 text-sm font-medium mb-2 transition-colors">
-                          Subject Specialization
-                        </label>
-                        <div className="relative">
-                          <select
-                            id="subjectSpecialization"
-                            name="subjectSpecialization"
-                            value={formData.subjectSpecialization}
-                            onChange={handleInputChange}
-                            required
-                            className={`w-full px-4 py-3 bg-slate-800 border-b-2 ${
-                              errors.subjectSpecialization ? 'border-red-500' : 'border-blue-500'
-                            } text-white focus:outline-none focus:border-blue-400 transition-all duration-300 hover:border-blue-400/80 appearance-none cursor-pointer`}
-                          >
-                            <option value="" className="bg-slate-800">Select subject specialization</option>
-                            <option value="English" className="bg-slate-800">English</option>
-                            <option value="Mathematics" className="bg-slate-800">Mathematics</option>
-                            <option value="Environmental Studies" className="bg-slate-800">Environmental Studies</option>
-                            <option value="Social Studies" className="bg-slate-800">Social Studies</option>
-                            <option value="Art and Craft" className="bg-slate-800">Art and Craft</option>
-                            <option value="Physical and Health Education" className="bg-slate-800">Physical and Health Education</option>
-                            <option value="General Science" className="bg-slate-800">General Science</option>
-                            <option value="Signs" className="bg-slate-800">Signs</option>
-                            <option value="Physics" className="bg-slate-800">Physics</option>
-                            <option value="Chemistry" className="bg-slate-800">Chemistry</option>
-                            <option value="Biology" className="bg-slate-800">Biology</option>
-                          </select>
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <svg className="w-5 h-5 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </div>
-                          {errors.subjectSpecialization && (
-                            <div className="absolute right-10 top-1/2 -translate-y-1/2 animate-fade-in">
-                              <XCircle className="w-5 h-5 text-red-500" />
-                            </div>
-                          )}
-                        </div>
-                        {errors.subjectSpecialization && (
-                          <p className="text-red-400 text-xs mt-1 flex items-center gap-1 animate-fade-in transition-all duration-200">
-                            <AlertCircle className="w-3 h-3" />
-                            {errors.subjectSpecialization}
-                          </p>
-                        )}
-                      </div>
-
                       <div className="transform transition-all duration-300 hover:scale-[1.01]">
                         <label htmlFor="qualification" className="block text-blue-200 text-sm font-medium mb-2 transition-colors">
                           Qualification
