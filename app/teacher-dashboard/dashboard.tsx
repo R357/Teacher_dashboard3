@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Lottie from 'lottie-react';
 import teacherDashboardAnimation from '../../login(animations)/TeacherDashboard.json';
+import SlideIn from '../student-dashboard/components/SlideIn';
 
 export default function Dashboard() {
   const [username, setUsername] = useState<string | null>(null);
@@ -48,22 +49,28 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* main container: leave top margin so fixed navbar (layout) doesn't overlap */}
-      <main className="max-w-7xl mx-auto px-6 mt-24">
-        {/* Hero Card spans from red mark (left edge) to yellow mark (right edge) */}
-        <div className="bg-white rounded-2xl shadow-md p-8 flex items-center justify-between gap-6 mb-6">
-          <div className="flex-1">
-            <h1 className="text-5xl font-serif font-bold leading-tight mb-4">{username ? `Hello ${username}!` : 'Hello!'}</h1>
-            <p className="text-lg text-jetblack-700">You have 3 new updates. Stay informed about your child progress and activities!</p>
-          </div>
-
-          {/* Lottie Animation */}
-          <div className="w-80 h-80 flex-shrink-0">
-            <Lottie
-              animationData={teacherDashboardAnimation}
-              loop={true}
-              className="w-full h-full"
-            />
-          </div>
+      <main className="max-w-7x2 mx-auto pr-10 pl-2 mt-24">
+        <div className="pt-3 pb-6 pr-10 pl-3">
+          <SlideIn direction="left" delay={0}>
+            <div className="bg-blue-100 rounded-xl p-4 shadow-sm mb-6 max-w-3xl">
+              <div className="flex items-start justify-between mb-2">
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold font-montserrat text-jetblack-800 mb-1">{username ? `Hello ${username}!` : 'Hello!'}</h2>
+                  <p className="text-jetblack-600 mb-1 text-sm font-medium font-montserrat">
+                    You have 3 new updates. Stay informed about your child progress and activities!
+                  </p>
+                </div>
+                {/* Lottie Animation */}
+                <div className="w-24 h-24 flex-shrink-0 ml-4">
+                  <Lottie
+                    animationData={teacherDashboardAnimation}
+                    loop={true}
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            </div>
+          </SlideIn>
         </div>
 
         {/* optional spacing / other sections can go below */}
