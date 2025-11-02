@@ -33,7 +33,17 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import Lottie from 'lottie-react';
 import './dashboard.css';
+
+// Import report card animation
+let reportCardAnimation: any = null;
+try {
+  // @ts-ignore - Dynamic import for optional file
+  reportCardAnimation = require('../../login(animations)/note.json');
+} catch (e) {
+  // File will be loaded when available
+}
 
 export default function ParentDashboard() {
   const [monthOpen, setMonthOpen] = useState(false);
@@ -484,13 +494,28 @@ export default function ParentDashboard() {
           <div className="w-full px-3 py-2 h-full">
             <div className="grid grid-cols-2 gap-3 h-full">
               {/* Left Half - Subject Performance (unchanged) */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm dashboard-card overflow-y-auto">
-                <h2 className="text-xl font-bold text-[#1A1A1A] mb-2 flex items-center gap-2">
+              <motion.div 
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="bg-white rounded-2xl p-4 shadow-sm dashboard-card overflow-y-auto"
+              >
+                <motion.h2 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1 }}
+                  className="text-xl font-bold text-[#1A1A1A] mb-2 flex items-center gap-2"
+                >
                   📊 Subject Performance
-                </h2>
+                </motion.h2>
                 
                 {/* Bar Chart - Horizontal */}
-                <div className="h-[220px] mb-2">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="h-[220px] mb-2"
+                >
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={[
@@ -548,10 +573,15 @@ export default function ParentDashboard() {
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
-                </div>
+                </motion.div>
 
                 {/* Remarks Section */}
-                <div className="grid grid-cols-3 gap-2 mt-2">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                  className="grid grid-cols-3 gap-2 mt-2"
+                >
                   <div className="flex flex-col items-center p-2 bg-[#6C5CE7]/5 rounded-lg border border-[#6C5CE7]/20">
                     <span className="text-xs font-semibold text-[#2D3436] mb-0.5">Python</span>
                     <span className="text-[10px] text-[#00B894] font-medium">Excellent</span>
@@ -582,12 +612,22 @@ export default function ParentDashboard() {
                     <span className="text-[10px] text-[#00B894] font-medium">Good</span>
                     <p className="text-[10px] text-gray-500 mt-0.5 leading-tight">Algorithm implementation</p>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
 
               {/* Right Half - Report Card */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm dashboard-card overflow-y-auto">
-                <div className="flex items-center justify-between mb-3">
+              <motion.div 
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-white rounded-2xl p-4 shadow-sm dashboard-card overflow-y-auto"
+              >
+                <motion.div 
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.3 }}
+                  className="flex items-center justify-between mb-3"
+                >
                   <h2 className="text-xl font-bold text-[#1A1A1A]">Report Card</h2>
                   <button 
                     onClick={() => {
@@ -599,24 +639,58 @@ export default function ParentDashboard() {
                     <Download className="w-3.5 h-3.5" />
                     Download PDF
                   </button>
-                </div>
+                </motion.div>
 
                 {/* Congratulatory Message */}
-                <div className="text-center mb-3">
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.4 }}
+                  className="text-center mb-3"
+                >
                   <p className="text-xs text-[#1A1A1A] leading-tight">
                     Congratulations, Sarah! Your hard work and dedication have paid off. Here&apos;s a detailed overview of your academic performance this semester.
                   </p>
-                </div>
+                </motion.div>
 
                 {/* Academic Performance Section */}
-                <div className="bg-gray-50 rounded-xl p-3 mb-3">
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.5 }}
+                  className="bg-gray-50 rounded-xl p-3 mb-3"
+                >
                   <h3 className="text-sm font-bold text-[#1A1A1A] mb-1">Academic Performance</h3>
                   <p className="text-xs text-gray-600 mb-2">Semester 1, 2024</p>
-                  <div className="text-2xl font-bold text-[#5D5FEF]">Overall Grade: A</div>
-                </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-2xl font-bold text-[#5D5FEF]">Overall Grade: A</div>
+                    {/* Lottie Animation */}
+                    {reportCardAnimation && (
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, delay: 0.6 }}
+                        className="flex-shrink-0"
+                      >
+                        <div className="w-20 h-20">
+                          <Lottie
+                            animationData={reportCardAnimation}
+                            loop={true}
+                            className="w-full h-full"
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
+                </motion.div>
 
                 {/* Subject-wise Performance Table */}
-                <div className="mb-3">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.7 }}
+                  className="mb-3"
+                >
                   <h3 className="text-sm font-bold text-[#1A1A1A] mb-2">Subject-wise Performance</h3>
                   <div className="overflow-x-auto">
                     <table className="w-full">
@@ -661,16 +735,8 @@ export default function ParentDashboard() {
                       </tbody>
                     </table>
                   </div>
-                </div>
-
-                {/* Overall Remarks Section */}
-                <div className="mb-0">
-                  <h3 className="text-sm font-bold text-[#1A1A1A] mb-1.5">Overall Remarks</h3>
-                  <p className="text-xs text-[#1A1A1A] leading-tight">
-                    Sarah has shown significant improvement throughout the semester. Her dedication to learning and consistent effort are commendable. Keep up the great work!
-                  </p>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
         </section>
