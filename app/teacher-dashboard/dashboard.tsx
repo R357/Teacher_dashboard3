@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Calendar, Clock, Users, FileText, CheckCircle, AlertCircle, TrendingUp, BookOpen, Bell, ArrowRight, User, MessageSquare, Award } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from './navbar';
 
 export default function TeacherDashboard() {
-  const [selectedMonth, setSelectedMonth] = useState('December');
-  const [selectedDay, setSelectedDay] = useState('Today');
+  const [selectedDay, setSelectedDay] = useState<'Today' | 'Tomorrow' | 'Wednesday'>('Today');
   const [isLoaded, setIsLoaded] = useState(true);
 
   const teacherData = {
@@ -212,10 +212,11 @@ export default function TeacherDashboard() {
     ]
   };
 
-  const currentClasses = teacherData.scheduleByDay[selectedDay] || [];
+  type DayKey = 'Today' | 'Tomorrow' | 'Wednesday';
+  const currentClasses = teacherData.scheduleByDay[selectedDay as DayKey] || [];
 
   // Helper function to get icon component
-  const getActivityIcon = (iconName) => {
+  const getActivityIcon = (iconName: string) => {
     switch(iconName) {
       case 'FileText':
         return <FileText className="w-5 h-5" />;
@@ -275,7 +276,7 @@ export default function TeacherDashboard() {
                   <h2 className="text-xl font-bold text-gray-900">Classes</h2>
                   <select
                     value={selectedDay}
-                    onChange={(e) => setSelectedDay(e.target.value)}
+                    onChange={(e) => setSelectedDay(e.target.value as 'Today' | 'Tomorrow' | 'Wednesday')}
                     className="text-sm text-blue-600 bg-transparent border-none cursor-pointer font-medium focus:outline-none"
                   >
                     <option value="Today">Today </option>
@@ -332,33 +333,95 @@ export default function TeacherDashboard() {
                   <div className="relative mt-8">
                     <div className="flex items-end justify-between h-64 gap-4 px-2">
                       {teacherData.classPerformance.map((cls, index) => (
-                        <div key={index} className="flex-1 flex flex-col items-center group relative">
+                        <motion.div
+                          key={index}
+                          className="flex-1 flex flex-col items-center group relative"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{
+                            duration: 0.5,
+                            delay: index * 0.1,
+                            ease: [0.22, 1, 0.36, 1]
+                          }}
+                        >
                           {/* Bar container with explicit height */}
-                          <div className="w-full h-48 bg-gray-100 rounded-t-lg flex items-end relative">
-                            <div
-                              className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg transition-all duration-700 hover:from-blue-700 hover:to-blue-500 cursor-pointer relative"
-                              style={{ 
+                          <div className="w-full h-48 bg-gray-100 rounded-t-lg flex items-end relative overflow-hidden">
+                            <motion.div
+                              className="w-full bg-gradient-to-t from-blue-600 via-blue-500 to-blue-400 rounded-t-lg cursor-pointer relative shadow-lg hover:shadow-xl group/bar"
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ 
                                 height: `${cls.score}%`,
-                                minHeight: '20px'
+                                opacity: 1
+                              }}
+                              transition={{
+                                duration: 0.8,
+                                delay: index * 0.1 + 0.2,
+                                ease: [0.34, 1.56, 0.64, 1]
+                              }}
+                              whileHover={{
+                                scaleY: 1.05,
+                                transition: { duration: 0.2 }
+                              }}
+                              style={{ 
+                                minHeight: '20px',
+                                transformOrigin: 'bottom'
                               }}
                             >
-                              {/* Score display on top of bar */}
-                              <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-sm font-bold text-gray-700 whitespace-nowrap">
+                              {/* Animated score display */}
+                              <motion.div
+                                className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-sm font-bold text-gray-700 whitespace-nowrap z-10"
+                                initial={{ opacity: 0, y: -10, scale: 0.8 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{
+                                  duration: 0.4,
+                                  delay: index * 0.1 + 0.6,
+                                  ease: "easeOut"
+                                }}
+                              >
                                 {cls.score}
-                              </div>
-                            </div>
+                              </motion.div>
+                              
+                              {/* Shine effect on hover */}
+                              <motion.div
+                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                                initial={{ x: '-100%' }}
+                                whileHover={{ x: '100%' }}
+                                transition={{ duration: 0.6, ease: "easeInOut" }}
+                              />
+                              
+                              {/* Top glow effect */}
+                              <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-b from-white/30 to-transparent rounded-t-lg" />
+                            </motion.div>
                           </div>
                           
-                          {/* Subject name below */}
-                          <p className="text-xs text-gray-600 mt-3 text-center leading-tight h-10 flex items-center px-1">
+                          {/* Animated subject name */}
+                          <motion.p
+                            className="text-xs text-gray-600 mt-3 text-center leading-tight h-10 flex items-center px-1 font-medium"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{
+                              duration: 0.4,
+                              delay: index * 0.1 + 0.8
+                            }}
+                            whileHover={{ 
+                              color: '#3b82f6',
+                              scale: 1.05,
+                              transition: { duration: 0.2 }
+                            }}
+                          >
                             {cls.subject}
-                          </p>
-                        </div>
+                          </motion.p>
+                        </motion.div>
                       ))}
                     </div>
 
-                    {/* Y-axis reference line */}
-                    <div className="absolute left-0 right-0 bottom-12 border-t border-gray-300"></div>
+                    {/* Animated Y-axis reference line */}
+                    <motion.div
+                      className="absolute left-0 right-0 bottom-12 border-t border-gray-300"
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: 0.6, delay: 0.4 }}
+                    />
                   </div>
                 </div>
 
@@ -666,13 +729,13 @@ export default function TeacherDashboard() {
                 {/* Physics Course Card */}
                 <Link 
                   href="/teacher/courses/physics" 
-                  className={`rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 relative focus:outline-none focus:ring-4 focus:ring-purple-300 group ${
+                  className={`rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 relative focus:outline-none focus:ring-4 focus:ring-blue-300 group ${
                     isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                   }`}
                   style={{ transitionDelay: '1ms' }}
                 >
                   {/* Top Colored Section */}
-                  <div className="relative bg-gradient-to-br from-purple-400 to-purple-600 group-hover:from-purple-500 group-hover:to-purple-700 transition-all duration-700 p-6 overflow-hidden">
+                  <div className="relative bg-gradient-to-br from-blue-400 to-blue600 group-hover:from-blue-500 group-hover:to-blue-700 transition-all duration-700 p-6 overflow-hidden">
                     <svg className="absolute top-0 right-0 w-full h-full opacity-10" viewBox="0 0 400 200" preserveAspectRatio="none">
                       <path d="M0,0 L400,0 L400,100 Q300,80 200,100 T0,100 Z" fill="white">
                         <animate attributeName="d" dur="7s" repeatCount="indefinite"
@@ -702,26 +765,26 @@ export default function TeacherDashboard() {
                   {/* Middle White Section */}
                   <div className="bg-white p-6">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <svg className="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="w-10 h-10 bg-lightblue-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-lightblue-600" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
                         </svg>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">Class</p>
-                        <p className="text-sm font-semibold text-gray-900">Class 7th</p>
+                        <p className="text-xs text-jetblack-500">Class</p>
+                        <p className="text-sm font-semibold text-jetblack-900">Class 7th</p>
                       </div>
                     </div>
 
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-gray-600">
+                        <div className="flex items-center gap-2 text-jetblack-600">
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
                           </svg>
                           <span className="text-sm">Students</span>
                         </div>
-                        <span className="text-sm font-bold text-gray-900">25</span>
+                        <span className="text-sm font-bold text-jetblack-900">25</span>
                       </div>
 
                       <div className="flex items-center justify-between">
@@ -731,23 +794,23 @@ export default function TeacherDashboard() {
                           </svg>
                           <span className="text-sm">Assignments</span>
                         </div>
-                        <span className="text-sm font-bold text-gray-900">12</span>
+                        <span className="text-sm font-bold text-jetblack-900">12</span>
                       </div>
 
                       <div className="mt-4">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs text-gray-600">Course Progress</span>
-                          <span className="text-xs font-semibold text-gray-900">68%</span>
+                          <span className="text-xs text-jetblack-600">Course Progress</span>
+                          <span className="text-xs font-semibold text-jetblack-900">68%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div className="bg-gradient-to-r from-purple-600 to-purple-400 h-2 rounded-full" style={{ width: '68%' }}></div>
+                        <div className="w-full bg-jetblack-200 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-lightblue-600 to-lightblack-400 h-2 rounded-full" style={{ width: '68%' }}></div>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Bottom Colored Section */}
-                  <div className="relative bg-gradient-to-br from-purple-500 to-purple-700 group-hover:from-purple-600 group-hover:to-purple-800 transition-all duration-700 p-4 overflow-hidden">
+                  <div className="relative bg-gradient-to-br from-blue-500 to-blue-700 group-hover:from-blue-600 group-hover:to-blue-800 transition-all duration-700 p-4 overflow-hidden">
                     <svg className="absolute bottom-0 left-0 w-full h-full opacity-10" viewBox="0 0 400 100" preserveAspectRatio="none">
                       <path d="M0,100 L400,100 L400,50 Q300,70 200,50 T0,50 Z" fill="white">
                         <animate attributeName="d" dur="11s" repeatCount="indefinite"
@@ -763,7 +826,7 @@ export default function TeacherDashboard() {
                       <div className="absolute bottom-4 right-24 text-lg">ℏ</div>
                     </div>
 
-                    <button className="relative z-10 w-full bg-white text-purple-600 py-2 rounded-lg font-semibold hover:bg-purple-50 transition-colors flex items-center justify-center gap-2">
+                    <button className="relative z-10 w-full bg-white text-blue-600 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
                       Manage Course
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
