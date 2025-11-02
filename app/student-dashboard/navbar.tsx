@@ -18,15 +18,102 @@ export default function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  // Smooth scroll function
+  const scrollToSection = (sectionId: string) => {
+    if (sectionId === "#" || !sectionId) return;
+    
+    const element = document.querySelector(sectionId);
+    if (element) {
+      const offsetTop = element.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({
+        top: offsetTop - 100, // Offset for navbar height
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, title: string) => {
+    // Prevent default link behavior
+    e.preventDefault();
+    
+    // Ignore Profile and Logout
+    if (title === "Profile" || title === "Logout") {
+      return;
+    }
+    
+    // Handle Home - scroll to top
+    if (title === "Home") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      return;
+    }
+
+    // Map navbar items to section IDs
+    const sectionMap: { [key: string]: string } = {
+      "Subjects": "#subjects",
+      "Assignment": "#assignments",
+      "Exam": "#exams",
+      "Report": "#results",
+      "Attendance": "#attendance",
+    };
+
+    const sectionId = sectionMap[title];
+    if (sectionId) {
+      scrollToSection(sectionId);
+    }
+  };
+
   const navItems = [
-    { title: "Home", icon: <Home className="w-5 h-5" />, href: "#" },
-    { title: "Subjects", icon: <BookOpen className="w-5 h-5" />, href: "#" },
-    { title: "Assignment", icon: <FileText className="w-5 h-5" />, href: "#" },
-    { title: "Exam", icon: <ClipboardList className="w-5 h-5" />, href: "#" },
-    { title: "Report", icon: <BarChart3 className="w-5 h-5" />, href: "#" },
-    { title: "Attendance", icon: <CheckSquare className="w-5 h-5" />, href: "#" },
-    { title: "Profile", icon: <User className="w-5 h-5" />, href: "#" },
-    { title: "Logout", icon: <LogOut className="w-5 h-5" />, href: "#" },
+    { 
+      title: "Home", 
+      icon: <Home className="w-5 h-5" />, 
+      href: "#",
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, "Home")
+    },
+    { 
+      title: "Subjects", 
+      icon: <BookOpen className="w-5 h-5" />, 
+      href: "#subjects",
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, "Subjects")
+    },
+    { 
+      title: "Assignment", 
+      icon: <FileText className="w-5 h-5" />, 
+      href: "#assignments",
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, "Assignment")
+    },
+    { 
+      title: "Exam", 
+      icon: <ClipboardList className="w-5 h-5" />, 
+      href: "#exams",
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, "Exam")
+    },
+    { 
+      title: "Report", 
+      icon: <BarChart3 className="w-5 h-5" />, 
+      href: "#results",
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, "Report")
+    },
+    { 
+      title: "Attendance", 
+      icon: <CheckSquare className="w-5 h-5" />, 
+      href: "#attendance",
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, "Attendance")
+    },
+    { 
+      title: "Profile", 
+      icon: <User className="w-5 h-5" />, 
+      href: "#",
+      onClick: () => {} // Ignored for now
+    },
+    { 
+      title: "Logout", 
+      icon: <LogOut className="w-5 h-5" />, 
+      href: "#",
+      onClick: () => {} // Ignored for now
+    },
   ];
 
   useEffect(() => {

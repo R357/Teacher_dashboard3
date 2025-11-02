@@ -1,5 +1,913 @@
 "use client";
 
+<<<<<<< HEAD
+import React, { useState } from 'react';
+import { Calendar, Clock, Users, FileText, CheckCircle, AlertCircle, TrendingUp, BookOpen, Bell, ArrowRight, User, MessageSquare, Award } from 'lucide-react';
+import Link from 'next/link';
+import Navbar from './navbar';
+
+export default function TeacherDashboard() {
+  const [selectedMonth, setSelectedMonth] = useState('December');
+  const [selectedDay, setSelectedDay] = useState('Today');
+  const [isLoaded, setIsLoaded] = useState(true);
+
+  const teacherData = {
+    name: 'Grace',
+    pendingTasks: 3,
+    scheduleByDay: {
+      'Today': [
+        {
+          id: 1,
+          subject: 'Chemistry',
+          time: '8:40 - 9:15',
+          students: 21,
+          type: 'Notes'
+        },
+        {
+          id: 2,
+          subject: 'Physics',
+          time: '11:00 - 11:35',
+          students: 23,
+          type: 'Assignment'
+        }
+      ],
+      'Tomorrow': [
+        {
+          id: 3,
+          subject: 'Biology',
+          time: '9:00 - 9:30',
+          students: 23,
+          type: 'Notes'
+        },
+        {
+          id: 4,
+          subject: 'Mathematics',
+          time: '13:45 - 14:30',
+          students: 21,
+          type: 'Notes'
+        }
+      ],
+      'Wednesday': [
+        {
+          id: 5,
+          subject: 'EVS',
+          time: '10:00 - 10:30',
+          students: 25,
+          type: 'Assignment'
+        },
+        {
+          id: 6,
+          subject: 'Data Structures Lab',
+          time: '14:00 - 15:30',
+          students: 20,
+          type: 'practical'
+        }
+      ]
+    },
+    allClasses: [
+      {
+        id: 1,
+        subject: 'Algorithms & Data Structures',
+        time: '8:40 - 10:30',
+        students: 21,
+        day: 'Monday, Wednesday, Friday'
+      },
+      {
+        id: 2,
+        subject: 'Database Management',
+        time: '11:00 - 11:45',
+        students: 23,
+        day: 'Tuesday, Thursday'
+      },
+      {
+        id: 3,
+        subject: 'Web Development',
+        time: '12:00 - 12:45',
+        students: 23,
+        day: 'Monday, Wednesday'
+      },
+      {
+        id: 4,
+        subject: 'Machine Learning Basics',
+        time: '13:45 - 14:30',
+        students: 21,
+        day: 'Tuesday, Friday'
+      },
+      {
+        id: 5,
+        subject: 'Object-Oriented Programming',
+        time: '10:00 - 11:30',
+        students: 25,
+        day: 'Wednesday, Thursday'
+      },
+      {
+        id: 6,
+        subject: 'Genral Knowledge',
+        time: '14:00 - 14:30',
+        students: 20,
+        day: 'Friday'
+      }
+    ],
+    classPerformance: [
+      { subject: 'Physics', score: 85.3 },
+      { subject: 'Chemistry', score: 64.7 },
+      { subject: 'Biology', score: 84.2 },
+      { subject: 'English', score: 45.6 },
+      { subject: 'EVS', score: 43.5 },
+      { subject: 'Mathematics', score: 74.4 }
+    ],
+    recentActivities: [
+      {
+        id: 1,
+        type: 'Assignment submission',
+        title: 'Student submitted assignment',
+        description: 'IN001 Kumar submitted "Quadratic Equations"',
+        time: '2 hours ago',
+        icon: 'FileText',
+        color: 'bg-blue-100'
+      },
+      {
+        id: 2,
+        type: 'Notes',
+        title: 'Mathematics Notes ',
+        description: 'Mathematics notes uploaded',
+        time: '4 hours ago',
+        icon: 'MessageSquare',
+        color: 'bg-purple-100'
+      },
+      {
+        id: 3,
+        type: 'Assignment submission ',
+        title: ' IN002 Assignment submitted',
+        description: '90% of students passed recent test',
+        time: 'recently',
+        icon: 'Award',
+        color: 'bg-green-100'
+      },
+      {
+        id: 4,
+        type: 'Student',
+        title: 'New student enrolled',
+        description: 'RAMU joined Mathematics Class',
+        time: '1 days ago',
+        icon: 'User',
+        color: 'bg-orange-100'
+      }
+    ],
+    pendingApprovals: {
+      notes: 5,
+      assignments: 8,
+      PendingRequests: 2
+    },
+    announcements: [
+      {
+        id: 1,
+        title: 'Assesment Schedule Released',
+        date: '14 December 2025',
+        time: '12:00 pm',
+        priority: 'high'
+      },
+      {
+        id: 2,
+        title: 'Submmission date of assignment',
+        date: '18 December 2025',
+        time: '09:00 am',
+        priority: 'medium'
+      },
+      {
+        id: 3,
+        title: 'Grading of the assements',
+        date: '21 December 2025',
+        time: '11:00 am',
+        priority: 'high'
+      }
+    ],
+    courses: [
+      {
+        id: 'math',
+        name: 'Mathematics',
+        class: 'Class 10th',
+        students: 28,
+        assignments: 12,
+        progress: 68,
+        color: 'blue'
+      },
+      {
+        id: 'physics',
+        name: 'Physics',
+        class: 'Class 7th',
+        students: 25,
+        assignments: 12,
+        progress: 68,
+        color: 'purple'
+      },
+      {
+        id: 'chemistry',
+        name: 'Chemistry',
+        class: 'Class 11th',
+        students: 30,
+        assignments: 12,
+        progress: 68,
+        color: 'green'
+      }
+    ]
+  };
+
+  const currentClasses = teacherData.scheduleByDay[selectedDay] || [];
+
+  // Helper function to get icon component
+  const getActivityIcon = (iconName) => {
+    switch(iconName) {
+      case 'FileText':
+        return <FileText className="w-5 h-5" />;
+      case 'MessageSquare':
+        return <MessageSquare className="w-5 h-5" />;
+      case 'Award':
+        return <Award className="w-5 h-5" />;
+      case 'User':
+        return <User className="w-5 h-5" />;
+      default:
+        return <Bell className="w-5 h-5" />;
+    }
+  };
+
+  return (
+    <>
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Main Content with top padding to account for fixed navbar */}
+      <div className="min-h-screen bg-gray-50 pt-20 ">
+        <div className="p-6">
+          <div className="max-w-7xl mx-auto">
+            {/* Welcome Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+              {/* Welcome Card with GIF */}
+              <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2 mt-9">
+                      Hello {teacherData.name}!
+                    </h1>
+                    <p className="text-gray-600 mb-4">
+                      You have <span className="font-semibold">{teacherData.pendingTasks} new tasks</span>. It is a lot of work for today! So let's start!
+                    </p>
+                    <button className="text-blue-600 hover:text-blue-700 font-medium underline">
+                      review it
+                    </button>
+                  </div>
+                  
+                  {/* GIF Animation */}
+                  <div className="hidden md:block">
+                    <div className="w-48 h-48 relative rounded-lg overflow-hidden">
+                      <img 
+                        src="/Teacher-aniamtion.gif" 
+                        alt="Teacher Animation"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Today's Schedule Card with Day Selector */}
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-gray-900">Classes</h2>
+                  <select
+                    value={selectedDay}
+                    onChange={(e) => setSelectedDay(e.target.value)}
+                    className="text-sm text-blue-600 bg-transparent border-none cursor-pointer font-medium focus:outline-none"
+                  >
+                    <option value="Today">Today </option>
+                    <option value="Tomorrow">Tomorrow </option>
+                    <option value="Wednesday">Wednesday </option>
+                  </select>
+                </div>
+                <div className="space-y-3">
+                  {currentClasses.length > 0 ? (
+                    currentClasses.map((cls) => (
+                      <div
+                        key={cls.id}
+                        className="bg-blue-600 text-white rounded-lg p-4 hover:bg-blue-700 transition-colors cursor-pointer"
+                      >
+                        <h3 className="font-semibold mb-2">{cls.subject}</h3>
+                        <div className="flex items-center text-sm text-blue-100">
+                          <Clock className="w-4 h-4 mr-1" />
+                          {cls.time}, {cls.students} students
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-gray-500">
+                      No classes scheduled
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Left Column - Performance & Progress */}
+              <div className="lg:col-span-2 space-y-6">
+                {/* Class Performance with Bar Graph */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-xl font-bold text-gray-900">Class Performance</h2>
+                      <p className="text-sm text-gray-500">Best performing class:</p>
+                      <div className="flex items-baseline mt-1">
+                        <span className="text-4xl font-bold text-gray-900">
+                          {Math.max(...teacherData.classPerformance.map(c => c.score)).toFixed(1)}
+                        </span>
+                        <span className="text-sm text-gray-500 ml-2">in Algorithms</span>
+                      </div>
+                    </div>
+                    <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50">
+                      All classes
+                    </button>
+                  </div>
+
+                  {/* Bar Graph */}
+                  <div className="relative mt-8">
+                    <div className="flex items-end justify-between h-64 gap-4 px-2">
+                      {teacherData.classPerformance.map((cls, index) => (
+                        <div key={index} className="flex-1 flex flex-col items-center group relative">
+                          {/* Bar container with explicit height */}
+                          <div className="w-full h-48 bg-gray-100 rounded-t-lg flex items-end relative">
+                            <div
+                              className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg transition-all duration-700 hover:from-blue-700 hover:to-blue-500 cursor-pointer relative"
+                              style={{ 
+                                height: `${cls.score}%`,
+                                minHeight: '20px'
+                              }}
+                            >
+                              {/* Score display on top of bar */}
+                              <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-sm font-bold text-gray-700 whitespace-nowrap">
+                                {cls.score}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Subject name below */}
+                          <p className="text-xs text-gray-600 mt-3 text-center leading-tight h-10 flex items-center px-1">
+                            {cls.subject}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Y-axis reference line */}
+                    <div className="absolute left-0 right-0 bottom-12 border-t border-gray-300"></div>
+                  </div>
+                </div>
+
+                {/* Pending Approvals */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Pending Approvals</h2>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="bg-orange-50 rounded-lg p-4 border border-orange-200 hover:shadow-md transition-shadow cursor-pointer">
+                      <div className="flex items-center justify-between mb-2">
+                        <FileText className="w-6 h-6 text-orange-600" />
+                        <span className="text-2xl font-bold text-orange-600">
+                          {teacherData.pendingApprovals.notes}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-medium">Notes to Review</p>
+                    </div>
+                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200 hover:shadow-md transition-shadow cursor-pointer">
+                      <div className="flex items-center justify-between mb-2">
+                        <CheckCircle className="w-6 h-6 text-blue-600" />
+                        <span className="text-2xl font-bold text-blue-600">
+                          {teacherData.pendingApprovals.assignments}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-medium">Assignments</p>
+                    </div>
+                    <div className="bg-purple-50 rounded-lg p-4 border border-purple-200 hover:shadow-md transition-shadow cursor-pointer">
+                      <div className="flex items-center justify-between mb-2">
+                        <AlertCircle className="w-6 h-6 text-purple-600" />
+                        <span className="text-2xl font-bold text-purple-600">
+                          {teacherData.pendingApprovals.leaveRequests}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-medium">Leave Requests</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Recent Activities */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold text-gray-900">Recent Activities</h2>
+                    <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+                      View All
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    {teacherData.recentActivities.map((activity) => (
+                      <div 
+                        key={activity.id}
+                        className="flex items-start gap-4 p-4 bg-gradient-to-r from-gray-50 to-transparent rounded-lg border border-gray-100 hover:border-blue-200 transition-all cursor-pointer group"
+                      >
+                        {/* Icon Circle */}
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${activity.color} group-hover:scale-110 transition-transform`}>
+                          <div className="text-gray-700">
+                            {getActivityIcon(activity.icon)}
+                          </div>
+                        </div>
+
+                        {/* Activity Details */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm font-semibold text-gray-900">
+                            {activity.title}
+                          </h3>
+                          <p className="text-xs text-gray-600 mt-1 line-clamp-1">
+                            {activity.description}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-2">
+                            {activity.time}
+                          </p>
+                        </div>
+
+                        {/* Arrow */}
+                        <div className="flex-shrink-0">
+                          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 transition-colors" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column - Schedule & Announcements */}
+              <div className="space-y-6">
+                {/* Full Schedule with View More */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Full Schedule</h2>
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {teacherData.allClasses.slice(0, 4).map((cls) => (
+                      <div
+                        key={cls.id}
+                        className="border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-colors cursor-pointer"
+                      >
+                        <h3 className="font-semibold text-gray-900 mb-2">{cls.subject}</h3>
+                        <div className="flex items-center text-sm text-gray-600 mb-1">
+                          <Clock className="w-4 h-4 mr-2" />
+                          {cls.time}
+                        </div>
+                        <div className="flex items-center text-sm text-gray-600">
+                          <Users className="w-4 h-4 mr-2" />
+                          {cls.students} students • {cls.day}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* View More Button */}
+                  <button className="w-full mt-4 py-2 text-blue-600 hover:text-blue-700 font-medium border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
+                    View More Classes
+                  </button>
+                </div>
+
+                {/* Announcements */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      <Bell className="w-5 h-5 text-blue-600 mr-2" />
+                      <h2 className="text-xl font-bold text-gray-900">Announcements</h2>
+                    </div>
+                    <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                      See all
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    {teacherData.announcements.map((announcement) => (
+                      <div
+                        key={announcement.id}
+                        className="flex items-start space-x-4 pb-4 border-b border-gray-100 last:border-0 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                      >
+                        <div className={`w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center ${
+                          announcement.priority === 'high' 
+                            ? 'bg-red-100' 
+                            : 'bg-blue-100'
+                        }`}>
+                          <Bell className={`w-6 h-6 ${
+                            announcement.priority === 'high' 
+                              ? 'text-red-600' 
+                              : 'text-blue-600'
+                          }`} />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1 leading-tight">
+                            {announcement.title}
+                          </h3>
+                          <div className="flex items-center text-sm text-gray-600">
+                            <Clock className="w-4 h-4 mr-1" />
+                            {announcement.date} {announcement.time}
+                          </div>
+                          {announcement.priority === 'high' && (
+                            <span className="inline-block mt-2 px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded">
+                              Important
+                            </span>
+                          )}
+                        </div>
+                        <button className="text-gray-400 hover:text-gray-600">
+                          <span className="text-xl">⋮</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Quick Stats */}
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+                  <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">Quick Stats</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-700">Total Classes</span>
+                      <span className="font-bold text-gray-900">6</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-1.5">
+                      <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: '100%' }}></div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between pt-2">
+                      <span className="text-sm text-gray-700">Avg. Attendance</span>
+                      <span className="font-bold text-gray-900">92%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-1.5">
+                      <div className="bg-green-600 h-1.5 rounded-full" style={{ width: '92%' }}></div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2">
+                      <span className="text-sm text-gray-700">Assignment Rate</span>
+                      <span className="font-bold text-gray-900">78%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-1.5">
+                      <div className="bg-purple-600 h-1.5 rounded-full" style={{ width: '78%' }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            {/* Your Courses Section */}
+            <div className="mt-8">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Your Courses</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Math Course Card */}
+                <Link 
+                  href="/teacher/courses/math" 
+                  className={`rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 relative focus:outline-none focus:ring-4 focus:ring-blue-300 group ${
+                    isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                  }`}
+                  style={{ transitionDelay: '1ms' }}
+                >
+                  {/* Top Colored Section with Math Formulas */}
+                  <div className="relative bg-gradient-to-br from-blue-400 to-blue-600 group-hover:from-blue-500 group-hover:to-blue-700 transition-all duration-700 p-6 overflow-hidden">
+                    {/* Mathematical formulas and symbols */}
+                    <div className="absolute inset-0 text-white/80 font-bold pointer-events-none">
+                      <div className="absolute top-3 right-4 text-3xl">π</div>
+                      <div className="absolute top-14 right-14 text-2xl">∫</div>
+                      <div className="absolute top-8 right-16 text-xl">∑</div>
+                      <div className="absolute left-1/4 transform -translate-x-1/2 top-6 text-2xl">√</div>
+                      <div className="absolute left-1/2 transform -translate-x-1/2 top-10 text-xl">α</div>
+                      
+                      {/* Geometric triangles */}
+                      <svg className="absolute top-6 right-24 w-8 h-8 opacity-30" viewBox="0 0 50 50">
+                        <polygon points="25,5 45,40 5,40" fill="none" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                      <svg className="absolute top-2 left-20 w-6 h-6 opacity-30" viewBox="0 0 50 50">
+                        <polygon points="25,5 45,40 5,40" fill="none" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                    </div>
+
+                    <div className="relative z-10">
+                      <p className="text-sm text-white/90 mb-1 font-bold">Course</p>
+                      <h3 className="text-2xl font-bold text-white">Mathematics</h3>
+                    </div>
+                  </div>
+
+                  {/* Middle White Section with Stats */}
+                  <div className="bg-white p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Class</p>
+                        <p className="text-sm font-semibold text-gray-900">Class 10th</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                          </svg>
+                          <span className="text-sm">Students</span>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">28</span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd"/>
+                          </svg>
+                          <span className="text-sm">Assignments</span>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">12</span>
+                      </div>
+
+                      <div className="mt-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs text-gray-600">Course Progress</span>
+                          <span className="text-xs font-semibold text-gray-900">68%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-purple-600 to-blue-400 h-2 rounded-full" style={{ width: '68%' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom Colored Section with Button */}
+                  <div className="relative bg-gradient-to-br from-blue-500 to-blue-700 group-hover:from-blue-600 group-hover:to-blue-800 transition-all duration-700 p-4 overflow-hidden">
+                    {/* More formulas in bottom */}
+                    <div className="absolute inset-0 text-white/20 font-bold pointer-events-none">
+                      <div className="absolute bottom-3 right-6 text-2xl">∞</div>
+                      <div className="absolute bottom-2 left-8 text-xl">θ</div>
+                      <div className="absolute bottom-4 right-20 text-2xl">Σ</div>
+                      
+                      {/* More triangles */}
+                      <svg className="absolute bottom-3 left-20 w-7 h-7 opacity-30" viewBox="0 0 50 50">
+                        <polygon points="25,5 45,40 5,40" fill="none" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                    </div>
+
+                    <button className="relative z-10 w-full bg-white text-blue-600 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                      Manage Course
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </Link>
+
+                {/* Physics Course Card */}
+                <Link 
+                  href="/teacher/courses/physics" 
+                  className={`rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 relative focus:outline-none focus:ring-4 focus:ring-purple-300 group ${
+                    isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                  }`}
+                  style={{ transitionDelay: '1ms' }}
+                >
+                  {/* Top Colored Section */}
+                  <div className="relative bg-gradient-to-br from-purple-400 to-purple-600 group-hover:from-purple-500 group-hover:to-purple-700 transition-all duration-700 p-6 overflow-hidden">
+                    <svg className="absolute top-0 right-0 w-full h-full opacity-10" viewBox="0 0 400 200" preserveAspectRatio="none">
+                      <path d="M0,0 L400,0 L400,100 Q300,80 200,100 T0,100 Z" fill="white">
+                        <animate attributeName="d" dur="7s" repeatCount="indefinite"
+                          values="M0,0 L400,0 L400,100 Q300,80 200,100 T0,100 Z;
+                                  M0,0 L400,0 L400,100 Q300,120 200,100 T0,100 Z;
+                                  M0,0 L400,0 L400,100 Q300,80 200,100 T0,100 Z"/>
+                      </path>
+                    </svg>
+
+                    {/* Physics symbols */}
+                    <div className="absolute inset-0 text-white/90 font-bold pointer-events-none">
+                      <svg className="absolute top-4 right-6 w-12 h-12 opacity-30" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="6" fill="currentColor"/>
+                        <ellipse cx="50" cy="50" rx="35" ry="12" fill="none" stroke="currentColor" strokeWidth="2"/>
+                        <ellipse cx="50" cy="50" rx="12" ry="35" fill="none" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                      <div className="absolute top-3 right-20 text-xl">E=mc²</div>
+                      <div className="absolute top-10 right-20 text-lg">λ</div>
+                    </div>
+
+                    <div className="relative z-10">
+                      <p className="text-sm text-white/90 mb-1 font-bold">Course</p>
+                      <h3 className="text-2xl font-bold text-white">Physics</h3>
+                    </div>
+                  </div>
+
+                  {/* Middle White Section */}
+                  <div className="bg-white p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Class</p>
+                        <p className="text-sm font-semibold text-gray-900">Class 7th</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                          </svg>
+                          <span className="text-sm">Students</span>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">25</span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd"/>
+                          </svg>
+                          <span className="text-sm">Assignments</span>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">12</span>
+                      </div>
+
+                      <div className="mt-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs text-gray-600">Course Progress</span>
+                          <span className="text-xs font-semibold text-gray-900">68%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-purple-600 to-purple-400 h-2 rounded-full" style={{ width: '68%' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom Colored Section */}
+                  <div className="relative bg-gradient-to-br from-purple-500 to-purple-700 group-hover:from-purple-600 group-hover:to-purple-800 transition-all duration-700 p-4 overflow-hidden">
+                    <svg className="absolute bottom-0 left-0 w-full h-full opacity-10" viewBox="0 0 400 100" preserveAspectRatio="none">
+                      <path d="M0,100 L400,100 L400,50 Q300,70 200,50 T0,50 Z" fill="white">
+                        <animate attributeName="d" dur="11s" repeatCount="indefinite"
+                          values="M0,100 L400,100 L400,50 Q300,70 200,50 T0,50 Z;
+                                  M0,100 L400,100 L400,50 Q300,30 200,50 T0,50 Z;
+                                  M0,100 L400,100 L400,50 Q300,70 200,50 T0,50 Z"/>
+                      </path>
+                    </svg>
+
+                    <div className="absolute inset-0 text-white/20 font-bold pointer-events-none">
+                      <div className="absolute bottom-3 right-8 text-2xl">ω</div>
+                      <div className="absolute bottom-2 left-10 text-xl">F=ma</div>
+                      <div className="absolute bottom-4 right-24 text-lg">ℏ</div>
+                    </div>
+
+                    <button className="relative z-10 w-full bg-white text-purple-600 py-2 rounded-lg font-semibold hover:bg-purple-50 transition-colors flex items-center justify-center gap-2">
+                      Manage Course
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </Link>
+
+                {/* Chemistry Course Card */}
+                <Link 
+                  href="/teacher/courses/chemistry" 
+                  className={`rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 relative focus:outline-none focus:ring-4 focus:ring-green-300 group ${
+                    isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                  }`}
+                  style={{ transitionDelay: '1ms' }}
+                >
+                  {/* Top Colored Section */}
+                  <div className="relative bg-gradient-to-br from-green-400 to-green-600 group-hover:from-green-500 group-hover:to-green-700 transition-all duration-700 p-6 overflow-hidden">
+                    <svg className="absolute top-0 right-0 w-full h-full opacity-10" viewBox="0 0 400 200" preserveAspectRatio="none">
+                      <path d="M0,0 L400,0 L400,100 Q300,80 200,100 T0,100 Z" fill="white">
+                        <animate attributeName="d" dur="9s" repeatCount="indefinite"
+                          values="M0,0 L400,0 L400,100 Q300,80 200,100 T0,100 Z;
+                                  M0,0 L400,0 L400,100 Q300,120 200,100 T0,100 Z;
+                                  M0,0 L400,0 L400,100 Q300,80 200,100 T0,100 Z"/>
+                      </path>
+                    </svg>
+
+                    {/* Chemistry symbols and organic compounds */}
+                    <div className="absolute inset-0 text-white font-mono pointer-events-none">
+                      {/* Benzene ring */}
+                      <svg className="absolute top-4 right-8 w-14 h-14 opacity-30" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3">
+                        <polygon points="50,10 90,30 90,70 50,90 10,70 10,30" />
+                        <circle cx="50" cy="50" r="20" />
+                      </svg>
+                      
+                      {/* Chemical formulas */}
+                      <div className="absolute top-16 right-10 text-2xl font-bold">H₂O</div>
+                      <div className="absolute top-10 right-24 text-xl font-bold">CH₄</div>
+                      <div className="absolute top-3 left-24 text-lg font-bold">CO₂</div>
+                      
+                      {/* Molecular structure */}
+                      <svg className="absolute top-8 left-16 w-12 h-8 opacity-30" viewBox="0 0 60 30" fill="currentColor" stroke="currentColor" strokeWidth="1.5">
+                        <circle cx="10" cy="15" r="3" />
+                        <circle cx="30" cy="15" r="3" />
+                        <circle cx="50" cy="15" r="3" />
+                        <line x1="13" y1="15" x2="27" y2="15" />
+                        <line x1="33" y1="15" x2="47" y2="15" />
+                      </svg>
+                    </div>
+
+                    <div className="relative z-10">
+                      <p className="text-sm text-white/90 mb-1 font-bold">Course</p>
+                      <h3 className="text-2xl font-bold text-white">Chemistry</h3>
+                    </div>
+                  </div>
+
+                  {/* Middle White Section */}
+                  <div className="bg-white p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Class</p>
+                        <p className="text-sm font-semibold text-gray-900">Class 11th</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                          </svg>
+                          <span className="text-sm">Students</span>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">30</span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd"/>
+                          </svg>
+                          <span className="text-sm">Assignments</span>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">12</span>
+                      </div>
+
+                      <div className="mt-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs text-gray-600">Course Progress</span>
+                          <span className="text-xs font-semibold text-gray-900">68%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-green-600 to-green-400 h-2 rounded-full" style={{ width: '68%' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom Colored Section */}
+                  <div className="relative bg-gradient-to-br from-green-500 to-green-700 group-hover:from-green-600 group-hover:to-green-800 transition-all duration-700 p-4 overflow-hidden">
+                    <svg className="absolute bottom-0 left-0 w-full h-full opacity-10" viewBox="0 0 400 100" preserveAspectRatio="none">
+                      <path d="M0,100 L400,100 L400,50 Q300,70 200,50 T0,50 Z" fill="white">
+                        <animate attributeName="d" dur="10s" repeatCount="indefinite"
+                          values="M0,100 L400,100 L400,50 Q300,70 200,50 T0,50 Z;
+                                  M0,100 L400,100 L400,50 Q300,30 200,50 T0,50 Z;
+                                  M0,100 L400,100 L400,50 Q300,70 200,50 T0,50 Z"/>
+                      </path>
+                    </svg>
+
+                    <div className="absolute inset-0 text-white/20 font-mono pointer-events-none">
+                      <div className="absolute bottom-3 right-10 text-xl font-bold">NH₃</div>
+                      <div className="absolute bottom-2 left-12 text-lg font-bold">C₆H₁₂O₆</div>
+                      
+                      {/* Small molecular structure */}
+                      <svg className="absolute bottom-3 right-28 w-10 h-6 opacity-30" viewBox="0 0 50 20" fill="currentColor" stroke="currentColor" strokeWidth="1.5">
+                        <circle cx="8" cy="10" r="2.5" />
+                        <circle cx="25" cy="10" r="2.5" />
+                        <circle cx="42" cy="10" r="2.5" />
+                        <line x1="10.5" y1="10" x2="22.5" y2="10" />
+                        <line x1="27.5" y1="10" x2="39.5" y2="10" />
+                      </svg>
+                    </div>
+
+                    <button className="relative z-10 w-full bg-white text-green-600 py-2 rounded-lg font-semibold hover:bg-green-50 transition-colors flex items-center justify-center gap-2">
+                      Manage Course
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+=======
 import React, { useEffect, useState } from 'react';
 import Lottie from 'lottie-react';
 import teacherDashboardAnimation from '../../login(animations)/TeacherDashboard.json';
@@ -76,5 +984,6 @@ export default function Dashboard() {
         {/* optional spacing / other sections can go below */}
       </main>
     </div>
+>>>>>>> 6c66df812ccffc3cb3e6ca4b9685d03e7f3289ef
   );
 }

@@ -64,7 +64,11 @@ const FloatingDockMobile = ({
                 <a
                   href={item.href}
                   key={item.title}
-                  onClick={item.onClick}
+                  onClick={(e) => {
+                    if (item.onClick) {
+                      item.onClick(e);
+                    }
+                  }}
                   className="flex h-10 w-10 items-center justify-center"
                 >
                   <div className="h-4 w-4">{item.icon}</div>
@@ -164,7 +168,14 @@ function IconContainer({
   const [hovered, setHovered] = useState(false);
 
   return (
-    <a href={href} onClick={onClick}>
+    <a 
+      href={href} 
+      onClick={(e) => {
+        if (onClick) {
+          onClick(e);
+        }
+      }}
+    >
       <motion.div
         ref={ref}
         style={{ width, height }}
