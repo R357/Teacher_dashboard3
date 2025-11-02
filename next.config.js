@@ -7,9 +7,8 @@ const nextConfig = {
     buildActivity: false,
   },
   experimental: {
-    turbopack: {
-      root: process.cwd()
-    }
+    serverActions: true,
+    typedRoutes: true
   }
 }
 
