@@ -378,10 +378,7 @@ export default function ParentDashboard() {
                             dataKey="score"
                             position="top"
                             style={{ fill: '#1F2937', fontSize: '12px', fontWeight: 'bold' }}
-<<<<<<< HEAD
-=======
                             formatter={(label: any) => `${label}%`}
->>>>>>> 79a663ffb9bef9e24f4c11aca6ae091ea88a9595
                           />
                         </Bar>
                       </BarChart>
