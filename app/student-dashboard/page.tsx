@@ -23,7 +23,7 @@ import {
 
 import Navbar from './navbar'; 
 import SlideIn from './components/SlideIn';
-
+import ParticlesBackground from './components/ParticlesBackground';
 
 import ScrollAnimator from './components/ScrollAnimator';   
 import Subjects from './sections/Subjects';      
@@ -31,7 +31,6 @@ import Assignments from './sections/Assignments';
 import Results from './sections/Results';
 import Attendance from './sections/Attendance';
 import Exams from './sections/Exams';
-import Silk from './components/Silk';
 
 export default function StudentDashboard() {
   // Mock data for performance chart
@@ -88,16 +87,11 @@ export default function StudentDashboard() {
 
   return (
     <div className="relative min-h-screen font-sans" style={{ fontFamily: 'var(--font-montserrat), Montserrat, sans-serif' }}>
-      {/* Silk Background */}
-      <div className="fixed inset-0 -z-10 w-full h-full">
-        <Silk
-          speed={5}
-          scale={1}
-          color="#4b84af"
-          noiseIntensity={1}
-          rotation={0}
-        />
-      </div>
+      {/* Blue Background */}
+      <div className="fixed inset-0 -z-10 w-full h-full" style={{ backgroundColor: '#1e3a8a' }}></div>
+      
+      {/* Interactive Particles Background */}
+      <ParticlesBackground />
       
       {/* Floating Dock Navbar */}
       <Navbar />
