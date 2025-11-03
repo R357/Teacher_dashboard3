@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ScrollAnimator } from './components/ScrollAnimator';
 import { Attendance } from './sections/Attendance';
 import TaskSection from './sections/task';
+import Feedback from './sections/feedback';
 import { 
   ChevronDown, 
   ChevronUp,
@@ -514,7 +515,7 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['tasks'] = el; }}
         >
-          <div className="w-full px-4 py-4 h-full">
+          <div className="w-full px-2 py-1 h-full flex items-center">
             {/* TaskSection already contains its own white cards and max-width container */}
             <TaskSection />
           </div>
@@ -782,8 +783,8 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['attendance'] = el; }}
         >
-          <div className="max-w-[1920px] mx-auto px-6 py-4">
-            <div className="bg-white rounded-2xl p-8 shadow-sm dashboard-card">
+          <div className="w-full px-2 py-1 h-full flex items-center">
+            <div className="bg-white rounded-2xl p-2 shadow-sm dashboard-card w-full h-full flex flex-col">
               {/* Import and use Attendance component */}
               <Attendance />
             </div>
@@ -796,110 +797,10 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['feedback'] = el; }}
         >
-          <div className="max-w-[1920px] mx-auto px-6 py-4">
-            <div className="bg-white rounded-2xl shadow-sm dashboard-card">
+          <div className="w-full px-2 py-1 h-full flex items-center">
+            <div className="bg-white rounded-2xl shadow-sm dashboard-card h-full w-full">
               {/* Import and use the Feedback component */}
-              <div className="feedback-section">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
-                  {/* Left side - Feedback Form */}
-                  <div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-6">Feedback & Suggestions</h2>
-                    <p className="text-gray-600 mb-8">
-                      Share your thoughts to help us improve your child's learning experience
-                    </p>
-                    <div className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Parent's Name</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Student's Name</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                          placeholder="Student's name"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Class/Grade</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                          placeholder="Class/Grade"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Feedback Category</label>
-                        <select className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                          <option value="">Select a category</option>
-                          <option value="teaching">Teaching</option>
-                          <option value="communication">Communication</option>
-                          <option value="infrastructure">Infrastructure</option>
-                          <option value="others">Others</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                        <textarea
-                          rows={4}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                          placeholder="Your feedback message"
-                        ></textarea>
-                      </div>
-                      <button className="w-full bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors">
-                        Submit Feedback
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Right side - Feedback Summary */}
-                  <div>
-                    <div className="bg-gray-50 rounded-xl p-8">
-                      <h3 className="text-2xl font-semibold text-gray-900 mb-6">Feedback Summary</h3>
-                      {/* Chart will be added here */}
-                      <div className="aspect-square max-w-md mx-auto mb-8 bg-white rounded-lg p-4">
-                        <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
-                            <span>Teaching (40%)</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-teal-500"></div>
-                            <span>Communication (30%)</span>
-                          </div>
-                        </div>
-                        <div className="flex justify-between items-center text-sm text-gray-600">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                            <span>Infrastructure (20%)</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-indigo-400"></div>
-                            <span>Others (10%)</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Recent Comments */}
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Recent Comments</h4>
-                        <div className="space-y-4">
-                          <div className="bg-white p-4 rounded-lg">
-                            <p className="text-gray-700">The math classes are great!</p>
-                          </div>
-                          <div className="bg-white p-4 rounded-lg">
-                            <p className="text-gray-700">Would love more updates about homework</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Feedback />
             </div>
           </div>
         </section>

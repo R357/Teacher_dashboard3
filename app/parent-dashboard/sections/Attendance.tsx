@@ -48,15 +48,15 @@ const Index = () => {
   ];
 
   return (
-    <section id="attendance" className="py-20">
-      <div className="container mx-auto px-4 py-12 max-w-7xl">
+    <section id="attendance" className="py-1 h-full flex flex-col">
+      <div className="container mx-auto px-2 py-1 max-w-7xl h-full flex flex-col">
         {/* Header */}
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-12 text-center tracking-tight">
+        <h1 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2 text-center tracking-tight">
           Attendance Dashboard
         </h1>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-2 flex-shrink-0">
           {statsData.map((stat, index) => {
             const IconComponent = stat.icon;
             return (
@@ -64,22 +64,22 @@ const Index = () => {
                 key={index}
                 className="bg-white border border-blue-200 rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
               >
-                <div className="p-6 relative">
+                <div className="p-2 relative">
                   <div 
-                    className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${stat.color} opacity-10 rounded-bl-full`}
+                    className={`absolute top-0 right-0 w-12 h-12 bg-gradient-to-br ${stat.color} opacity-10 rounded-bl-full`}
                   />
                   <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between mb-1">
                       <div 
-                        className={`h-12 w-12 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg`}
+                        className={`h-6 w-6 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg`}
                       >
-                        <IconComponent className="text-white" size={24} strokeWidth={2.5} />
+                        <IconComponent className="text-white" size={12} strokeWidth={2.5} />
                       </div>
                     </div>
-                    <h3 className="text-sm text-gray-600 mb-2 uppercase tracking-wide font-semibold">
+                    <h3 className="text-[10px] text-gray-600 mb-1 uppercase tracking-wide font-semibold">
                       {stat.label}
                     </h3>
-                    <p className="text-4xl font-bold text-gray-800">{stat.value}</p>
+                    <p className="text-xl font-bold text-gray-800">{stat.value}</p>
                   </div>
                 </div>
               </div>
@@ -88,14 +88,14 @@ const Index = () => {
         </div>
 
         {/* Bar Graph Section */}
-        <div className="bg-white border border-blue-200 rounded-xl p-8 shadow-lg" ref={chartRef}>
-          <h2 className="text-3xl font-bold text-gray-800 mb-12 text-center">
+        <div className="bg-white border border-blue-200 rounded-xl p-2 shadow-lg flex-1 flex flex-col" ref={chartRef}>
+          <h2 className="text-sm font-bold text-gray-800 mb-2 text-center">
             Subject-wise Attendance
           </h2>
           
-          <div className="relative px-12 py-8">
+          <div className="relative px-2 py-1 flex-1">
             {/* Y-Axis */}
-            <div className="absolute left-8 top-8 bottom-20 w-0.5 bg-gray-300">
+            <div className="absolute left-4 top-4 bottom-12 w-0.5 bg-gray-300">
               {/* Y-axis arrow */}
               <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-8 border-l-transparent border-r-transparent border-b-blue-600"></div>
               
@@ -121,19 +121,19 @@ const Index = () => {
             </div>
 
             {/* X-Axis */}
-            <div className="absolute left-8 right-8 bottom-12 h-0.5 bg-gray-300">
+            <div className="absolute left-4 right-4 bottom-8 h-0.5 bg-gray-300">
               {/* X-axis arrow */}
               <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-l-8 border-t-transparent border-b-transparent border-l-blue-600"></div>
             </div>
 
             {/* Bars */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 ml-8 mb-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-1 ml-4 mb-1">
               {subjectData.map((data, index) => (
                 <div key={index} className="flex flex-col items-center">
                   {/* Percentage Label */}
-                  <div className="mb-3 h-8 flex items-center">
+                  <div className="mb-1 h-4 flex items-center">
                     <span 
-                      className="text-lg font-bold text-gray-800 transition-all duration-500"
+                      className="text-xs font-bold text-gray-800 transition-all duration-500"
                       style={{
                         opacity: isVisible ? 1 : 0,
                         transform: isVisible ? 'translateY(0)' : 'translateY(-10px)',
@@ -146,7 +146,7 @@ const Index = () => {
 
                   {/* Bar Container */}
                   <div 
-                    className="relative w-16 h-64 rounded-t-lg overflow-hidden shadow-inner"
+                    className="relative w-10 h-32 rounded-t-lg overflow-hidden shadow-inner"
                     style={{
                       background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)'
                     }}

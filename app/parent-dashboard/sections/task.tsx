@@ -68,38 +68,38 @@ const recentPractice = [
 
 export default function TaskSection() {
   return (
-    <div className="max-w-7xl mx-auto px-6">
+    <div className="max-w-7xl mx-auto px-2 h-full flex flex-col">
       {/* Recent Tasks and Recent Practice Section (copied exactly) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 h-full">
         {/* Recent Tasks - Left Side */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <Clock className="w-6 h-6 text-blue-600" />
+        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col">
+          <h3 className="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
+            <Clock className="w-4 h-4 text-blue-600" />
             Recent Tasks
           </h3>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             {recentTasks.map((task) => (
               <div
                 key={task.id}
-                className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition border border-gray-200"
+                className="flex items-start gap-2 p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition border border-gray-200"
               >
-                <div className={`mt-1 ${
+                <div className={`mt-0.5 ${
                   task.status === "completed" ? "text-green-600" : 
                   task.status === "in-progress" ? "text-yellow-600" : 
                   "text-gray-400"
                 }`}>
                   {task.status === "completed" ? (
-                    <CheckCircle2 className="w-5 h-5" />
+                    <CheckCircle2 className="w-4 h-4" />
                   ) : (
-                    <Clock className="w-5 h-5" />
+                    <Clock className="w-4 h-4" />
                   )}
                 </div>
                 
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className="font-semibold text-gray-800">{task.title}</h4>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                  <div className="flex items-center gap-1 mb-0.5">
+                    <h4 className="font-semibold text-gray-800 text-xs">{task.title}</h4>
+                    <span className={`text-[10px] px-1 py-0.5 rounded-full ${
                       task.priority === "high" ? "bg-red-100 text-red-700" :
                       task.priority === "medium" ? "bg-yellow-100 text-yellow-700" :
                       "bg-blue-100 text-blue-700"
@@ -107,19 +107,19 @@ export default function TaskSection() {
                       {task.priority}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-1">{task.subject}</p>
-                  <p className="text-xs text-gray-500">Due: {task.dueDate}</p>
+                  <p className="text-[10px] text-gray-600 mb-0.5">{task.subject}</p>
+                  <p className="text-[10px] text-gray-500">Due: {task.dueDate}</p>
                   {task.status === "in-progress" && (
-                    <div className="mt-2">
-                      <button className="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
-                        <PlayCircle className="w-3 h-3" />
+                    <div className="mt-1">
+                      <button className="text-[10px] text-blue-600 hover:text-blue-700 font-medium flex items-center gap-0.5">
+                        <PlayCircle className="w-2 h-2" />
                         Continue
                       </button>
                     </div>
                   )}
                 </div>
                 
-                <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                <div className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
                   task.status === "completed" ? "bg-green-100 text-green-700" :
                   task.status === "in-progress" ? "bg-yellow-100 text-yellow-700" :
                   "bg-gray-100 text-gray-700"
@@ -134,26 +134,26 @@ export default function TaskSection() {
         </div>
 
         {/* Recent Practice - Right Side */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <PlayCircle className="w-6 h-6 text-green-600" />
+        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col">
+          <h3 className="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
+            <PlayCircle className="w-4 h-4 text-green-600" />
             Recent Practice
           </h3>
 
-          <div className="space-y-6">
+          <div className="space-y-2 flex-1">
             {recentPractice.map((practice, index) => {
               const percentage = Math.round((practice.covered / practice.total) * 100);
               
               return (
                 <div
                   key={index}
-                  className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition"
+                  className="p-2 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition"
                 >
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="text-4xl">{practice.icon}</div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="text-xl">{practice.icon}</div>
                     <div className="flex-1">
-                      <h4 className="font-semibold text-gray-800 mb-1">{practice.subject}</h4>
-                      <p className="text-sm text-gray-600">
+                      <h4 className="font-semibold text-gray-800 mb-0.5 text-xs">{practice.subject}</h4>
+                      <p className="text-[10px] text-gray-600">
                         <span className="font-bold text-blue-600">{practice.covered}</span> of{" "}
                         <span className="text-gray-700">{practice.total}</span> topics covered
                       </p>
@@ -161,14 +161,14 @@ export default function TaskSection() {
                   </div>
                   
                   {/* Progress Bar */}
-                  <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+                  <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
                     <div
-                      className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                      className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
                       style={{ width: `${percentage}%` }}
                     ></div>
                   </div>
                   
-                  <p className="text-xs text-gray-600 text-right">{percentage}% completed</p>
+                  <p className="text-[10px] text-gray-600 text-right">{percentage}% completed</p>
                 </div>
               );
             })}
