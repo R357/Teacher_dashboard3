@@ -30,36 +30,41 @@ const ParentCard = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+      // FIXED: Reduced padding from p-4 sm:p-6 to p-4
+      className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 hover:shadow-md hover:-translate-y-1 transition-all duration-300"
     >
-      <div className="flex items-start justify-between mb-4 sm:mb-6">
-        <div className="flex items-center gap-3 sm:gap-4">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg sm:text-xl">
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center gap-3">
+          {/* FIXED: Reduced avatar size */}
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
             {parent.name
               .split(" ")
               .map((n) => n[0])
               .join("")}
           </div>
           <div>
-            <h3 className="font-bold text-gray-800 text-base sm:text-lg">{parent.name}</h3>
-            <p className="text-xs sm:text-sm text-gray-600">Parent</p>
+            {/* FIXED: Reduced text size */}
+            <h3 className="font-bold text-gray-800 text-base">{parent.name}</h3>
+            <p className="text-xs text-gray-600">Parent</p>
           </div>
         </div>
-        <div className="bg-blue-100 text-blue-700 px-2 py-1 sm:px-3 rounded-full text-xs font-semibold">
+        <div className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-semibold ml-2">
           {parent.students.length} Student{parent.students.length > 1 ? "s" : ""}
         </div>
       </div>
 
-      <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
-        <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-          <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+      <div className="space-y-2 mb-4">
+        <div className="flex items-center gap-2 text-xs">
+          {/* FIXED: Reduced icon box size */}
+          <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
             <Mail className="w-4 h-4 text-blue-600" />
           </div>
           <span className="text-gray-700 truncate">{parent.email}</span>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-          <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+        <div className="flex items-center gap-2 text-xs">
+          {/* FIXED: Reduced icon box size */}
+          <div className="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
             <Phone className="w-4 h-4 text-green-600" />
           </div>
           <span className="text-gray-700">{parent.phone}</span>
@@ -67,22 +72,24 @@ const ParentCard = ({
       </div>
 
       {/* Students Section */}
-      <div className="border-t border-gray-200 pt-4">
-        <h4 className="text-xs sm:text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-          <GraduationCap className="w-3 h-3 sm:w-4 sm:h-4" />
+      <div className="border-t border-gray-200 pt-3">
+        <h4 className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-2">
+          <GraduationCap className="w-4 h-4" />
           Enrolled Children
         </h4>
         <div className="space-y-2">
           {parent.students.map((student, index) => (
             <div
               key={index}
-              className="bg-gray-50 rounded-lg p-2 sm:p-3 flex items-center gap-2 sm:gap-3"
+              // FIXED: Reduced padding
+              className="bg-gray-50 rounded-lg p-2 flex items-center gap-2"
             >
-              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
+              {/* FIXED: Reduced avatar size */}
+              <div className="w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                 {student.name[0]}
               </div>
               <div>
-                <span className="text-xs sm:text-sm font-medium text-gray-800">
+                <span className="text-xs font-medium text-gray-800">
                   {student.name}
                 </span>
                 <p className="text-xs text-gray-600">{student.id}</p>
@@ -278,7 +285,7 @@ export default function ParentSection() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div>  
               <div className="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-2 shadow-sm border border-gray-100 flex-1 sm:flex-none">
                 <div className="flex items-center gap-2">
                   <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
@@ -308,7 +315,8 @@ export default function ParentSection() {
           </div>
 
           {/* Parents Grid with Fixed Height and Scroll */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-h-[800px] overflow-y-auto pr-2">
+          {/* FIXED: Added xl:grid-cols-4 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 max-h-[800px] overflow-y-auto pr-2">
             {filteredParents.map((parent, index) => (
               <ParentCard key={index} parent={parent} />
             ))}

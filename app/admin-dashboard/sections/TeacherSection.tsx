@@ -3,11 +3,11 @@ import {
   UserCheck,
   FileText,
   Clock,
-  Check,
+  Check, // This is the "tick mark" icon
   X,
   Bell,
   Eye,
-  Trash2, // FIXED: Added missing icon
+  Trash2,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -138,6 +138,7 @@ export default function TeacherSection() {
     },
   ]);
 
+  // This list now represents PENDING teacher approvals
   const [teachers, setTeachers] = useState([
     {
       id: "1",
@@ -262,14 +263,24 @@ export default function TeacherSection() {
     );
   };
 
+  // This function now simulates approval by removing the teacher from the pending list
   const handleApproveTeacher = (id: string) => {
-    // In real app, this would send API request to approve teacher
-    console.log("Approve teacher:", id);
+    if (confirm("Are you sure you want to approve this teacher?")) {
+      // In a real app, this would send an API request to set the teacher's status to 'approved'.
+      // For this UI demo, we'll just remove them from the pending list.
+      console.log("Approve teacher:", id);
+      setTeachers(teachers.filter((t) => t.id !== id));
+    }
   };
 
-  const handleDeleteTeacher = (id: string) => {
-    // Renamed from handleRejectTeacher to be more accurate to the button
-    if (confirm("Are you sure you want to delete this teacher?")) {
+  // Renamed this function for clarity
+  const handleRejectTeacher = (id: string) => {
+    if (
+      confirm(
+        "Are you sure you want to reject this teacher? This will delete their request.",
+      )
+    ) {
+      console.log("Reject teacher:", id);
       setTeachers(teachers.filter((t) => t.id !== id));
     }
   };
@@ -339,15 +350,23 @@ export default function TeacherSection() {
             >
               <div className="flex items-center justify-center gap-2">
                 <UserCheck className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">All Teachers</span>
-                <span className="sm:hidden">Teachers</span>
+                <span className="hidden sm:inline">Teacher Approvals</span>
+                <span className="sm:hidden">Approvals</span>
+                {/* Show pending teacher count if any */}
+                {teachers.length > 0 && (
+                  <span className="bg-blue-600 text-white text-xs font-bold px-1.5 py-0.5 sm:px-2 rounded-full">
+                    {teachers.length}
+                  </span>
+                )}
               </div>
             </button>
           </div>
 
           <div className="p-6">
+            {/* START: REQUESTS TAB CONTENT */}
             {activeTab === "requests" && (
               <div className="space-y-8">
+                {/* Pending Requests Table */}
                 {pendingRequests.length > 0 && (
                   <div>
                     <div className="flex items-center gap-2 mb-4">
@@ -440,6 +459,7 @@ export default function TeacherSection() {
                   </div>
                 )}
 
+                {/* Approved Requests Table */}
                 {approvedRequests.length > 0 && (
                   <div>
                     <div className="flex items-center gap-2 mb-4">
@@ -513,6 +533,7 @@ export default function TeacherSection() {
                   </div>
                 )}
 
+                {/* Rejected Requests Table */}
                 {rejectedRequests.length > 0 && (
                   <div>
                     <div className="flex items-center gap-2 mb-4">
@@ -587,15 +608,18 @@ export default function TeacherSection() {
                 )}
               </div>
             )}
+            {/* END: REQUESTS TAB CONTENT */}
 
+            {/* START: TEACHERS TAB CONTENT */}
             {activeTab === "teachers" && (
               <div>
                 <div className="mb-6">
                   <h3 className="text-lg sm:text-xl font-bold text-gray-800">
-                    All Teachers ({teachers.length})
+                    Pending Teacher Approvals ({teachers.length})
                   </h3>
                 </div>
 
+                {/* Pending Teacher Approvals Table */}
                 <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                   <div className="max-h-[600px] overflow-y-auto overflow-x-auto">
                     <table className="w-full">
@@ -648,21 +672,23 @@ export default function TeacherSection() {
                             </td>
                             <td className="px-6 py-4">
                               <div className="flex items-center justify-center gap-2">
+                                {/* This is the "Approve" button */}
                                 <button
                                   onClick={() =>
-                                    alert(`Edit ${teacher.name}`)
+                                    handleApproveTeacher(teacher.id)
                                   }
-                                  className="p-2 hover:bg-blue-50 rounded-lg transition-colors"
-                                  title="Edit"
+                                  className="p-2 hover:bg-green-50 rounded-lg transition-colors"
+                                  title="Approve"
                                 >
-                                  <Eye className="w-4 h-4 text-blue-600" />
+                                  <Check className="w-4 h-4 text-green-600" />
                                 </button>
+                                {/* This is the "Reject" button */}
                                 <button
                                   onClick={() =>
-                                    handleDeleteTeacher(teacher.id)
+                                    handleRejectTeacher(teacher.id)
                                   }
                                   className="p-2 hover:bg-red-50 rounded-lg transition-colors"
-                                  title="Delete"
+                                  title="Reject"
                                 >
                                   <Trash2 className="w-4 h-4 text-red-600" />
                                 </button>
@@ -676,9 +702,10 @@ export default function TeacherSection() {
                 </div>
               </div>
             )}
+            {/* END: TEACHERS TAB CONTENT */}
           </div>
         </div>
       </div>
     </section>
   );
-}
+}  
