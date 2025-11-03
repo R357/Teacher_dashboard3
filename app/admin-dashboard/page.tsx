@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+// === EDITED: Removed useScroll and useTransform ===
+import { motion, Variants } from 'framer-motion';
 import {
   Phone,
   Mail,
@@ -40,8 +42,10 @@ import StudentSection from './sections/StudentSection';
 import AnnouncementSection from './sections/AnnouncementSection';
 import ParentSection from './sections/ParentSection';
 
+
 export default function AdminDashboard() {
-  // Mock data for overall performance chart (e.g., by department)
+  // Mock data (no changes)
+ 
   const overallPerformanceData = [
     { name: 'Computer Science', score: 82.1 },
     { name: 'Humanities', score: 88.5 },
@@ -50,8 +54,6 @@ export default function AdminDashboard() {
     { name: 'Arts & Design', score: 90.2 },
     { name: 'Business', score: 81.7 },
   ];
-
-  // Mock data for school-wide attendance (e.g., by grade level)
   const schoolAttendanceData = [
     { name: 'Grade 9', value: 95, fill: '#3B82F6' },
     { name: 'Grade 10', value: 92, fill: '#10B981' },
@@ -60,15 +62,11 @@ export default function AdminDashboard() {
     { name: 'Faculty', value: 98, fill: '#6366F1' },
     { name: 'Staff', value: 99, fill: '#8B5CF6' },
   ];
-
-  // Admin/School-wide calendar events
   const calendarEvents = [
-    { time: '09:00', title: 'All-Faculty Meeting', duration: '9.00-10.30', location: 'Auditorium', color: 'bg-blue-500' },
-    { time: '11:00', title: 'Board of Directors Call', duration: '11.00-11.40', location: 'Admin Office', color: 'bg-gray-200' },
-    { time: '14:00', title: 'Budget Review: Q4', duration: '14.00-15.45', location: 'Conf. Room 3', color: 'bg-gray-200' },
+    { title: 'All-Faculty Meeting', duration: '9.00-10.30', location: 'Auditorium', color: 'bg-blue-500' },
+    { title: 'Board of Directors Call', duration: '11.00-11.40', location: 'Admin Office', color: 'bg-gray-200' },
+    { title: 'Budget Review: Q4', duration: '14.00-15.45', location: 'Conf. Room 3', color: 'bg-gray-200' },
   ];
-
-  // Admin tasks or school announcements
   const upcomingTasks = [
     {
       icon: '📅',
@@ -82,7 +80,7 @@ export default function AdminDashboard() {
     },
   ];
 
-  // Custom donut chart component
+  // Donut chart component (no changes)
   const DonutChart = ({ data, percentage }: { data: any; percentage: number }) => {
     return (
       <div className="relative w-full h-full flex items-center justify-center">
@@ -97,6 +95,9 @@ export default function AdminDashboard() {
               startAngle={90}
               endAngle={-270}
               dataKey="value"
+              isAnimationActive={true}
+              animationDuration={1500}
+              animationEasing="ease-out"
             >
               <Cell key={`cell-0`} fill={data.fill} />
               <Cell key={`cell-1`} fill="#E5E7EB" />
@@ -104,84 +105,210 @@ export default function AdminDashboard() {
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <span className="text-xl font-bold text-gray-700">{percentage}%</span>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="text-xl font-bold text-gray-700"
+          >
+            {percentage}%
+          </motion.span>
         </div>
       </div>
     );
   };
 
+  // Variants for the main 3-column grid container (Idea 1)
+  const gridContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2, // Each column animates 0.2s after the previous
+        delayChildren: 0.5,  // Wait 0.5s after navbar
+      },
+    },
+  };
+
+  // Variants for columns (Idea 1)
+  const columnLeftVariants: Variants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  };
+  
+  const columnRightVariants: Variants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  };
+  
+  const columnMiddleVariants: Variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  };
+
+  // Staggered list container variants (for lists inside cards)
+  const listContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.5, 
+      },
+    },
+  };
+
+  // Staggered list item variants (slide from left)
+  const listItemVariants: Variants = {
+    hidden: { opacity: 0, x: -30 },
+    visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 100 } },
+  };
+
+  // Staggered list item variants (slide from right)
+  const taskItemVariants: Variants = {
+    hidden: { opacity: 0, x: 30 },
+    visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 100 } },
+  };
+  
+  // === REMOVED hooks for Idea 5 (Scroll Transition) ===
+
+
   return (
     <div className="bg-gray-50 relative z-0">
-      {/* Floating Dock Navbar */}
-      <Navbar />
+      {/* Navbar animation */}
+      <motion.div
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+        style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50 }}
+      >
+        <Navbar />
+      </motion.div>
 
-      <div className="pt-20 sm:pt-24">
+      <div className="pt-24">
         
+        {/* === REMOVED motion.div wrapper for Idea 5 === */}
         {/* === START OF 3-COLUMN ADMIN LAYOUT === */}
-        <div className="p-4 sm:p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="p-6">
+          {/* === EDITED: Added motion.div wrapper for Idea 1 (Grand Entrance) === */}
+          <motion.div 
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch"
+            variants={gridContainerVariants}
+            initial="hidden"
+            animate="visible"
+          >
             
-            {/* === Left Column (Admin POV) === */}
-            <div className="space-y-4 sm:space-y-6">
+            {/* === Left Column === */}
+            {/* === EDITED: Added column variants and perspective for 3D tilt (Idea 2) === */}
+            <motion.div 
+              className="space-y-6 flex flex-col" 
+              variants={columnLeftVariants}
+              style={{ perspective: 1000 }} // For 3D tilt
+            >
               
               {/* Admin Welcome / Overview */}
-              <div className="bg-gray-100 rounded-xl p-4 sm:p-6 shadow-sm">
+              {/* === EDITED: Added Idea 2 (3D Tilt) === */}
+              <motion.div
+                className="bg-gray-100 rounded-xl p-6 shadow-sm"
+                whileHover={{ scale: 1.03, rotateY: 10 }} // Tilt
+                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+              >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Admin Overview</h2>
-                    <p className="text-sm sm:text-base text-gray-600 mb-2">
+                    <h2 className="text-3xl font-bold text-gray-800 mb-2">Admin Overview</h2>
+                    <p className="text-gray-600 mb-2">
                       Key metrics for the institution. You have 2 pending tasks.
                     </p>
-                    <a href="#teachers" className="text-blue-600 hover:underline font-medium text-sm">
+                    <motion.a
+                      href="#teachers"
+                      className="text-blue-600 hover:underline font-medium"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
                       Review Tasks
-                    </a>
+                    </motion.a>
                   </div>
-                  <div className="w-24 h-24 sm:w-32 sm:h-32 bg-blue-100 rounded-lg flex items-center justify-center ml-2 sm:ml-4">
-                    <div className="text-4xl sm:text-6xl">📊</div>
-                  </div>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.5 }}
+                    style={{ originX: 0.5, originY: 0.5 }}
+                    className="w-32 h-32 bg-blue-100 rounded-lg flex items-center justify-center ml-4"
+                  >
+                    <motion.div
+                      animate={{ scale: [1, 1.05, 1] }} // "Breathe"
+                      transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="text-6xl"
+                    >
+                      📊
+                    </motion.div>
+                  </motion.div>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Overall Performance Section */}
-              <div className="bg-gray-100 rounded-xl p-4 sm:p-6 shadow-sm">
-                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Student Performance</h3>
-                  <div className="flex items-center gap-2 bg-white rounded-lg px-2 py-1 sm:px-3 cursor-pointer hover:bg-gray-50 transition">
-                    <span className="text-gray-700 text-xs sm:text-sm">This Semester</span>
-                    <ChevronDown className="w-4 h-4 text-gray-500" />
-                  </div>
-                </div>
-                <div className="mb-4 sm:mb-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <div>
-                      <span className="text-3xl sm:text-4xl font-bold text-gray-800">84.3%</span>
-                      <p className="text-gray-600 text-xs sm:text-sm mt-1">Avg. Score (All Departments)</p>
-                    </div>
-                    <button className="bg-blue-500 text-white px-3 py-2 sm:px-4 rounded-lg hover:bg-blue-600 transition text-xs sm:text-sm font-medium">
+              {/* Student Performance Section */}
+              {/* === EDITED: Added Idea 2 (3D Tilt) === */}
+              <motion.div
+                className="bg-gray-100 rounded-xl p-6 shadow-sm flex-1 flex flex-col"
+                whileHover={{ scale: 1.03, rotateY: 10 }} // Tilt
+                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold text-gray-800">Student Performance</h3>
+                  <div className="flex items-center gap-4">
+                    <motion.div
+                      className="flex items-center gap-2 bg-white rounded-lg px-3 py-1 cursor-pointer hover:bg-gray-50 transition"
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      <span className="text-gray-700 text-sm">Classes 1-10</span>
+                      <motion.div
+                        animate={{ y: [0, -2, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <ChevronDown className="w-4 h-4 text-gray-500" />
+                      </motion.div>
+                    </motion.div>
+                    <motion.button
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      animate={{ scale: [1, 1.02, 1] }}
+                      transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                    >
                       Full Report
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
+
                 {/* Bar Chart (Department Scores) */}
-                <div className="h-64 sm:h-80">
+                <div className="flex-1">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={overallPerformanceData}
                       layout="vertical"
                       barSize={20}
-                      margin={{ left: 100, right: 40, top: 10, bottom: 10 }}
+                      margin={{ left: 10, right: 40, top: 0, bottom: 0 }}
                     >
                       <XAxis type="number" domain={[0, 100]} hide />
                       <YAxis
                         dataKey="name"
                         type="category"
-                        width={100}
+                        width={100} 
                         fontSize={11}
                         tick={{ fill: '#6B7280' }}
                         tickLine={false}
+                        axisLine={false}
                       />
                       <Tooltip />
-                      <Bar dataKey="score" fill="#3B82F6" radius={[0, 4, 4, 0]}>
+                      <Bar 
+                        dataKey="score" 
+                        fill="#3B82F6" 
+                        radius={[0, 4, 4, 0]}
+                        isAnimationActive={true}
+                        animationDuration={1500}
+                        animationEasing="ease-out"
+                      >
                         <LabelList
                           dataKey="score"
                           position="right"
@@ -194,103 +321,130 @@ export default function AdminDashboard() {
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-              </div>
+              </motion.div>
+            </motion.div>
 
-              {/* Faculty Overview Section */}
-              <div className="bg-gray-100 rounded-xl p-4 sm:p-6 shadow-sm">
-                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Faculty Overview</h3>
-                  <a href="#teachers" className="text-blue-600 hover:underline text-xs sm:text-sm font-medium">
-                    Manage All
-                  </a>
-                </div>
-                <div className="space-y-3 sm:space-y-4">
-                  {[
-                    { initials: 'MJ', name: 'Dr. Mary Johnson', subject: 'Head of Science' },
-                    { initials: 'JB', name: 'James Brown', subject: 'Head of Arts' },
-                    { initials: 'LS', name: 'Dr. Li Smith', subject: 'Head of CompSci' },
-                  ].map((teacher, i) => (
-                    <div key={i} className="flex items-center justify-between bg-white rounded-lg p-3 sm:p-4">
-                      <div className="flex items-center gap-3 sm:gap-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold text-xs sm:text-sm">
-                          {teacher.initials}
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-800 text-sm sm:text-base">{teacher.name}</h4>
-                          <p className="text-xs sm:text-sm text-gray-600">{teacher.subject}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <MoreVertical className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-600 transition" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* === Middle Column (Admin POV) === */}
-            <div className="space-y-4 sm:space-y-6">
+            {/* === Middle Column === */}
+            {/* === EDITED: Added column variants and perspective for 3D tilt (Idea 2) === */}
+            <motion.div 
+              className="space-y-6 flex flex-col" 
+              variants={columnMiddleVariants}
+              style={{ perspective: 1000 }} // For 3D tilt
+            >
               {/* Overall Attendance Section */}
-              <div className="bg-gray-100 rounded-xl p-4 sm:p-6 shadow-sm">
-                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800">School Attendance</h3>
-                  <div className="flex items-center gap-2 bg-white rounded-lg px-2 py-1 sm:px-3 cursor-pointer hover:bg-gray-50 transition">
-                    <span className="text-gray-700 text-xs sm:text-sm">Today</span>
-                    <ChevronDown className="w-4 h-4 text-gray-500" />
-                  </div>
+              {/* === EDITED: Added Idea 2 (3D Tilt) === */}
+              <motion.div
+                className="bg-gray-100 rounded-xl p-6 shadow-sm flex-1"
+                whileHover={{ scale: 1.03, rotateX: 5 }} // Tilt
+                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-semibold text-gray-800">School Attendance</h3>
+                  <motion.div
+                    className="flex items-center gap-2 bg-white rounded-lg px-3 py-1 cursor-pointer hover:bg-gray-50 transition"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    <span className="text-gray-700 text-sm">Today</span>
+                    <motion.div
+                      animate={{ y: [0, -2, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <ChevronDown className="w-4 h-4 text-gray-500" />
+                    </motion.div>
+                  </motion.div>
                 </div>
                 {/* Donut Charts Grid (Grade Levels) */}
-                <div className="grid grid-cols-2 gap-4 sm:gap-8">
+                <div className="grid grid-cols-2 gap-8">
                   {schoolAttendanceData.map((item, index) => (
-                    <div key={index} className="flex flex-col items-center">
-                      <div className="w-full h-28 sm:h-32 flex items-center justify-center">
+                    <motion.div
+                      key={index}
+                      className="flex flex-col items-center"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.8, delay: index * 0.15 + 1.0, type: "spring", stiffness: 100 }} // Increased delay
+                    >
+                      <div className="w-full h-32 flex items-center justify-center">
                         <DonutChart data={item} percentage={item.value} />
                       </div>
-                      <p className="text-xs text-gray-600 mt-2 sm:mt-3 text-center leading-tight">{item.name}</p>
-                    </div>
+                      <motion.p 
+                        className="text-xs text-gray-600 mt-3 text-center leading-tight"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.15 + 1.2 }} // Increased delay
+                      >
+                        {item.name}
+                      </motion.p>
+                    </motion.div>
                   ))}
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            {/* === Right Column (Admin POV) === */}
-            <div className="space-y-4 sm:space-y-6">
+            {/* === Right Column === */}
+            {/* === EDITED: Added column variants and perspective for 3D tilt (Idea 2) === */}
+            <motion.div 
+              className="space-y-6 flex flex-col" 
+              variants={columnRightVariants}
+              style={{ perspective: 1000 }} // For 3D tilt
+            >
+              
               {/* School Calendar Section */}
-              <div className="bg-gray-100 rounded-xl p-4 sm:p-6 shadow-sm">
+              {/* === EDITED: Added Idea 2 (3D Tilt) === */}
+              <motion.div
+                className="bg-gray-100 rounded-xl p-6 shadow-sm flex-1 flex flex-col"
+                whileHover={{ scale: 1.03, rotateY: -10 }} // Tilt
+                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-800">School Calendar</h3>
-                    <p className="text-xs sm:text-sm text-gray-600 mt-1">3 major events today</p>
+                    <h3 className="text-xl font-semibold text-gray-800">School Calendar</h3>
+                    <p className="text-sm text-gray-600 mt-1">3 major events today</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-white rounded-lg px-2 py-1 sm:px-3 cursor-pointer hover:bg-gray-50 transition">
-                    <span className="text-gray-700 text-xs sm:text-sm">Today</span>
-                    <ChevronDown className="w-4 h-4 text-gray-500" />
-                  </div>
+                  <motion.div
+                    className="flex items-center gap-2 bg-white rounded-lg px-3 py-1 cursor-pointer hover:bg-gray-50 transition"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    <span className="text-gray-700 text-sm">Today</span>
+                    <motion.div
+                      animate={{ y: [0, -2, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <ChevronDown className="w-4 h-4 text-gray-500" />
+                    </motion.div>
+                  </motion.div>
                 </div>
                 {/* Timeline */}
-                <div className="relative mt-4 sm:mt-6 pl-16 sm:pl-20">
-                  <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-0.5 bg-gray-300"></div>
-                  <div className="space-y-4 sm:space-y-6">
+                <div className="relative mt-6 pl-8 flex-1">
+                  <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-300"></div>
+                  <motion.div 
+                    className="space-y-6"
+                    variants={listContainerVariants}
+                    initial="hidden"
+                    animate="visible"
+                  >
                     {calendarEvents.map((event, index) => (
-                      <div key={index} className="flex items-start gap-3 sm:gap-4 relative">
-                        <div className="absolute -left-10 sm:-left-12 top-0 z-10">
-                          <div className="text-xs text-gray-600 font-medium">{event.time}</div>
-                        </div>
+                      <motion.div
+                        key={index}
+                        className="flex items-start gap-4 relative"
+                        variants={listItemVariants}
+                        whileHover={{ scale: 1.03 }}
+                      >
                         <div
                           className={`${event.color} ${
-                            event.time === '09:00' ? 'text-white' : 'text-gray-800'
-                          } rounded-lg p-2 sm:p-3 flex-1 shadow-sm`}
+                            event.title === 'All-Faculty Meeting' ? 'text-white' : 'text-gray-800'
+                          } rounded-lg p-3 flex-1 shadow-sm`}
                         >
                           <div className="flex items-center gap-2 mb-1">
-                            {event.time === '09:00' ? (
+                            {event.title === 'All-Faculty Meeting' ? (
                               <Users className="w-4 h-4" />
                             ) : (
                               <div className="w-4 h-4 rounded-full bg-gray-400"></div>
                             )}
                             <h4
-                              className={`font-semibold text-xs sm:text-sm ${
-                                event.time === '09:00' ? 'text-white' : 'text-gray-800'
+                              className={`font-semibold ${
+                                event.title === 'All-Faculty Meeting' ? 'text-white' : 'text-gray-800'
                               }`}
                             >
                               {event.title}
@@ -298,48 +452,75 @@ export default function AdminDashboard() {
                           </div>
                           <p 
                             className={`text-xs ${
-                              event.time === '09:00' ? 'text-white/90' : 'text-gray-600'
+                              event.title === 'All-Faculty Meeting' ? 'text-white/90' : 'text-gray-600'
                             }`}
                           >
                             {event.duration}, {event.location}
                           </p>
                         </div>
-                      </div>
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Pending Tasks Section */}
-              <div className="bg-gray-100 rounded-xl p-4 sm:p-6 shadow-sm">
-                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Pending Tasks</h3>
-                  <a href="#teachers" className="text-blue-600 hover:underline text-xs sm:text-sm font-medium">
+              {/* === EDITED: Added Idea 2 (3D Tilt) === */}
+              <motion.div
+                className="bg-gray-100 rounded-xl p-6 shadow-sm flex-1 flex flex-col"
+                whileHover={{ scale: 1.03, rotateY: -10 }} // Tilt
+                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-semibold text-gray-800">Pending Tasks</h3>
+                  <motion.a
+                    href="#teachers"
+                    className="text-blue-600 hover:underline text-sm font-medium"
+                    whileHover={{ scale: 1.05, x: [0, 2, -2, 2, 0] }}
+                    transition={{ duration: 0.5, type: "spring", stiffness: 500 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     See all
-                  </a>
+                  </motion.a>
                 </div>
-                <div className="space-y-3 sm:space-y-4">
+                <motion.div 
+                  className="space-y-4 flex-1"
+                  variants={listContainerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
                   {upcomingTasks.map((event, index) => (
-                    <div key={index} className="bg-white rounded-lg p-3 sm:p-4 flex items-start gap-3 sm:gap-4">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-100 flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
+                    <motion.div
+                      key={index}
+                      className="bg-white rounded-lg p-4 flex items-start gap-4"
+                      variants={taskItemVariants}
+                      whileHover={{ scale: 1.03 }}
+                    >
+                      <motion.div 
+                        className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl flex-shrink-0"
+                        animate={{ rotate: [0, 5, -5, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.5 }}
+                      >
                         {event.icon}
-                      </div>
+                      </motion.div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-gray-800 mb-1 text-xs sm:text-sm">{event.title}</h4>
+                        <h4 className="font-semibold text-gray-800 mb-1 text-sm">{event.title}</h4>
                         <p className="text-xs text-gray-600">{event.date}</p>
                       </div>
-                      <MoreVertical className="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-600 transition flex-shrink-0" />
-                    </div>
+                      <motion.div
+                        whileHover={{ scale: 1.2, rotate: 90 }}
+                        className="flex-shrink-0"
+                      >
+                        <MoreVertical className="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-600 transition" />
+                      </motion.div>
+                    </motion.div>
                   ))}
-                </div>
-              </div>
-            </div>
-          </div>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
-        {/* === END OF 3-COLUMN ADMIN LAYOUT === */}
-
-
-        {/* === START OF SCROLLING SECTIONS WITH PARALLAX ANIMATION === */}
+        
         
         <ScrollAnimator className="w-full">
           <TeacherSection />
@@ -362,5 +543,4 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
-}  
-   
+}
