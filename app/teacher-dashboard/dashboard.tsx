@@ -1378,7 +1378,7 @@ export default function TeacherDashboard() {
 
                 {/* Chemistry Course Card */}
                 <Link 
-                  href="/teacher/courses/chemistry" 
+                  href="/teacher-dashboard/courses/chemistry" 
                   className={`rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 relative focus:outline-none focus:ring-4 focus:ring-green-300 group ${
                     isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                   }`}
