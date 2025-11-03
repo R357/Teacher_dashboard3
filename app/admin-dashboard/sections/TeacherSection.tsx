@@ -1,4 +1,3 @@
-"use client";
 import {
   UserCheck,
   FileText,
@@ -61,6 +60,78 @@ export default function TeacherSection() {
       date: "Dec 11, 2023",
       status: "approved" as const,
     },
+    {
+      id: "7",
+      teacher: "Dr. Emily Davis",
+      subject: "Physics",
+      title: "Thermodynamics Study Guide",
+      date: "Dec 10, 2023",
+      status: "pending" as const,
+    },
+    {
+      id: "8",
+      teacher: "Mr. James Wilson",
+      subject: "Chemistry",
+      title: "Chemical Reactions Worksheet",
+      date: "Dec 17, 2023",
+      status: "pending" as const,
+    },
+    {
+      id: "9",
+      teacher: "Dr. Lisa Anderson",
+      subject: "Biology",
+      title: "Cell Biology Lab Manual",
+      date: "Dec 9, 2023",
+      status: "approved" as const,
+    },
+    {
+      id: "10",
+      teacher: "Prof. David Martinez",
+      subject: "History",
+      title: "World War II Timeline",
+      date: "Dec 18, 2023",
+      status: "rejected" as const,
+    },
+    {
+      id: "11",
+      teacher: "Dr. Sarah Johnson",
+      subject: "Mathematics",
+      title: "Trigonometry Practice Problems",
+      date: "Dec 8, 2023",
+      status: "approved" as const,
+    },
+    {
+      id: "12",
+      teacher: "Prof. Michael Brown",
+      subject: "Computer Science",
+      title: "Machine Learning Basics",
+      date: "Dec 19, 2023",
+      status: "pending" as const,
+    },
+    {
+      id: "13",
+      teacher: "Dr. Emily Davis",
+      subject: "Physics",
+      title: "Electromagnetism Notes",
+      date: "Dec 7, 2023",
+      status: "approved" as const,
+    },
+    {
+      id: "14",
+      teacher: "Mr. James Wilson",
+      subject: "Chemistry",
+      title: "Periodic Table Quiz",
+      date: "Dec 20, 2023",
+      status: "rejected" as const,
+    },
+    {
+      id: "15",
+      teacher: "Dr. Lisa Anderson",
+      subject: "Biology",
+      title: "Genetics Study Materials",
+      date: "Dec 6, 2023",
+      status: "pending" as const,
+    },
   ]);
 
   const [teachers, setTeachers] = useState([
@@ -105,6 +176,69 @@ export default function TeacherSection() {
       subject: "History",
       email: "david.m@university.edu",
       phone: "+1 (555) 678-9012",
+    },
+    {
+      id: "7",
+      name: "Dr. Robert Taylor",
+      subject: "English Literature",
+      email: "robert.t@university.edu",
+      phone: "+1 (555) 789-0123",
+    },
+    {
+      id: "8",
+      name: "Prof. Jennifer Lee",
+      subject: "Art & Design",
+      email: "jennifer.l@university.edu",
+      phone: "+1 (555) 890-1234",
+    },
+    {
+      id: "9",
+      name: "Dr. Christopher Garcia",
+      subject: "Economics",
+      email: "chris.g@university.edu",
+      phone: "+1 (555) 901-2345",
+    },
+    {
+      id: "10",
+      name: "Ms. Amanda Clark",
+      subject: "Music",
+      email: "amanda.c@university.edu",
+      phone: "+1 (555) 012-3456",
+    },
+    {
+      id: "11",
+      name: "Dr. Daniel Rodriguez",
+      subject: "Psychology",
+      email: "daniel.r@university.edu",
+      phone: "+1 (555) 123-5678",
+    },
+    {
+      id: "12",
+      name: "Prof. Laura Wright",
+      subject: "Philosophy",
+      email: "laura.w@university.edu",
+      phone: "+1 (555) 234-6789",
+    },
+    {
+      id: "13",
+      name: "Dr. Kevin Thompson",
+      subject: "Geography",
+      email: "kevin.t@university.edu",
+      phone: "+1 (555) 345-7890",
+    },
+    {
+      id: "14",
+      name: "Ms. Nicole White",
+      subject: "Physical Education",
+      email: "nicole.w@university.edu",
+      phone: "+1 (555) 456-8901",
+    },
+    {
+      id: "15",
+      name: "Dr. Steven Harris",
+      subject: "Political Science",
+      email: "steven.h@university.edu",
+      phone: "+1 (555) 567-9012",
     },
   ]);
 
@@ -164,9 +298,7 @@ export default function TeacherSection() {
           </div>
         </div>
 
-        {/* Tabs */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {/* Tab Headers */}
           <div className="flex border-b border-gray-200">
             <button
               onClick={() => setActiveTab("requests")}
@@ -203,11 +335,9 @@ export default function TeacherSection() {
             </button>
           </div>
 
-          {/* Tab Content with Fixed Height and Scroll */}
-          <div className="p-4 sm:p-6">
+          <div className="p-6">
             {activeTab === "requests" && (
-              <div className="space-y-6 max-h-[600px] overflow-y-auto pr-2">
-                {/* Pending Requests */}
+              <div className="space-y-8">
                 {pendingRequests.length > 0 && (
                   <div>
                     <div className="flex items-center gap-2 mb-4">
@@ -219,84 +349,85 @@ export default function TeacherSection() {
                         {pendingRequests.length}
                       </span>
                     </div>
-                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden overflow-x-auto">
-                      <table className="w-full min-w-[600px]">
-                        <thead className="bg-gray-50 border-b border-gray-200">
-                          <tr>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              Note Title
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              Teacher
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden md:table-cell">
-                              Subject
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden lg:table-cell">
-                              Date
-                            </th>
-                            <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              Actions
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                          {pendingRequests.map((request) => (
-                            <tr
-                              key={request.id}
-                              className="hover:bg-gray-50 transition-colors"
-                            >
-                              <td className="px-4 py-3">
-                                <div className="flex items-center gap-2">
-                                  <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                                  <span className="font-medium text-sm text-gray-800">
-                                    {request.title}
-                                  </span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-3 text-sm text-gray-700">
-                                {request.teacher}
-                              </td>
-                              <td className="px-4 py-3 text-sm text-gray-600 hidden md:table-cell">
-                                {request.subject}
-                              </td>
-                              <td className="px-4 py-3 text-sm text-gray-500 hidden lg:table-cell">
-                                {request.date}
-                              </td>
-                              <td className="px-4 py-3">
-                                <div className="flex items-center justify-center gap-2">
-                                  <button
-                                    onClick={() => alert("View note details")}
-                                    className="p-2 hover:bg-blue-50 rounded-lg transition-colors"
-                                    title="View"
-                                  >
-                                    <Eye className="w-4 h-4 text-blue-600" />
-                                  </button>
-                                  <button
-                                    onClick={() => handleApprove(request.id)}
-                                    className="p-2 hover:bg-green-50 rounded-lg transition-colors"
-                                    title="Approve"
-                                  >
-                                    <Check className="w-4 h-4 text-green-600" />
-                                  </button>
-                                  <button
-                                    onClick={() => handleReject(request.id)}
-                                    className="p-2 hover:bg-red-50 rounded-lg transition-colors"
-                                    title="Reject"
-                                  >
-                                    <X className="w-4 h-4 text-red-600" />
-                                  </button>
-                                </div>
-                              </td>
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                      <div className="max-h-[400px] overflow-y-auto overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="sticky top-0 bg-gray-50 border-b border-gray-200 z-10">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Note Title
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Teacher
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Subject
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Date
+                              </th>
+                              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Actions
+                              </th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody className="divide-y divide-gray-200">
+                            {pendingRequests.map((request) => (
+                              <tr
+                                key={request.id}
+                                className="hover:bg-gray-50 transition-colors"
+                              >
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center gap-2">
+                                    <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                                    <span className="font-medium text-gray-800">
+                                      {request.title}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-700">
+                                  {request.teacher}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-600">
+                                  {request.subject}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-500">
+                                  {request.date}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center justify-center gap-2">
+                                    <button
+                                      onClick={() => alert("View note details")}
+                                      className="p-2 hover:bg-blue-50 rounded-lg transition-colors"
+                                      title="View"
+                                    >
+                                      <Eye className="w-4 h-4 text-blue-600" />
+                                    </button>
+                                    <button
+                                      onClick={() => handleApprove(request.id)}
+                                      className="p-2 hover:bg-green-50 rounded-lg transition-colors"
+                                      title="Approve"
+                                    >
+                                      <Check className="w-4 h-4 text-green-600" />
+                                    </button>
+                                    <button
+                                      onClick={() => handleReject(request.id)}
+                                      className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                      title="Reject"
+                                    >
+                                      <X className="w-4 h-4 text-red-600" />
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 )}
 
-                {/* Approved Requests */}
                 {approvedRequests.length > 0 && (
                   <div>
                     <div className="flex items-center gap-2 mb-4">
@@ -308,67 +439,68 @@ export default function TeacherSection() {
                         {approvedRequests.length}
                       </span>
                     </div>
-                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden overflow-x-auto">
-                      <table className="w-full min-w-[600px]">
-                        <thead className="bg-gray-50 border-b border-gray-200">
-                          <tr>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              Note Title
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              Teacher
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden md:table-cell">
-                              Subject
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden lg:table-cell">
-                              Date
-                            </th>
-                            <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              Status
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                          {approvedRequests.map((request) => (
-                            <tr
-                              key={request.id}
-                              className="hover:bg-gray-50 transition-colors"
-                            >
-                              <td className="px-4 py-3">
-                                <div className="flex items-center gap-2">
-                                  <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                                  <span className="font-medium text-sm text-gray-800">
-                                    {request.title}
-                                  </span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-3 text-sm text-gray-700">
-                                {request.teacher}
-                              </td>
-                              <td className="px-4 py-3 text-sm text-gray-600 hidden md:table-cell">
-                                {request.subject}
-                              </td>
-                              <td className="px-4 py-3 text-sm text-gray-500 hidden lg:table-cell">
-                                {request.date}
-                              </td>
-                              <td className="px-4 py-3">
-                                <div className="flex justify-center">
-                                  <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold flex items-center gap-1">
-                                    <Check className="w-3 h-3" />
-                                    Approved
-                                  </span>
-                                </div>
-                              </td>
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                      <div className="max-h-[400px] overflow-y-auto overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="sticky top-0 bg-gray-50 border-b border-gray-200 z-10">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Note Title
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Teacher
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Subject
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Date
+                              </th>
+                              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Status
+                              </th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody className="divide-y divide-gray-200">
+                            {approvedRequests.map((request) => (
+                              <tr
+                                key={request.id}
+                                className="hover:bg-gray-50 transition-colors"
+                              >
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center gap-2">
+                                    <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                                    <span className="font-medium text-gray-800">
+                                      {request.title}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-700">
+                                  {request.teacher}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-600">
+                                  {request.subject}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-500">
+                                  {request.date}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex justify-center">
+                                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold flex items-center gap-1">
+                                      <Check className="w-3 h-3" />
+                                      Approved
+                                    </span>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 )}
 
-                {/* Rejected Requests */}
                 {rejectedRequests.length > 0 && (
                   <div>
                     <div className="flex items-center gap-2 mb-4">
@@ -380,62 +512,64 @@ export default function TeacherSection() {
                         {rejectedRequests.length}
                       </span>
                     </div>
-                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden overflow-x-auto">
-                      <table className="w-full min-w-[600px]">
-                        <thead className="bg-gray-50 border-b border-gray-200">
-                          <tr>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              Note Title
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              Teacher
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden md:table-cell">
-                              Subject
-                            </th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden lg:table-cell">
-                              Date
-                            </th>
-                            <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                              Status
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                          {rejectedRequests.map((request) => (
-                            <tr
-                              key={request.id}
-                              className="hover:bg-gray-50 transition-colors"
-                            >
-                              <td className="px-4 py-3">
-                                <div className="flex items-center gap-2">
-                                  <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                                  <span className="font-medium text-sm text-gray-800">
-                                    {request.title}
-                                  </span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-3 text-sm text-gray-700">
-                                {request.teacher}
-                              </td>
-                              <td className="px-4 py-3 text-sm text-gray-600 hidden md:table-cell">
-                                {request.subject}
-                              </td>
-                              <td className="px-4 py-3 text-sm text-gray-500 hidden lg:table-cell">
-                                {request.date}
-                              </td>
-                              <td className="px-4 py-3">
-                                <div className="flex justify-center">
-                                  <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold flex items-center gap-1">
-                                    <X className="w-3 h-3" />
-                                    Rejected
-                                  </span>
-                                </div>
-                              </td>
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                      <div className="max-h-[400px] overflow-y-auto overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="sticky top-0 bg-gray-50 border-b border-gray-200 z-10">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Note Title
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Teacher
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Subject
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Date
+                              </th>
+                              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Status
+                              </th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody className="divide-y divide-gray-200">
+                            {rejectedRequests.map((request) => (
+                              <tr
+                                key={request.id}
+                                className="hover:bg-gray-50 transition-colors"
+                              >
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center gap-2">
+                                    <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                                    <span className="font-medium text-gray-800">
+                                      {request.title}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-700">
+                                  {request.teacher}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-600">
+                                  {request.subject}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-500">
+                                  {request.date}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex justify-center">
+                                    <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold flex items-center gap-1">
+                                      <X className="w-3 h-3" />
+                                      Rejected
+                                    </span>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -450,77 +584,81 @@ export default function TeacherSection() {
                   </h3>
                 </div>
 
-                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden overflow-x-auto max-h-[600px] overflow-y-auto">
-                  <table className="w-full min-w-[600px]">
-                    <thead className="bg-gray-50 border-b border-gray-200">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Name
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Subject
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden md:table-cell">
-                          Email
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden lg:table-cell">
-                          Phone
-                        </th>
-                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {teachers.map((teacher) => (
-                        <tr
-                          key={teacher.id}
-                          className="hover:bg-gray-50 transition-colors"
-                        >
-                          <td className="px-4 py-3">
-                            <div className="flex items-center gap-2 sm:gap-3">
-                              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm">
-                                {teacher.name
-                                  .split(" ")
-                                  .map((n) => n[0])
-                                  .join("")}
-                              </div>
-                              <span className="font-medium text-sm text-gray-800">
-                                {teacher.name}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3 text-sm text-gray-700">
-                            {teacher.subject}
-                          </td>
-                          <td className="px-4 py-3 text-sm text-gray-600 hidden md:table-cell">
-                            {teacher.email}
-                          </td>
-                          <td className="px-4 py-3 text-sm text-gray-600 hidden lg:table-cell">
-                            {teacher.phone}
-                          </td>
-                          <td className="px-4 py-3">
-                            <div className="flex items-center justify-center gap-2">
-                              <button
-                                onClick={() => handleApproveTeacher(teacher.id)}
-                                className="p-2 hover:bg-green-50 rounded-lg transition-colors"
-                                title="Accept"
-                              >
-                                <Check className="w-4 h-4 text-green-600" />
-                              </button>
-                              <button
-                                onClick={() => handleRejectTeacher(teacher.id)}
-                                className="p-2 hover:bg-red-50 rounded-lg transition-colors"
-                                title="Reject"
-                              >
-                                <X className="w-4 h-4 text-red-600" />
-                              </button>
-                            </div>
-                          </td>
+                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                  <div className="max-h-[600px] overflow-y-auto overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="sticky top-0 bg-gray-50 border-b border-gray-200 z-10">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Name
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Subject
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Email
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Phone
+                          </th>
+                          <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Actions
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {teachers.map((teacher) => (
+                          <tr
+                            key={teacher.id}
+                            className="hover:bg-gray-50 transition-colors"
+                          >
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">
+                                  {teacher.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </div>
+                                <span className="font-medium text-gray-800">
+                                  {teacher.name}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-700">
+                              {teacher.subject}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-600">
+                              {teacher.email}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-600">
+                              {teacher.phone}
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center justify-center gap-2">
+                                <button
+                                  onClick={() =>
+                                    alert(`Edit ${teacher.name}`)
+                                  }
+                                  className="p-2 hover:bg-blue-50 rounded-lg transition-colors"
+                                  title="Edit"
+                                >
+                                  <Eye className="w-4 h-4 text-blue-600" />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteTeacher(teacher.id)}
+                                  className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                  title="Delete"
+                                >
+                                  <Trash2 className="w-4 h-4 text-red-600" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             )}
