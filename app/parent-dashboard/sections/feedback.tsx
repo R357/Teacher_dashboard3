@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
@@ -36,7 +37,7 @@ export default function Feedback() {
     datasets: [
       {
         data: [40, 30, 20, 10],
-        backgroundColor: ['#4338ca', '#06b6d4', '#3b82f6', '#6366f1'],
+        backgroundColor: ['#7BD5F5', '#787FF6', '#4ADEDE', '#1CA7EC'],
         borderWidth: 0,
       },
     ],
@@ -56,7 +57,15 @@ export default function Feedback() {
         }
       }
     }
-  };
+    ,
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+      duration: 1800,
+      easing: 'easeOutQuart',
+      loop: false,
+    }
+  } as const;
 
   return (
     <section id="feedback" className="py-1 bg-gray-50 h-full flex flex-col">
@@ -70,7 +79,13 @@ export default function Feedback() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 flex-1 min-h-0">
           {/* Feedback Form */}
-          <div className="bg-white rounded-xl shadow-lg p-2 flex flex-col min-h-0 overflow-y-auto">
+          <motion.div 
+            className="bg-white rounded-xl shadow-lg p-2 flex flex-col min-h-0 overflow-y-auto"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5 }}
+          >
             <h2 className="text-sm font-semibold text-gray-800 mb-2">Feedback Form</h2>
             <form onSubmit={handleSubmit} className="space-y-2 flex-1 flex flex-col">
               <div>
@@ -156,14 +171,20 @@ export default function Feedback() {
                 <p className="text-green-800 text-center">Thank you for your feedback!</p>
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* Feedback Summary */}
-          <div className="bg-white rounded-xl shadow-lg p-2 flex flex-col min-h-0 overflow-y-auto">
+          <motion.div 
+            className="bg-white rounded-xl shadow-lg p-2 flex flex-col min-h-0 overflow-y-auto"
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             <h2 className="text-sm font-semibold text-gray-800 mb-2">Feedback Summary</h2>
             
             {/* Chart */}
-            <div className="mb-2 max-w-[180px] h-[150px] mx-auto flex-shrink-0">
+            <div className="mb-2 max-w-[220px] h-[200px] mx-auto flex-shrink-0">
               <Pie data={chartData} options={chartOptions} />
             </div>
 
@@ -179,7 +200,7 @@ export default function Feedback() {
                 </li>
               </ul>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

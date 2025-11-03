@@ -46,6 +46,15 @@ try {
   // File will be loaded when available
 }
 
+// Import parent greeting animation (large and visible)
+let parentAnimation: any = null;
+try {
+  // @ts-ignore - Dynamic import for optional file
+  parentAnimation = require('../../login(animations)/parent.json');
+} catch (e) {
+  // File will be loaded when available
+}
+
 export default function ParentDashboard() {
   const [navHidden, setNavHidden] = useState(false);
   const [lastScrollTop, setLastScrollTop] = useState(0);
@@ -63,6 +72,14 @@ export default function ParentDashboard() {
     { title: "Report", icon: <BarChart3 className="w-5 h-5" />, href: "#performance" },
     { title: "Attendance", icon: <CheckSquare className="w-5 h-5" />, href: "#attendance" },
   ];
+
+  // Animation variants for cards
+  const variants = {
+    fadeUp: { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } },
+    slideLeft: { initial: { opacity: 0, x: 40 }, animate: { opacity: 1, x: 0 } },
+    slideRight: { initial: { opacity: 0, x: -40 }, animate: { opacity: 1, x: 0 } },
+    zoomIn: { initial: { opacity: 0, scale: 0.95 }, animate: { opacity: 1, scale: 1 } },
+  } as const;
 
   // Handle navbar clicks with smooth scroll
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -259,75 +276,49 @@ export default function ParentDashboard() {
               {/* Left Column */}
               <div className="col-span-2 flex flex-col gap-3 overflow-y-auto">
                 {/* Greeting Section */}
-                <div className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-shrink-0">
+                <motion.div 
+                  className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-shrink-0"
+                  initial={variants.slideRight.initial}
+                  animate={variants.slideRight.animate}
+                  transition={{ duration: 0.5, delay: 0.05 }}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex-1 pr-4">
-                      <h1 className="text-[36px] font-bold text-[#1A1A1A] mb-2 leading-tight">Hello Grace!</h1>
-                      <p className="text-base text-[#1A1A1A] mb-3 leading-relaxed">
-                        You have 3 new tasks. It is a lot of work for today! So let&apos;s start!
-                      </p>
-                      <a 
-                        href="#" 
-                        className="text-[#5D5FEF] underline hover:text-[#4C4ED8] transition-colors text-base font-medium"
+                      <motion.h1 
+                        className="text-[36px] font-bold text-[#1A1A1A] mb-2 leading-tight"
+                        initial={{ opacity: 0, y: -12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ type: 'spring', stiffness: 120, damping: 12 }}
                       >
-                        review it
-                      </a>
+                        Hello Parent!
+                      </motion.h1>
+                      <motion.p 
+                        className="text-base text-[#1A1A1A] mb-3 leading-relaxed"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.15 }}
+                      >
+                        You have 3 new tasks. It is a lot of work for today! So let&apos;s start!
+                      </motion.p>
                     </div>
-                    {/* 3D Character Illustration */}
-                    <div className="w-28 h-28 flex-shrink-0 greeting-illustration">
-                      <svg viewBox="0 0 400 400" className="w-full h-full">
-                        <defs>
-                          <linearGradient id="deskGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stopColor="#5D5FEF" />
-                            <stop offset="100%" stopColor="#4C4ED8" />
-                          </linearGradient>
-                          <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stopColor="#FEE3CC" />
-                            <stop offset="100%" stopColor="#FBD5B8" />
-                          </linearGradient>
-                          <filter id="shadow">
-                            <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-                            <feOffset dx="2" dy="2" result="offsetblur" />
-                            <feComponentTransfer>
-                              <feFuncA type="linear" slope="0.3" />
-                            </feComponentTransfer>
-                            <feMerge>
-                              <feMergeNode />
-                              <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                          </filter>
-                        </defs>
-                        <rect x="50" y="280" width="300" height="20" fill="url(#deskGrad)" rx="4" filter="url(#shadow)" />
-                        <rect x="80" y="250" width="60" height="80" fill="#5D5FEF" rx="8" filter="url(#shadow)" />
-                        <rect x="75" y="320" width="70" height="8" fill="#4C4ED8" rx="4" />
-                        <rect x="80" y="240" width="60" height="15" fill="#5D5FEF" rx="4" />
-                        <circle cx="200" cy="140" r="35" fill="url(#skinGrad)" filter="url(#shadow)" />
-                        <rect x="175" y="175" width="50" height="80" fill="#FFFFFF" rx="4" filter="url(#shadow)" />
-                        <rect x="165" y="250" width="70" height="60" fill="#5D5FEF" rx="6" filter="url(#shadow)" />
-                        <ellipse cx="200" cy="110" rx="40" ry="25" fill="#8B4513" filter="url(#shadow)" />
-                        <rect x="170" y="120" width="60" height="15" fill="#654321" rx="2" />
-                        <ellipse cx="200" cy="125" rx="35" ry="8" fill="#A0522D" />
-                        <rect x="160" y="240" width="80" height="8" fill="#D1D5DB" rx="2" filter="url(#shadow)" />
-                        <rect x="162" y="220" width="76" height="22" fill="#E5E7EB" rx="2" filter="url(#shadow)" />
-                        <rect x="165" y="223" width="70" height="16" fill="#1A1A1A" rx="1" />
-                        <rect x="168" y="226" width="64" height="10" fill="#3B82F6" opacity="0.3" />
-                        <ellipse cx="195" cy="248" rx="8" ry="10" fill="url(#skinGrad)" />
-                        <ellipse cx="240" cy="200" rx="8" ry="18" fill="url(#skinGrad)" />
-                        <line x1="245" y1="185" x2="245" y2="205" stroke="#FBD5B8" strokeWidth="3" strokeLinecap="round" />
-                        <line x1="250" y1="190" x2="250" y2="200" stroke="#FBD5B8" strokeWidth="3" strokeLinecap="round" />
-                        <circle cx="245" cy="183" r="2" fill="#FBD5B8" />
-                        <circle cx="250" cy="188" r="2" fill="#FBD5B8" />
-                        <rect x="313" y="275" width="14" height="20" fill="#8B4513" rx="2" />
-                        <ellipse cx="320" cy="260" rx="18" ry="25" fill="#22C55E" filter="url(#shadow)" />
-                        <ellipse cx="315" cy="265" rx="12" ry="18" fill="#16A34A" />
-                        <ellipse cx="325" cy="265" rx="12" ry="18" fill="#16A34A" />
-                      </svg>
+                    {/* Parent Lottie Animation (big and visible) */}
+                    <div className="flex-shrink-0 greeting-illustration">
+                      {parentAnimation ? (
+                        <div className="w-40 h-40 md:w-56 md:h-56">
+                          <Lottie animationData={parentAnimation} loop={true} className="w-full h-full" />
+                        </div>
+                      ) : null}
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Performance Section (from Student Dashboard) */}
-                <div className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-1">
+                <motion.div 
+                  className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-1"
+                  initial={variants.fadeUp.initial}
+                  animate={variants.fadeUp.animate}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-[#1A1A1A]">Performance</h3>
                     <div className="flex items-center gap-2 rounded-lg px-3 py-1 cursor-pointer transition border border-gray-200">
@@ -370,8 +361,19 @@ export default function ParentDashboard() {
                           tick={{ fill: '#1F2937' }}
                           tickLine={false}
                         />
-                        <Bar dataKey="score" stackId="a" fill="#3B82F6" radius={[0, 0, 0, 0]} />
-                        <Bar dataKey="remaining" stackId="a" fill="#93C5FD" radius={[4, 4, 0, 0]}>
+                        <Bar dataKey="score" stackId="a" radius={[0, 0, 0, 0]} isAnimationActive animationDuration={1600} animationEasing="ease-out">
+                          {[
+                            { color: '#7BD5F5' },
+                            { color: '#787FF6' },
+                            { color: '#4ADEDE' },
+                            { color: '#1CA7EC' },
+                            { color: '#1F2F98' },
+                            { color: '#7BD5F5' },
+                          ].map((entry, index) => (
+                            <Cell key={`color-${index}`} fill={entry.color} />
+                          ))}
+                        </Bar>
+                        <Bar dataKey="remaining" stackId="a" fill="#E5E7EB" radius={[4, 4, 0, 0]} isAnimationActive={false}>
                           <LabelList
                             dataKey="score"
                             position="top"
@@ -382,7 +384,7 @@ export default function ParentDashboard() {
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Linked Teachers removed as requested */}
               </div>
@@ -390,7 +392,12 @@ export default function ParentDashboard() {
               {/* Right Column - Calendar & Events */}
               <div className="flex flex-col gap-3 h-full min-h-0">
                 {/* Calendar Section */}
-                <div className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-1 min-h-0 overflow-y-auto">
+                <motion.div 
+                  className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-1 min-h-0 overflow-y-auto"
+                  initial={variants.slideLeft.initial}
+                  animate={variants.slideLeft.animate}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
                   <div className="flex items-center justify-between mb-3 flex-shrink-0">
                     <h2 className="text-lg font-semibold text-[#1A1A1A]">Calendar</h2>
                     <div className="relative dropdown-container">
@@ -457,9 +464,14 @@ export default function ParentDashboard() {
                       })}
                     </div>
                   </div>
-                </div>
+                </motion.div>
                 {/* Upcoming Events Section (moved from left column) */}
-                <div className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-shrink-0">
+                <motion.div 
+                  className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-shrink-0"
+                  initial={variants.zoomIn.initial}
+                  animate={variants.zoomIn.animate}
+                  transition={{ duration: 0.6, delay: 0.15 }}
+                >
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold text-[#1A1A1A]">Upcoming events</h2>
                     <a href="#" className="text-[#5D5FEF] text-sm font-medium hover:underline">
@@ -500,7 +512,7 @@ export default function ParentDashboard() {
                       </button>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>
@@ -528,9 +540,10 @@ export default function ParentDashboard() {
             <div className="grid grid-cols-2 gap-3 h-full">
               {/* Left Half - Subject Performance (unchanged) */}
               <motion.div 
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+                initial={{ opacity: 0, scale: 0.96, y: 12 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 0.1 }}
                 className="bg-white rounded-2xl p-4 shadow-sm dashboard-card overflow-y-auto"
               >
                 <motion.h2 
@@ -587,14 +600,14 @@ export default function ParentDashboard() {
                         }}
                         formatter={(value: number) => `${value}%`}
                       />
-                      <Bar dataKey="score" radius={[0, 8, 8, 0]}>
+                      <Bar dataKey="score" radius={[0, 8, 8, 0]} isAnimationActive animationBegin={200} animationDuration={1200} animationEasing="ease-out">
                         {[
-                          { name: 'Python', score: 92, color: '#6C5CE7' },
-                          { name: 'Java', score: 88, color: '#0984E3' },
-                          { name: 'JavaScript', score: 85, color: '#00B894' },
-                          { name: 'React', score: 88, color: '#FDCB6E' },
-                          { name: 'HTML/CSS', score: 95, color: '#E17055' },
-                          { name: 'C++', score: 82, color: '#A0AEC0' },
+                          { color: '#7BD5F5' },
+                          { color: '#787FF6' },
+                          { color: '#4ADEDE' },
+                          { color: '#1CA7EC' },
+                          { color: '#1F2F98' },
+                          { color: '#7BD5F5' },
                         ].map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -650,9 +663,10 @@ export default function ParentDashboard() {
 
               {/* Right Half - Report Card */}
               <motion.div 
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
                 className="bg-white rounded-2xl p-4 shadow-sm dashboard-card overflow-y-auto"
               >
                 <motion.div 
