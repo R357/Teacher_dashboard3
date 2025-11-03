@@ -1,3 +1,4 @@
+"use client";
 import {
   UserCheck,
   FileText,
@@ -6,11 +7,14 @@ import {
   X,
   Bell,
   Eye,
+  Trash2, // FIXED: Added missing icon
 } from "lucide-react";
 import { useState } from "react";
 
 export default function TeacherSection() {
-  const [activeTab, setActiveTab] = useState<"requests" | "teachers">("requests");
+  const [activeTab, setActiveTab] = useState<"requests" | "teachers">(
+    "requests",
+  );
   const [requests, setRequests] = useState([
     {
       id: "1",
@@ -244,13 +248,17 @@ export default function TeacherSection() {
 
   const handleApprove = (id: string) => {
     setRequests(
-      requests.map((r) => (r.id === id ? { ...r, status: "approved" as const } : r))
+      requests.map((r) =>
+        r.id === id ? { ...r, status: "approved" as const } : r,
+      ),
     );
   };
 
   const handleReject = (id: string) => {
     setRequests(
-      requests.map((r) => (r.id === id ? { ...r, status: "rejected" as const } : r))
+      requests.map((r) =>
+        r.id === id ? { ...r, status: "rejected" as const } : r,
+      ),
     );
   };
 
@@ -259,9 +267,9 @@ export default function TeacherSection() {
     console.log("Approve teacher:", id);
   };
 
-  const handleRejectTeacher = (id: string) => {
-    // In real app, this would send API request to reject teacher
-    if (confirm("Are you sure you want to reject this teacher?")) {
+  const handleDeleteTeacher = (id: string) => {
+    // Renamed from handleRejectTeacher to be more accurate to the button
+    if (confirm("Are you sure you want to delete this teacher?")) {
       setTeachers(teachers.filter((t) => t.id !== id));
     }
   };
@@ -288,7 +296,9 @@ export default function TeacherSection() {
               <div className="flex items-center gap-2">
                 <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
                 <div>
-                  <p className="text-xs text-gray-600 hidden sm:block">Pending Requests</p>
+                  <p className="text-xs text-gray-600 hidden sm:block">
+                    Pending Requests
+                  </p>
                   <p className="text-sm sm:text-xl font-bold text-gray-800">
                     {pendingRequests.length}
                   </p>
@@ -397,7 +407,9 @@ export default function TeacherSection() {
                                 <td className="px-6 py-4">
                                   <div className="flex items-center justify-center gap-2">
                                     <button
-                                      onClick={() => alert("View note details")}
+                                      onClick={() =>
+                                        alert("View note details")
+                                      }
                                       className="p-2 hover:bg-blue-50 rounded-lg transition-colors"
                                       title="View"
                                     >
@@ -646,7 +658,9 @@ export default function TeacherSection() {
                                   <Eye className="w-4 h-4 text-blue-600" />
                                 </button>
                                 <button
-                                  onClick={() => handleDeleteTeacher(teacher.id)}
+                                  onClick={() =>
+                                    handleDeleteTeacher(teacher.id)
+                                  }
                                   className="p-2 hover:bg-red-50 rounded-lg transition-colors"
                                   title="Delete"
                                 >

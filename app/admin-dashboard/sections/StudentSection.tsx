@@ -1,629 +1,702 @@
-import React, { useEffect, useId, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import {
-  Users,
-  GraduationCap,
-  Mail,
-  Phone,
-  Eye,
+  UserCheck,
+  FileText,
+  Clock,
+  Check, // This is the "tick mark" icon
   X,
-  ClipboardList,  
+  Bell,
+  Eye,
   Trash2,
-  ChevronDown,
-  School, // ADDED
-  ArrowRight, // ADDED
 } from "lucide-react";
+import { useState } from "react";
 
-// Hook for detecting clicks outside
-function useOutsideClick(
-  ref: React.RefObject<HTMLElement>,
-  callback: () => void,
-) {
-  useEffect(() => {
-    const listener = (event: MouseEvent | TouchEvent) => {
-      if (!ref.current || ref.current.contains(event.target as Node)) {
-        return;
-      }
-      callback();
-    };
+export default function TeacherSection() {
+  const [activeTab, setActiveTab] = useState<"requests" | "teachers">(
+    "requests",
+  );
+  const [requests, setRequests] = useState([
+    {
+      id: "1",
+      teacher: "Dr. Sarah Johnson",
+      subject: "Mathematics",
+      title: "Calculus Chapter 3 Notes",
+      date: "Dec 15, 2023",
+      status: "pending" as const,
+    },
+    {
+      id: "2",
+      teacher: "Prof. Michael Brown",
+      subject: "Computer Science",
+      title: "Data Structures Lab Materials",
+      date: "Dec 14, 2023",
+      status: "pending" as const,
+    },
+    {
+      id: "3",
+      teacher: "Dr. Emily Davis",
+      subject: "Physics",
+      title: "Quantum Mechanics Lecture Notes",
+      date: "Dec 13, 2023",
+      status: "approved" as const,
+    },
+    {
+      id: "4",
+      teacher: "Mr. James Wilson",
+      subject: "Chemistry",
+      title: "Organic Chemistry Slides",
+      date: "Dec 12, 2023",
+      status: "rejected" as const,
+    },
+    {
+      id: "5",
+      teacher: "Dr. Sarah Johnson",
+      subject: "Mathematics",
+      title: "Linear Algebra Problem Set",
+      date: "Dec 16, 2023",
+      status: "pending" as const,
+    },
+    {
+      id: "6",
+      teacher: "Prof. Michael Brown",
+      subject: "Computer Science",
+      title: "Algorithm Design Patterns",
+      date: "Dec 11, 2023",
+      status: "approved" as const,
+    },
+    {
+      id: "7",
+      teacher: "Dr. Emily Davis",
+      subject: "Physics",
+      title: "Thermodynamics Study Guide",
+      date: "Dec 10, 2023",
+      status: "pending" as const,
+    },
+    {
+      id: "8",
+      teacher: "Mr. James Wilson",
+      subject: "Chemistry",
+      title: "Chemical Reactions Worksheet",
+      date: "Dec 17, 2023",
+      status: "pending" as const,
+    },
+    {
+      id: "9",
+      teacher: "Dr. Lisa Anderson",
+      subject: "Biology",
+      title: "Cell Biology Lab Manual",
+      date: "Dec 9, 2023",
+      status: "approved" as const,
+    },
+    {
+      id: "10",
+      teacher: "Prof. David Martinez",
+      subject: "History",
+      title: "World War II Timeline",
+      date: "Dec 18, 2023",
+      status: "rejected" as const,
+    },
+    {
+      id: "11",
+      teacher: "Dr. Sarah Johnson",
+      subject: "Mathematics",
+      title: "Trigonometry Practice Problems",
+      date: "Dec 8, 2023",
+      status: "approved" as const,
+    },
+    {
+      id: "12",
+      teacher: "Prof. Michael Brown",
+      subject: "Computer Science",
+      title: "Machine Learning Basics",
+      date: "Dec 19, 2023",
+      status: "pending" as const,
+    },
+    {
+      id: "13",
+      teacher: "Dr. Emily Davis",
+      subject: "Physics",
+      title: "Electromagnetism Notes",
+      date: "Dec 7, 2023",
+      status: "approved" as const,
+    },
+    {
+      id: "14",
+      teacher: "Mr. James Wilson",
+      subject: "Chemistry",
+      title: "Periodic Table Quiz",
+      date: "Dec 20, 2023",
+      status: "rejected" as const,
+    },
+    {
+      id: "15",
+      teacher: "Dr. Lisa Anderson",
+      subject: "Biology",
+      title: "Genetics Study Materials",
+      date: "Dec 6, 2023",
+      status: "pending" as const,
+    },
+  ]);
 
-    document.addEventListener("mousedown", listener);
-    document.addEventListener("touchstart", listener);
+  // This list now represents PENDING teacher approvals
+  const [teachers, setTeachers] = useState([
+    {
+      id: "1",
+      name: "Dr. Sarah Johnson",
+      subject: "Mathematics",
+      email: "sarah.j@university.edu",
+      phone: "+1 (555) 123-4567",
+    },
+    {
+      id: "2",
+      name: "Prof. Michael Brown",
+      subject: "Computer Science",
+      email: "michael.b@university.edu",
+      phone: "+1 (555) 234-5678",
+    },
+    {
+      id: "3",
+      name: "Dr. Emily Davis",
+      subject: "Physics",
+      email: "emily.d@university.edu",
+      phone: "+1 (555) 345-6789",
+    },
+    {
+      id: "4",
+      name: "Mr. James Wilson",
+      subject: "Chemistry",
+      email: "james.w@university.edu",
+      phone: "+1 (555) 456-7890",
+    },
+    {
+      id: "5",
+      name: "Dr. Lisa Anderson",
+      subject: "Biology",
+      email: "lisa.a@university.edu",
+      phone: "+1 (555) 567-8901",
+    },
+    {
+      id: "6",
+      name: "Prof. David Martinez",
+      subject: "History",
+      email: "david.m@university.edu",
+      phone: "+1 (555) 678-9012",
+    },
+    {
+      id: "7",
+      name: "Dr. Robert Taylor",
+      subject: "English Literature",
+      email: "robert.t@university.edu",
+      phone: "+1 (555) 789-0123",
+    },
+    {
+      id: "8",
+      name: "Prof. Jennifer Lee",
+      subject: "Art & Design",
+      email: "jennifer.l@university.edu",
+      phone: "+1 (555) 890-1234",
+    },
+    {
+      id: "9",
+      name: "Dr. Christopher Garcia",
+      subject: "Economics",
+      email: "chris.g@university.edu",
+      phone: "+1 (555) 901-2345",
+    },
+    {
+      id: "10",
+      name: "Ms. Amanda Clark",
+      subject: "Music",
+      email: "amanda.c@university.edu",
+      phone: "+1 (555) 012-3456",
+    },
+    {
+      id: "11",
+      name: "Dr. Daniel Rodriguez",
+      subject: "Psychology",
+      email: "daniel.r@university.edu",
+      phone: "+1 (555) 123-5678",
+    },
+    {
+      id: "12",
+      name: "Prof. Laura Wright",
+      subject: "Philosophy",
+      email: "laura.w@university.edu",
+      phone: "+1 (555) 234-6789",
+    },
+    {
+      id: "13",
+      name: "Dr. Kevin Thompson",
+      subject: "Geography",
+      email: "kevin.t@university.edu",
+      phone: "+1 (555) 345-7890",
+    },
+    {
+      id: "14",
+      name: "Ms. Nicole White",
+      subject: "Physical Education",
+      email: "nicole.w@university.edu",
+      phone: "+1 (555) 456-8901",
+    },
+    {
+      id: "15",
+      name: "Dr. Steven Harris",
+      subject: "Political Science",
+      email: "steven.h@university.edu",
+      phone: "+1 (555) 567-9012",
+    },
+  ]);
 
-    return () => {
-      document.removeEventListener("mousedown", listener);
-      document.removeEventListener("touchstart", listener);
-    };
-  }, [ref, callback]);
-}
+  const handleApprove = (id: string) => {
+    setRequests(
+      requests.map((r) =>
+        r.id === id ? { ...r, status: "approved" as const } : r,
+      ),
+    );
+  };
 
-const students = [
-  {
-    name: "Alexandra Smith",
-    id: "STU001",
-    class: "Class 1",
-    grade: "Grade 12",
-    department: "Computer Science",
-    email: "alex.smith@student.edu",
-    phone: "+1 (555) 123-4567",
-    parentName: "John & Mary Smith",
-    parentEmail: "smith.family@email.com",
-    parentPhone: "+1 (555) 123-4567",
-  },
-  {
-    name: "Michael Chen",
-    id: "STU002",
-    class: "Class 1",
-    grade: "Grade 11",
-    department: "Mathematics",
-    email: "michael.chen@student.edu",
-    phone: "+1 (555) 234-5678",
-    parentName: "David & Lisa Chen",
-    parentEmail: "chen.family@email.com",
-    parentPhone: "+1 (555) 234-5678",
-  },
-  {
-    name: "Emily Rodriguez",
-    id: "STU003",
-    class: "Class 2",
-    grade: "Grade 12",
-    department: "Biology",
-    email: "emily.r@student.edu",
-    phone: "+1 (555) 345-6789",
-    parentName: "Carlos & Maria Rodriguez",
-    parentEmail: "rodriguez.family@email.com",
-    parentPhone: "+1 (555) 345-6789",
-  },
-  {
-    name: "James Wilson",
-    id: "STU004",
-    class: "Class 2",
-    grade: "Grade 10",
-    department: "Physics",
-    email: "james.w@student.edu",
-    phone: "+1 (555) 456-7890",
-    parentName: "Robert & Jennifer Wilson",
-    parentEmail: "wilson.family@email.com",
-    parentPhone: "+1 (555) 456-7890",
-  },
-  {
-    name: "Sophia Martinez",
-    id: "STU005",
-    class: "Class 1",
-    grade: "Grade 11",
-    department: "Chemistry",
-    email: "sophia.m@student.edu",
-    phone: "+1 (555) 567-8901",
-    parentName: "Miguel & Ana Martinez",
-    parentEmail: "martinez.family@email.com",
-    parentPhone: "+1 (555) 567-8901",
-  },
-  {
-    name: "Daniel Kim",
-    id: "STU006",
-    class: "Class 3",
-    grade: "Grade 12",
-    department: "Computer Science",
-    email: "daniel.kim@student.edu",
-    phone: "+1 (555) 678-9012",
-    parentName: "Kevin & Susan Kim",
-    parentEmail: "kim.family@email.com",
-    parentPhone: "+1 (555) 678-9012",
-  },
-  {
-    name: "Isabella Thompson",
-    id: "STU007",
-    class: "Class 2",
-    grade: "Grade 10",
-    department: "Arts & Design",
-    email: "isabella.t@student.edu",
-    phone: "+1 (555) 789-0123",
-    parentName: "William & Karen Thompson",
-    parentEmail: "thompson.family@email.com",
-    parentPhone: "+1 (555) 789-0123",
-  },
-  {
-    name: "Ethan Brown",
-    id: "STU008",
-    class: "Class 3",
-    grade: "Grade 11",
-    department: "History",
-    email: "ethan.b@student.edu",
-    phone: "+1 (555) 890-1234",
-    parentName: "Matthew & Patricia Brown",
-    parentEmail: "brown.family@email.com",
-    parentPhone: "+1 (555) 890-1234",
-  },
-  {
-    name: "Olivia Johnson",
-    id: "STU009",
-    class: "Class 1",
-    grade: "Grade 12",
-    department: "Literature",
-    email: "olivia.j@student.edu",
-    phone: "+1 (555) 901-2345",
-    parentName: "Richard & Linda Johnson",
-    parentEmail: "johnson.family@email.com",
-    parentPhone: "+1 (555) 901-2345",
-  },
-  {
-    name: "Noah Davis",
-    id: "STU010",
-    class: "Class 2",
-    grade: "Grade 11",
-    department: "Physics",
-    email: "noah.d@student.edu",
-    phone: "+1 (555) 111-2222",
-    parentName: "Chris & Sarah Davis",
-    parentEmail: "davis.family@email.com",
-    parentPhone: "+1 (555) 111-2222",
-  },
-  {
-    name: "Emma Wilson",
-    id: "STU011",
-    class: "Class 3",
-    grade: "Grade 10",
-    department: "Chemistry",
-    email: "emma.w@student.edu",
-    phone: "+1 (555) 222-3333",
-    parentName: "Thomas & Anna Wilson",
-    parentEmail: "wilson2.family@email.com",
-    parentPhone: "+1 (555) 222-3333",
-  },
-  {
-    name: "Liam Anderson",
-    id: "STU012",
-    class: "Class 1",
-    grade: "Grade 11",
-    department: "Computer Science",
-    email: "liam.a@student.edu",
-    phone: "+1 (555) 333-4444",
-    parentName: "Robert & Jessica Anderson",
-    parentEmail: "anderson.family@email.com",
-    parentPhone: "+1 (555) 333-4444",
-  },
-  {
-    name: "Noah Anderson",
-    id: "STU021", // FIXED: Was STU010
-    class: "Class 1", // FIXED: Added missing property
-    grade: "Grade 10",
-    department: "Mathematics",
-    email: "noah.a@student.edu",
-    phone: "+1 (555) 012-3456",
-    parentName: "Paul & Sarah Anderson",
-  },
-  {
-    name: "Emma Davis",
-    id: "STU022", // FIXED: Was STU011
-    class: "Class 2", // FIXED: Added missing property
-    grade: "Grade 11",
-    department: "Biology",
-    email: "emma.d@student.edu",
-    phone: "+1 (555) 123-5678",
-    parentName: "Tom & Rachel Davis",
-  },
-  {
-    name: "Liam Garcia",
-    id: "STU023", // FIXED: Was STU012
-    class: "Class 3", // FIXED: Added missing property
-    grade: "Grade 12",
-    department: "Physics",
-    email: "liam.g@student.edu",
-    phone: "+1 (555) 234-6789",
-    parentName: "Jose & Maria Garcia",
-  },
-  {
-    name: "Ava Miller",
-    id: "STU013",
-    class: "Class 1", // FIXED: Added missing property
-    grade: "Grade 10",
-    department: "Chemistry",
-    email: "ava.m@student.edu",
-    phone: "+1 (555) 345-7890",
-    parentName: "Steve & Laura Miller",
-  },
-  {
-    name: "William Taylor",
-    id: "STU014",
-    class: "Class 2", // FIXED: Added missing property
-    grade: "Grade 11",
-    department: "Computer Science",
-    email: "william.t@student.edu",
-    phone: "+1 (555) 456-8901",
-    parentName: "Mark & Jessica Taylor",
-  },
-  {
-    name: "Mia Jackson",
-    id: "STU015",
-    class: "Class 3", // FIXED: Added missing property
-    grade: "Grade 12",
-    department: "Arts & Design",
-    email: "mia.j@student.edu",
-    phone: "+1 (555) 567-9012",
-    parentName: "Chris & Amanda Jackson",
-  },
-  {
-    name: "Benjamin White",
-    id: "STU016",
-    class: "Class 1", // FIXED: Added missing property
-    grade: "Grade 10",
-    department: "History",
-    email: "ben.w@student.edu",
-    phone: "+1 (555) 678-0123",
-    parentName: "Peter & Nancy White",
-  },
-  {
-    name: "Charlotte Harris",
-    id: "STU017",
-    class: "Class 2", // FIXED: Added missing property
-    grade: "Grade 11",
-    department: "Literature",
-    email: "charlotte.h@student.edu",
-    phone: "+1 (555) 789-1234",
-    parentName: "Daniel & Michelle Harris",
-  },
-  {
-    name: "Lucas Martin",
-    id: "STU018",
-    class: "Class 3", // FIXED: Added missing property
-    grade: "Grade 12",
-    department: "Mathematics",
-    email: "lucas.m@student.edu",
-    phone: "+1 (555) 890-2345",
-    parentName: "Brian & Kimberly Martin",
-  },
-  {
-    name: "Amelia Thomas",
-    id: "STU019",
-    class: "Class 1", // FIXED: Added missing property
-    grade: "Grade 10",
-    department: "Biology",
-    email: "amelia.t@student.edu",
-    phone: "+1 (555) 901-3456",
-    parentName: "Gary & Deborah Thomas",
-  },
-  {
-    name: "Henry Moore",
-    id: "STU020",
-    class: "Class 2", // FIXED: Added missing property
-    grade: "Grade 11",
-    department: "Physics",
-    email: "henry.m@student.edu",
-    phone: "+1 (555) 012-4567",
-    parentName: "Frank & Carol Moore",
-  },
-];
+  const handleReject = (id: string) => {
+    setRequests(
+      requests.map((r) =>
+        r.id === id ? { ...r, status: "rejected" as const } : r,
+      ),
+    );
+  };
 
-type Student = (typeof students)[number];
-
-const InfoItem = ({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: string;
-}) => (
-  <div className="flex items-start gap-2">
-    <Icon className="w-4 h-4 text-gray-500 mt-1 flex-shrink-0" />
-    <div>
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className="text-sm font-medium text-gray-800">{value}</p>
-    </div>
-  </div>
-);
-
-export default function StudentSection() {
-  // FIXED: Added state for allStudents and selectedClass
-  const [allStudents, setAllStudents] = useState(students);
-  const [selectedClass, setSelectedClass] = useState("All Classes");
-
-  const [active, setActive] = useState<Student | null>(null);
-  const [showParentModal, setShowParentModal] = useState(false);
-  const [selectedParent, setSelectedParent] = useState<{
-    name: string;
-    email: string;
-    phone: string;
-  } | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
-  const parentModalRef = useRef<HTMLDivElement>(null);
-  const id = useId();
-
-  // Filter students based on selected class
-  // This logic is now valid because selectedClass and allStudents are defined
-  const filteredStudents =
-    selectedClass === "All Classes"
-      ? allStudents
-      : allStudents.filter((s) => s.class === selectedClass);
-
-  // Get unique classes - add all classes 1-10
-  const uniqueClasses = [
-    "All Classes",
-    "Class 1",
-    "Class 2",
-    "Class 3",
-    "Class 4",
-    "Class 5",
-    "Class 6",
-    "Class 7",
-    "Class 8",
-    "Class 9",
-    "Class 10",
-  ];
-
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setActive(null);
-        setShowParentModal(false);
-      }
-    }
-    if (active || showParentModal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [active, showParentModal]);
-
-  useOutsideClick(ref, () => setActive(null));
-  useOutsideClick(parentModalRef, () => setShowParentModal(false));
-
-  const handleDelete = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (confirm("Are you sure you want to delete this student?")) {
-      // This now works because setAllStudents and allStudents are defined
-      setAllStudents(allStudents.filter((s) => s.id !== id));
+  // FIXED: This function now simulates approval by removing the teacher from the pending list
+  const handleApproveTeacher = (id: string) => {
+    if (confirm("Are you sure you want to approve this teacher?")) {
+      // In a real app, this would send an API request to set the teacher's status to 'approved'.
+      // For this UI demo, we'll just remove them from the pending list.
+      console.log("Approve teacher:", id);
+      setTeachers(teachers.filter((t) => t.id !== id));
     }
   };
 
-  // Note: totalStudents should be based on the state so it updates on delete
-  const totalStudents = allStudents.length;
-  const byDepartment = allStudents.reduce((acc, student) => {
-    acc[student.department] = (acc[student.department] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  // FIXED: Renamed this function for clarity
+  const handleRejectTeacher = (id: string) => {
+    if (
+      confirm(
+        "Are you sure you want to reject this teacher? This will delete their request.",
+      )
+    ) {
+      console.log("Reject teacher:", id);
+      setTeachers(teachers.filter((t) => t.id !== id));
+    }
+  };
+
+  const pendingRequests = requests.filter((r) => r.status === "pending");
+  const approvedRequests = requests.filter((r) => r.status === "approved");
+  const rejectedRequests = requests.filter((r) => r.status === "rejected");
 
   return (
-    <>
-      <AnimatePresence>
-        {active && (
-          <div className="fixed inset-0 grid place-items-center z-[100] p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 h-full w-full"
-              onClick={() => setActive(null)}
-            />
-
-            <motion.button
-              key={`button-${active.name}-${id}`}
-              layout
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0.05 } }}
-              className="flex absolute top-4 right-4 lg:hidden items-center justify-center bg-white rounded-full h-8 w-8 z-[101]"
-              onClick={() => setActive(null)}
-            >
-              <X className="w-5 h-5 text-black" />
-            </motion.button>
-
-            <motion.div
-              layoutId={`card-${active.name}-${id}`}
-              ref={ref}
-              className="w-full max-w-lg h-auto max-h-[90vh] flex flex-col bg-white rounded-2xl overflow-y-auto z-[100]"
-            >
-              <motion.div
-                layoutId={`image-${active.name}-${id}`}
-                className="w-full h-40 bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white"
-              >
-                <span className="font-bold text-6xl">
-                  {active.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </span>
-              </motion.div>
-
-              <div className="p-6 space-y-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <motion.h3
-                      layoutId={`title-${active.name}-${id}`}
-                      className="font-bold text-2xl text-gray-800"
-                    >
-                      {active.name}
-                    </motion.h3>
-                    <motion.p
-                      layoutId={`department-${active.name}-${id}`}
-                      className="text-lg text-gray-600"
-                    >
-                      {active.department}
-                    </motion.p>
-                  </div>
-                  <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
-                    {active.class}
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-4">
-                  <h4 className="font-semibold text-gray-700 mb-3">
-                    Student Details
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <InfoItem
-                      icon={ClipboardList}
-                      label="Student ID"
-                      value={active.id}
-                    />
-                    <InfoItem icon={Mail} label="Email" value={active.email} />
-                    <InfoItem icon={Phone} label="Phone" value={active.phone} />
-                    <InfoItem
-                      icon={School} // FIXED: Now imported
-                      label="Department"
-                      value={active.department}
-                    />
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-4">
-                  <h4 className="font-semibold text-gray-700 mb-3">
-                    Quick Actions
-                  </h4>
-                  <div className="flex gap-2">
-                    <button className="flex-1 text-center py-2 px-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-semibold">
-                      View Parent Details
-                    </button>
-                    <button className="flex-1 text-center py-2 px-3 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors text-sm font-semibold">
-                      View Grades
-                    </button>
-                  </div>
+    <section id="teachers" className="py-10 sm:py-20 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-10 gap-4">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
+              Teacher Management
+            </h2>
+            <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
+              Manage teachers and review note upload requests
+            </p>
+          </div>
+          <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-2 shadow-sm border border-gray-100 flex-1 sm:flex-none">
+              <div className="flex items-center gap-2">
+                <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+                <div>
+                  <p className="text-xs text-gray-600 hidden sm:block">
+                    Pending Requests
+                  </p>
+                  <p className="text-sm sm:text-xl font-bold text-gray-800">
+                    {pendingRequests.length}
+                  </p>
                 </div>
               </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      <section id="students" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between mb-10">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-                Student Management
-              </h2>
-              <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
-                View all students and access parent information
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-100">
-                <div className="flex items-center gap-2">
-                  <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
-                  <div>
-                    <p className="text-xs text-gray-600 hidden sm:block">
-                      Total Students
-                    </p>
-                    <p className="text-sm sm:text-xl font-bold text-gray-800">
-                      {totalStudents}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-            <div className="max-h-[600px] overflow-y-auto overflow-x-auto">
-              <table className="w-full min-w-max">
-                <thead className="sticky top-0 bg-gray-50 z-10">
-                  <tr className="border-b border-gray-200">
-                    <th className="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Student
-                    </th>
-                    <th className="p-3 sm:p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Department
-                    </th>
-                    <th className="p-3 sm:p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Grade
-                    </th>
-                    <th className="p-3 sm:p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden md:table-cell">
-                      Contact
-                    </th>
-                    <th className="p-3 sm:p-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Action
-                    </th>
-                    <th className="p-3 sm:p-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Delete
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody className="divide-y divide-gray-200">
-                  {filteredStudents.map((student) => (
-                    <motion.tr
-                      layoutId={`card-${student.name}-${id}`}
-                      key={student.id} // FIXED: IDs are now unique
-                      onClick={() => setActive(student)}
-                      className="cursor-pointer hover:bg-gray-100 hover:-translate-y-1 transition-all duration-200 group"
-                    >
-                      <td className="p-4 whitespace-nowrap">
-                        <div className="flex items-center gap-3">
-                          <motion.div
-                            layoutId={`image-${student.name}-${id}`}
-                            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0"
-                          >
-                            {student.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </motion.div>
-                          <div>
-                            <motion.h3
-                              layoutId={`title-${student.name}-${id}`}
-                              className="font-bold text-gray-800 text-xs sm:text-sm"
-                            >
-                              {student.name}
-                            </motion.h3>
-                            <p className="text-xs text-gray-600">
-                              ID: {student.id}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td className="p-4 whitespace-nowrap text-sm text-gray-600">
-                        <motion.span
-                          layoutId={`department-${student.name}-${id}`}
-                        >
-                          {student.department}
-                        </motion.span>
-                      </td>
-
-                      <td className="p-4 whitespace-nowrap">
-                        <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold inline-block">
-                          {student.grade}
-                        </div>
-                      </td>
-
-                      <td className="p-4 whitespace-nowrap text-sm text-gray-600 hidden md:table-cell">
-                        {" "}
-                        {/* FIXED: Added hidden md:table-cell */}
-                        <div className="flex items-center gap-2">
-                          <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                          <span className="truncate">{student.email}</span>
-                        </div>
-                      </td>
-
-                      <td className="p-4 whitespace-nowrap text-center">
-                        <div className="flex items-center justify-center gap-2 w-full py-2 px-3 bg-blue-50 text-blue-700 rounded-lg group-hover:bg-blue-100 transition-colors">
-                          <span className="text-sm font-semibold">View</span>
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />{" "}
-                          {/* FIXED: Now imported */}
-                        </div>
-                      </td>
-
-                      {/* FIXED: Added missing Delete button cell */}
-                      <td className="p-4 whitespace-nowrap text-center">
-                        <button
-                          onClick={(e) => handleDelete(student.id, e)}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                          title="Delete Student"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
           </div>
         </div>
-      </section>
-    </>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="flex border-b border-gray-200">
+            <button
+              onClick={() => setActiveTab("requests")}
+              className={`flex-1 px-4 py-3 sm:px-6 sm:py-4 font-semibold text-xs sm:text-sm transition-colors ${
+                activeTab === "requests"
+                  ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Upload Requests</span>
+                <span className="sm:hidden">Requests</span>
+                {pendingRequests.length > 0 && (
+                  <span className="bg-orange-500 text-white text-xs font-bold px-1.5 py-0.5 sm:px-2 rounded-full">
+                    {pendingRequests.length}
+                  </span>
+                )}
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab("teachers")}
+              className={`flex-1 px-4 py-3 sm:px-6 sm:py-4 font-semibold text-xs sm:text-sm transition-colors ${
+                activeTab === "teachers"
+                  ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <UserCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Teacher Approvals</span>
+                <span className="sm:hidden">Approvals</span>
+                {/* Show pending teacher count if any */}
+                {teachers.length > 0 && (
+                  <span className="bg-blue-600 text-white text-xs font-bold px-1.5 py-0.5 sm:px-2 rounded-full">
+                    {teachers.length}
+                  </span>
+                )}
+              </div>
+            </button>
+          </div>
+
+          <div className="p-6">
+            {activeTab === "requests" && (
+              <div className="space-y-8">
+                {pendingRequests.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <Clock className="w-5 h-5 text-orange-500" />
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-800">
+                        Pending Requests
+                      </h3>
+                      <span className="bg-orange-100 text-orange-700 text-xs font-semibold px-2 py-1 rounded-full">
+                        {pendingRequests.length}
+                      </span>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                      <div className="max-h-[400px] overflow-y-auto overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="sticky top-0 bg-gray-50 border-b border-gray-200 z-10">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Note Title
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Teacher
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Subject
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Date
+                              </th>
+                              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Actions
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-200">
+                            {pendingRequests.map((request) => (
+                              <tr
+                                key={request.id}
+                                className="hover:bg-gray-50 transition-colors"
+                              >
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center gap-2">
+                                    <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                                    <span className="font-medium text-gray-800">
+                                      {request.title}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-700">
+                                  {request.teacher}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-600">
+                                  {request.subject}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-500">
+                                  {request.date}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center justify-center gap-2">
+                                    <button
+                                      onClick={() =>
+                                        alert("View note details")
+                                      }
+                                      className="p-2 hover:bg-blue-50 rounded-lg transition-colors"
+                                      title="View"
+                                    >
+                                      <Eye className="w-4 h-4 text-blue-600" />
+                                    </button>
+                                    <button
+                                      onClick={() => handleApprove(request.id)}
+                                      className="p-2 hover:bg-green-50 rounded-lg transition-colors"
+                                      title="Approve"
+                                    >
+                                      <Check className="w-4 h-4 text-green-600" />
+                                    </button>
+                                    <button
+                                      onClick={() => handleReject(request.id)}
+                                      className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                      title="Reject"
+                                    >
+                                      <X className="w-4 h-4 text-red-600" />
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {approvedRequests.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <Check className="w-5 h-5 text-green-500" />
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-800">
+                        Approved Requests
+                      </h3>
+                      <span className="bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded-full">
+                        {approvedRequests.length}
+                      </span>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                      <div className="max-h-[400px] overflow-y-auto overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="sticky top-0 bg-gray-50 border-b border-gray-200 z-10">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Note Title
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Teacher
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Subject
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Date
+                              </th>
+                              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Status
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-200">
+                            {approvedRequests.map((request) => (
+                              <tr
+                                key={request.id}
+                                className="hover:bg-gray-50 transition-colors"
+                              >
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center gap-2">
+                                    <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                                    <span className="font-medium text-gray-800">
+                                      {request.title}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-700">
+                                  {request.teacher}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-600">
+                                  {request.subject}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-500">
+                                  {request.date}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex justify-center">
+                                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold flex items-center gap-1">
+                                      <Check className="w-3 h-3" />
+                                      Approved
+                                    </span>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {rejectedRequests.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <X className="w-5 h-5 text-red-500" />
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-800">
+                        Rejected Requests
+                      </h3>
+                      <span className="bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">
+                        {rejectedRequests.length}
+                      </span>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                      <div className="max-h-[400px] overflow-y-auto overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="sticky top-0 bg-gray-50 border-b border-gray-200 z-10">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Note Title
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Teacher
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Subject
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Date
+                              </th>
+                              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Status
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-200">
+                            {rejectedRequests.map((request) => (
+                              <tr
+                                key={request.id}
+                                className="hover:bg-gray-50 transition-colors"
+                              >
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center gap-2">
+                                    <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                                    <span className="font-medium text-gray-800">
+                                      {request.title}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-700">
+                                  {request.teacher}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-600">
+                                  {request.subject}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-500">
+                                  {request.date}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex justify-center">
+                                    <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold flex items-center gap-1">
+                                      <X className="w-3 h-3" />
+                                      Rejected
+                                    </span>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === "teachers" && (
+              <div>
+                <div className="mb-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-800">
+                    Pending Teacher Approvals ({teachers.length})
+                  </h3>
+                </div>
+
+                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                  <div className="max-h-[600px] overflow-y-auto overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="sticky top-0 bg-gray-50 border-b border-gray-200 z-10">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Name
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Subject
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Email
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Phone
+                          </th>
+                          <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {teachers.map((teacher) => (
+                          <tr
+                            key={teacher.id}
+                            className="hover:bg-gray-50 transition-colors"
+                          >
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">
+                                  {teacher.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </div>
+                                <span className="font-medium text-gray-800">
+                                  {teacher.name}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-700">
+                              {teacher.subject}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-600">
+                              {teacher.email}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-600">
+                              {teacher.phone}
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center justify-center gap-2">
+                                {/* FIXED: This is now an Approve button */}
+                                <button
+                                  onClick={() =>
+                                    handleApproveTeacher(teacher.id)
+                                  }
+                                  className="p-2 hover:bg-green-50 rounded-lg transition-colors"
+                                  title="Approve"
+                                >
+                                  <Check className="w-4 h-4 text-green-600" />
+                                </button>
+                                {/* FIXED: This is now a Reject button */}
+                                <button
+                                  onClick={() =>
+                                    handleRejectTeacher(teacher.id)
+                                  }
+                                  className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                  title="Reject"
+                                >
+                                  <Trash2 className="w-4 h-4 text-red-600" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
   );
-}  
+}
