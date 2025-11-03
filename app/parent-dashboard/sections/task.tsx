@@ -72,7 +72,7 @@ export default function TaskSection() {
       {/* Recent Tasks and Recent Practice Section (copied exactly) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 h-full">
         {/* Recent Tasks - Left Side */}
-        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto">
+        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto h-full">
           <h3 className="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
             <Clock className="w-4 h-4 text-blue-600" />
             Recent Tasks
@@ -134,7 +134,7 @@ export default function TaskSection() {
         </div>
 
         {/* Recent Practice - Right Side */}
-        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto">
+        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto h-full">
           <h3 className="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
             <PlayCircle className="w-4 h-4 text-green-600" />
             Recent Practice

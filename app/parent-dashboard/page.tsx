@@ -254,7 +254,7 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['home'] = el; }}
         >
-          <div className="w-full px-4 py-3 h-full">
+          <div className="w-full px-6 py-3 h-full">
             <div className="grid grid-cols-3 gap-3 h-full dashboard-grid">
               {/* Left Column */}
               <div className="col-span-2 flex flex-col gap-3 overflow-y-auto">
@@ -376,7 +376,7 @@ export default function ParentDashboard() {
                             dataKey="score"
                             position="top"
                             style={{ fill: '#1F2937', fontSize: '12px', fontWeight: 'bold' }}
-                            formatter={(value: number) => `${value}%`}
+                            formatter={(label: any) => `${label}%`}
                           />
                         </Bar>
                       </BarChart>
@@ -512,7 +512,7 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['tasks'] = el; }}
         >
-          <div className="w-full px-2 py-1 h-full flex items-center">
+          <div className="w-full px-6 py-1 h-full flex items-center">
             {/* TaskSection already contains its own white cards and max-width container */}
             <TaskSection />
           </div>
@@ -524,7 +524,7 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['performance'] = el; }}
         >
-          <div className="w-full px-3 py-2 h-full">
+          <div className="w-full px-6 py-2 h-full">
             <div className="grid grid-cols-2 gap-3 h-full">
               {/* Left Half - Subject Performance (unchanged) */}
               <motion.div 
@@ -780,7 +780,7 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['attendance'] = el; }}
         >
-          <div className="w-full px-2 py-1 h-full flex items-center">
+          <div className="w-full px-6 py-1 h-full flex items-center">
             <div className="bg-white rounded-2xl p-2 shadow-sm dashboard-card w-full h-full flex flex-col">
               {/* Import and use Attendance component */}
               <Attendance />
@@ -794,7 +794,7 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['feedback'] = el; }}
         >
-          <div className="w-full px-2 py-1 h-full flex items-center">
+          <div className="w-full px-6 py-1 h-full flex items-center">
             <div className="bg-white rounded-2xl shadow-sm dashboard-card h-full w-full">
               {/* Import and use the Feedback component */}
               <Feedback />
