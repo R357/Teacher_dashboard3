@@ -85,7 +85,7 @@ export default function Navbar() {
     { title: "Home", icon: <Home className="w-5 h-5" />, href: "/teacher-dashboard" },
     { title: "Classes", icon: <LayoutGrid className="w-5 h-5" />, href: "/teacher-dashboard/classes" },
     { title: "Students", icon: <Users className="w-5 h-5" />, href: "/teacher-dashboard/students" },
-    { title: "Attendance", icon: <ClipboardCheck className="w-5 h-5" />, href: "/teacher-dashboard/attendance" },
+    { title: "Attendance", icon: <ClipboardCheck className="w-5 h-5" />, href: "/teacher-dashboard/attendence" },
     { title: "Notes", icon: <BookOpen className="w-5 h-5" />, href: "/teacher-dashboard/notes" },
     { title: "Assignments", icon: <FileText className="w-5 h-5" />, href: "/teacher-dashboard/assignments" },
     { title: "Exams", icon: <GraduationCap className="w-5 h-5" />, href: "/teacher-dashboard/exams" },
