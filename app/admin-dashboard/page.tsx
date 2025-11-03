@@ -296,7 +296,7 @@ export default function AdminDashboard() {
                               {event.title}
                             </h4>
                           </div>
-                          <p
+                          <p 
                             className={`text-xs ${
                               event.time === '09:00' ? 'text-white/90' : 'text-gray-600'
                             }`}
@@ -362,4 +362,5 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
-}
+}  
+   
