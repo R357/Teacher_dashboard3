@@ -50,7 +50,7 @@ const Index = () => {
     <section id="attendance" className="py-20">
       <div className="container mx-auto px-4 py-12 max-w-7xl">
         {/* Header */}
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-12 text-center tracking-tight">
+        <h1 className="text-5xl font-bold text-white mb-12 text-center tracking-tight">
           Attendance Dashboard
         </h1>
 
@@ -61,7 +61,7 @@ const Index = () => {
             return (
               <div
                 key={index}
-                className="backdrop-blur-xl bg-white/20 border border-white/30 rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                className="backdrop-blur-xl bg-white/10 border border-white/30 rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
               >
                 <div className="p-6 relative">
                   <div 
@@ -87,7 +87,7 @@ const Index = () => {
         </div>
 
         {/* Bar Graph Section */}
-        <div className="backdrop-blur-xl bg-white/0 border border-white/30 rounded-xl p-8 shadow-lg" ref={chartRef}>
+        <div className="backdrop-blur-xl bg-white/10 border border-white/30 rounded-xl p-8 shadow-lg" ref={chartRef}>
           <h2 className="text-3xl font-bold text-white mb-12 text-center">
             Subject-wise Attendance
           </h2>

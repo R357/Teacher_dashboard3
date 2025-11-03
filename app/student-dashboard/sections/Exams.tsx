@@ -167,19 +167,19 @@ function ExamRow({
       <div
         className={`group relative overflow-hidden rounded-lg border transition-all duration-300 ${
           isActive
-            ? "backdrop-blur-xl bg-blue-500/20 border-blue-400/40 shadow-lg"
-            : "backdrop-blur-xl bg-white/20 border-white/30 hover:border-blue-400/50 hover:shadow-md"
+            ? "backdrop-blur-xl bg-white/5 border-white/30 shadow-lg"
+            : "backdrop-blur-xl bg-white/5 border-white/30 hover:border-blue-400/50 hover:shadow-md"
         }`}
       >
         {/* Gradient overlay on hover for upcoming exams */}
         {!isActive && (
-          <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-all duration-300 pointer-events-none backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-all duration-300 pointer-events-none backdrop-blur-sm" />
         )}
 
         <div className="relative p-5 flex items-center gap-4">
           {/* Subject Icon */}
           <div className="flex-shrink-0">
-            <div className="w-16 h-16 rounded-lg backdrop-blur-md bg-blue-500/40 border border-blue-400/50 flex items-center justify-center text-3xl shadow-lg">
+            <div className="w-16 h-16 rounded-lg backdrop-blur-md bg-white/10 border border-white/30 flex items-center justify-center text-3xl shadow-lg">
               {subjectIcons[exam.subject] || "📝"}
             </div>
           </div>
@@ -189,7 +189,7 @@ function ExamRow({
             <div className="flex items-center gap-3 mb-2">
               <h3 className="text-lg font-bold text-white">{exam.title}</h3>
               {isActive && (
-                <span className="flex items-center gap-1 px-2 py-1 bg-red-100 text-white rounded-full text-xs font-semibold">
+                <span className="flex items-center gap-1 px-2 py-1 bg-red-600/80 text-white rounded-full text-xs font-semibold border border-white/20">
                   <AlertCircle className="w-3 h-3" />
                   Active
                 </span>
@@ -232,7 +232,7 @@ function ExamRow({
             {!isActive && (
               <button
                 onClick={handlePrepare}
-                className="px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center gap-2 bg-gradient-to-r from-blue-100 to-blue-200 text-white border border-blue-300 hover:from-blue-200 hover:to-blue-300 hover:shadow-md"
+                className="px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white border border-blue-400 hover:from-blue-700 hover:to-blue-800 hover:shadow-md"
               >
                 <BookOpen className="w-4 h-4" />
                 Prepare
@@ -271,8 +271,8 @@ function TabButton({
         <span
           className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
             isActive
-              ? "bg-blue-100 text-white"
-              : "bg-gray-100 text-white"
+              ? "bg-blue-600/80 text-white"
+              : "bg-white/20 text-white border border-white/20"
           }`}
         >
           {count}
@@ -321,7 +321,7 @@ export default function Exams() {
 
         {/* Tabs */}
         <div className="mb-8">
-          <div className="backdrop-blur-xl bg-white/20 rounded-xl shadow-lg border border-white/30 overflow-hidden">
+          <div className="backdrop-blur-xl bg-white/10 rounded-xl shadow-lg border border-white/30 overflow-hidden">
             <div className="flex border-b border-white/20">
               <TabButton
                 label="All"

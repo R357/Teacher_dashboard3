@@ -51,7 +51,7 @@ const Index = () => {
     <section id="attendance" className="py-1 h-full flex flex-col">
       <div className="section-inner py-1">
         {/* Header */}
-        <h1 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2 text-center tracking-tight">
+        <h1 className="text-lg font-bold text-white mb-2 text-center tracking-tight">
           Attendance Dashboard
         </h1>
 

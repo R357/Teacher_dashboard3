@@ -46,7 +46,7 @@ export default function ParticlesBackground() {
           MAX_LINKS: 1,
         }
       : {
-          particleCount: 50,
+          particleCount: 30,
           minSize: 20,
           maxSize: 35,
           minSpeed: 0,

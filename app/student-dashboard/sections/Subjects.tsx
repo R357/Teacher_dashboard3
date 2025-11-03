@@ -223,7 +223,7 @@ function SubjectCard({ subject }: { subject: typeof subjectsData[0] }) {
 
   return (
     <>
-      <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-white/30 flex-shrink-0 w-full">
+      <div className="backdrop-blur-xl bg-white/10 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-white/30 flex-shrink-0 w-full">
         {/* Subject Icon - Top Right */}
         <div className="flex justify-between items-start mb-4">
           <div className="flex-1">
@@ -471,7 +471,7 @@ export default function Subjects() {
         {/* Recent Tasks and Recent Practice Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Recent Tasks - Left Side */}
-          <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 shadow-lg border border-white/30">
+          <div className="backdrop-blur-xl bg-white/10 rounded-xl p-6 shadow-lg border border-white/30">
             <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <Clock className="w-6 h-6 text-white" />
               Recent Tasks
@@ -481,7 +481,7 @@ export default function Subjects() {
               {recentTasks.map((task) => (
                 <div
                   key={task.id}
-                  className="flex items-start gap-4 p-4 backdrop-blur-md bg-white/30 rounded-lg hover:bg-white/40 transition border border-white/20"
+                  className="flex items-start gap-4 p-4 backdrop-blur-md bg-white/10 rounded-lg hover:bg-white/40 transition border border-white/20"
                 >
                   <div className={`mt-1 ${
                     task.status === "completed" ? "text-white" : 
@@ -498,13 +498,6 @@ export default function Subjects() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className="font-semibold text-white">{task.title}</h4>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        task.priority === "high" ? "bg-red-100 text-white" :
-                        task.priority === "medium" ? "bg-yellow-100 text-white" :
-                        "bg-blue-100 text-white"
-                      }`}>
-                        {task.priority}
-                      </span>
                     </div>
                     <p className="text-sm text-white mb-1">{task.subject}</p>
                     <p className="text-xs text-white">Due: {task.dueDate}</p>
@@ -518,14 +511,23 @@ export default function Subjects() {
                     )}
                   </div>
                   
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    task.status === "completed" ? "bg-green-100 text-green-700" :
-                    task.status === "in-progress" ? "bg-yellow-100 text-white" :
-                    "bg-gray-100 text-white"
-                  }`}>
-                    {task.status === "completed" ? "Done" :
-                     task.status === "in-progress" ? "In Progress" :
-                     "Pending"}
+                  <div className="flex flex-col items-end gap-2 ml-2">
+                    <span className={`text-xs px-2 py-0.5 rounded-full shadow-sm ${
+                      task.priority === "high" ? "bg-red-500/90 text-white" :
+                      task.priority === "medium" ? "bg-yellow-500/90 text-white" :
+                      "bg-blue-500/90 text-white"
+                    }`}>
+                      {task.priority}
+                    </span>
+                    <div className={`px-3 py-1 rounded-full text-xs font-medium shadow-sm ${
+                      task.status === "completed" ? "bg-green-500/90 text-white" :
+                      task.status === "in-progress" ? "bg-yellow-500/90 text-white" :
+                      "bg-gray-500/90 text-white"
+                    }`}>
+                      {task.status === "completed" ? "Done" :
+                       task.status === "in-progress" ? "In Progress" :
+                       "Pending"}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -533,7 +535,7 @@ export default function Subjects() {
           </div>
 
           {/* Recent Practice - Right Side */}
-          <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 shadow-lg border border-white/30">
+          <div className="backdrop-blur-xl bg-white/10 rounded-xl p-6 shadow-lg border border-white/30">
             <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <PlayCircle className="w-6 h-6 text-white" />
               Recent Practice
@@ -546,7 +548,7 @@ export default function Subjects() {
                 return (
                   <div
                     key={index}
-                    className="p-4 backdrop-blur-md bg-white/30 rounded-lg border border-white/20 hover:bg-white/40 transition"
+                    className="p-4 backdrop-blur-md bg-white/10 rounded-lg border border-white/20 hover:bg-white/40 transition"
                   >
                     <div className="flex items-center gap-4 mb-3">
                       <div className="text-4xl">{practice.icon}</div>

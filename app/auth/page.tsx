@@ -8,6 +8,7 @@ import studentAnimation from '../../login(animations)/Student.json';
 import teacherAnimation from '../../login(animations)/Teacher.json';
 import parentAnimation from '../../login(animations)/Parenting.json';
 import adminAnimation from '../../login(animations)/admin.json';
+import AuthParticlesBackground from './components/AuthParticlesBackground';
 
 type Role = 'student' | 'parent' | 'teacher' | 'admin';
 type AuthMode = 'login' | 'signup';
@@ -787,6 +788,7 @@ const AuthPage = () => {
       ref={containerRef}
       className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-50 p-4 relative overflow-hidden"
     >
+      <AuthParticlesBackground />
       {/* Floating parallax background elements */}
       <div 
         className="absolute inset-0 pointer-events-none"

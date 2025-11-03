@@ -81,7 +81,7 @@ export default function Results() {
           Results
         </h2>
         
-        <div className="backdrop-blur-xl bg-white/20 rounded-xl shadow-lg border border-white/30 overflow-hidden">
+        <div className="backdrop-blur-xl bg-white/10 rounded-xl shadow-lg border border-white/30 overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
             {features.map((feature, index) => (
               <Feature key={feature.title} {...feature} index={index} />

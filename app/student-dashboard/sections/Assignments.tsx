@@ -498,20 +498,20 @@ function TimelineCard({
       <VerticalTimelineElement
         position={position}
         contentStyle={{
-          background: "rgba(255, 255, 255, 0.2)",
-          backdropFilter: "blur(16px)",
-          boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
+          background: "transparent",
+          backdropFilter: "blur(10px)",
+          boxShadow: "none",
+          border: "none",
           borderRadius: "0.75rem",
           position: "relative",
         }}
         contentArrowStyle={
           index % 2 === 0
             ? {
-                borderRight: "12px solid #3b82f6",
+                borderRight: "12px solid transparent",
               }
             : {
-                borderLeft: "12px solid #3b82f6",
+                borderLeft: "12px solid transparent",
               }
         }
         date=""
@@ -530,14 +530,37 @@ function TimelineCard({
       >
         <div className="p-3">
           <div className="flex items-center gap-2 mb-2">
-            <div className="text-xl">{subjectEmojis[assignment.subject] || "📝"}</div>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center text-base backdrop-blur-md bg-white/20 border border-white/30">
+              {subjectEmojis[assignment.subject] || "📝"}
+            </div>
             <div className="flex-1">
               <h3 className="text-sm font-bold text-white">{assignment.subject}</h3>
               <p className="text-[10px] text-white">ID: {assignment.subjectId}</p>
             </div>
           </div>
 
-          <h4 className="text-base font-semibold text-white mb-1">{assignment.title}</h4>
+          <div className="flex items-start justify-between mb-1">
+            <h4 className="text-base font-semibold text-white">{assignment.title}</h4>
+            {/* Status badge - right aligned for visibility */}
+            <div
+              className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold shadow-sm ${
+                assignment.status === "graded"
+                  ? "bg-emerald-500/90 text-white"
+                  : assignment.status === "overdue"
+                  ? "bg-rose-500/90 text-white"
+                  : "bg-yellow-500/90 text-white"
+              }`}
+            >
+              <span>{statusInfo.icon}</span>
+              <span>
+                {assignment.status === "graded"
+                  ? `Graded: ${assignment.grade}`
+                  : assignment.status === "overdue"
+                  ? "Overdue"
+                  : "Pending"}
+              </span>
+            </div>
+          </div>
 
           <p className="text-xs text-white mb-2 line-clamp-2">{assignment.description}</p>
 
@@ -548,24 +571,6 @@ function TimelineCard({
             </span>
           </div>
 
-          <div
-            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium mb-2 ${
-              assignment.status === "graded"
-                ? "text-white bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200"
-                : assignment.status === "overdue"
-                ? "text-white bg-gradient-to-r from-blue-100 to-blue-200 border-blue-300"
-                : "text-white bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200"
-            }`}
-          >
-            <span>{statusInfo.icon}</span>
-            <span>
-              {assignment.status === "graded"
-                ? `Graded: ${assignment.grade}`
-                : assignment.status === "overdue"
-                ? "Overdue"
-                : "Pending"}
-            </span>
-          </div>
 
           {assignment.status !== "graded" && (
             <button
@@ -622,18 +627,22 @@ export default function Assignments() {
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-4xl font-bold text-white mb-12 text-center">Assignments Timeline</h2>
 
-        <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 shadow-lg border border-white/30">
+        <div className="backdrop-blur-xl bg-white/10 rounded-xl p-6 shadow-lg border border-white/30">
           {/* Date Filter */}
           <div className="flex justify-end mb-6">
             <div className="flex items-center gap-3">
               <CalendarIcon className="w-5 h-5 text-white" />
               <Select value={selectedDate} onValueChange={setSelectedDate}>
-                <SelectTrigger className="w-[240px] bg-white/20 backdrop-blur-md border-white/30 text-white hover:bg-white/30">
+                <SelectTrigger className="w-[240px] bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-white/30">
                   <SelectValue placeholder="Pick a date" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="backdrop-blur-xl bg-white/20 border border-white/30 text-white shadow-xl">
                   {last7Days.map((d) => (
-                    <SelectItem key={d.value} value={d.value}>
+                    <SelectItem
+                      key={d.value}
+                      value={d.value}
+                      className="text-white focus:bg-white/30 focus:text-white"
+                    >
                       {d.label}
                     </SelectItem>
                   ))}
