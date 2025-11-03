@@ -7,6 +7,7 @@ import { Calendar, Clock, Users, FileText, CheckCircle, AlertCircle, TrendingUp,
 import Link from 'next/link';
 import Navbar from './navbar';
 import teacherDashboardAnimation from '../../login(animations)/TeacherDashboard.json';
+import ParticlesBackground from '../student-dashboard/components/ParticlesBackground';
 
 export default function TeacherDashboard() {
   const [selectedDay, setSelectedDay] = useState<'Today' | 'Tomorrow' | 'Wednesday'>('Today');
@@ -235,8 +236,11 @@ export default function TeacherDashboard() {
   return (
     <>
       <Navbar />
+      {/* Blue Gradient Background to match Student Dashboard */}
+      <div className="fixed inset-0 -z-10 w-full h-full bg-gradient-to-br from-blue-900 via-blue-900 to-blue-900"></div>
+      <ParticlesBackground />
 
-      <div className="min-h-screen bg-jetblack-50 pt-20">
+      <div className="min-h-screen pt-20">
         <div className="p-6">
           <div className="max-w-9x1 mx-auto">
             {/* Welcome Section and Classes - Side by Side */}

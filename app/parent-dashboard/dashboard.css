@@ -391,6 +391,8 @@ html {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
+/* Ensure gradient from layout is visible across the app */
+.parent-dashboard, .dashboard-section { background: transparent !important; }
 /* Parent Dashboard overrides for Tasks section: make it use full width/height */
 .parent-dashboard #tasks .section-inner { max-width: 100%; padding-left: 1.5rem; padding-right: 1.5rem; }
 .parent-dashboard #tasks .grid { height: 100%; }

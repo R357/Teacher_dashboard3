@@ -36,6 +36,7 @@ import {
   LabelList,
 } from 'recharts';
 import Navbar from './navbar';
+import ParticlesBackground from '../student-dashboard/components/ParticlesBackground';
 import ScrollAnimator from './components/ScrollAnimator';
 import TeacherSection from './sections/TeacherSection';
 import StudentSection from './sections/StudentSection';
@@ -175,6 +176,8 @@ export default function AdminDashboard() {
 
   return (
     <div className="bg-gray-50 relative z-0">
+      <div className="fixed inset-0 -z-10 w-full h-full bg-gradient-to-br from-blue-900 via-blue-900 to-blue-900"></div>
+      <ParticlesBackground />
       {/* Navbar animation */}
       <motion.div
         initial={{ y: -100, opacity: 0 }}
