@@ -7,8 +7,11 @@ html { scroll-behavior: smooth; }
 /* Scroll container that holds all sections */
 .scroll-container { height:100vh; overflow-y:auto; padding-top:72px; scroll-behavior:smooth }
 
-/* Sections stack naturally and expand with content */
-.dashboard-section { padding:48px 0; min-height:60vh; background:#F8F9FA }
+/* Sections fit in a single window */
+.dashboard-section { padding:0.5rem 0; min-height:calc(100vh - 70px); max-height:calc(100vh - 70px); background:#F8F9FA; display:flex; flex-direction:column; overflow:hidden }
+
+/* Consistent inner width for all sections, matching performance/report-card scale */
+.section-inner { width:100%; max-width:1200px; margin:0 auto; padding:0 0.5rem; height:100%; display:flex; flex-direction:column; }
 
 /* Fixed navbar - will be hidden by toggling .hidden */
 .fixed-navbar { position:fixed; top:0; left:0; right:0; z-index:1000; background:#fff; border-bottom:1px solid #E6EDF3; transition:transform 220ms ease }
@@ -45,12 +48,15 @@ html { scroll-behavior: smooth; }
   scroll-behavior: smooth;
 }
 
-/* Sections flow vertically (allow content to grow) */
+/* Sections fit in a single window */
 .dashboard-section {
-  min-height: 60vh;
-  padding: 2.5rem 0;
+  min-height: calc(100vh - 70px);
+  max-height: calc(100vh - 70px);
+  padding: 0.5rem 0;
   background: #F8F9FA;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* Fixed navbar (we'll toggle translateY to hide/show) */
@@ -102,10 +108,13 @@ html {
 
 /* Make sections flow naturally one after another (no fixed max-heights or overflow hidden) */
 .dashboard-section {
-  min-height: 60vh; /* ensure reasonable section height but allow content to grow */
-  padding: 2.5rem 0;
+  min-height: calc(100vh - 70px);
+  max-height: calc(100vh - 70px);
+  padding: 0.5rem 0;
   background: #F8F9FA;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* ==== FIXED NAVBAR ==== */
@@ -428,10 +437,13 @@ html {
 
 /* Make sections flow naturally one after another (no fixed max-heights or overflow hidden) */
 .dashboard-section {
-  min-height: 60vh; /* ensure reasonable section height but allow content to grow */
-  padding: 2.5rem 0;
+  min-height: calc(100vh - 70px);
+  max-height: calc(100vh - 70px);
+  padding: 0.5rem 0;
   background: #F8F9FA;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* ==== FIXED NAVBAR ==== */

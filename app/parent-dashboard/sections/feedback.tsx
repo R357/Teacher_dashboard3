@@ -59,67 +59,67 @@ export default function Feedback() {
   };
 
   return (
-    <section id="feedback" className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900">Feedback & Suggestions</h2>
-          <p className="mt-2 text-lg text-gray-600">
+    <section id="feedback" className="py-1 bg-gray-50 h-full flex flex-col">
+      <div className="section-inner">
+        <div className="text-center mb-2 flex-shrink-0">
+          <h2 className="text-base font-bold text-gray-900">Feedback & Suggestions</h2>
+          <p className="mt-0.5 text-xs text-gray-600">
             Share your thoughts to help us improve your child's learning experience
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 flex-1 min-h-0">
           {/* Feedback Form */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Feedback Form</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="bg-white rounded-xl shadow-lg p-2 flex flex-col min-h-0 overflow-y-auto">
+            <h2 className="text-sm font-semibold text-gray-800 mb-2">Feedback Form</h2>
+            <form onSubmit={handleSubmit} className="space-y-2 flex-1 flex flex-col">
               <div>
-                <label htmlFor="parentName" className="block text-sm font-medium text-gray-700">Parent's Name</label>
+                <label htmlFor="parentName" className="block text-xs font-medium text-gray-700">Parent's Name</label>
                 <input
                   type="text"
                   name="parentName"
                   id="parentName"
                   value={formData.parentName}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-0.5 block w-full px-2 py-1 text-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="studentName" className="block text-sm font-medium text-gray-700">Student's Name</label>
+                <label htmlFor="studentName" className="block text-xs font-medium text-gray-700">Student's Name</label>
                 <input
                   type="text"
                   name="studentName"
                   id="studentName"
                   value={formData.studentName}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-0.5 block w-full px-2 py-1 text-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="classGrade" className="block text-sm font-medium text-gray-700">Class/Grade</label>
+                <label htmlFor="classGrade" className="block text-xs font-medium text-gray-700">Class/Grade</label>
                 <input
                   type="text"
                   name="classGrade"
                   id="classGrade"
                   value={formData.classGrade}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-0.5 block w-full px-2 py-1 text-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700">Feedback Category</label>
+                <label htmlFor="category" className="block text-xs font-medium text-gray-700">Feedback Category</label>
                 <select
                   name="category"
                   id="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-0.5 block w-full px-2 py-1 text-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   required
                 >
                   <option value="">Select a category</option>
@@ -129,22 +129,22 @@ export default function Feedback() {
                 </select>
               </div>
 
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
+              <div className="flex-1 flex flex-col">
+                <label htmlFor="message" className="block text-xs font-medium text-gray-700">Message</label>
                 <textarea
                   name="message"
                   id="message"
-                  rows={4}
+                  rows={3}
                   value={formData.message}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="mt-0.5 block w-full px-2 py-1 text-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 flex-1 resize-none"
                   required
                 ></textarea>
               </div>
 
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="w-full flex justify-center py-1 px-3 border border-transparent rounded-md shadow-sm text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Submit Feedback
               </button>
@@ -159,30 +159,30 @@ export default function Feedback() {
           </div>
 
           {/* Feedback Summary */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Feedback Summary</h2>
+          <div className="bg-white rounded-xl shadow-lg p-2 flex flex-col min-h-0 overflow-y-auto">
+            <h2 className="text-sm font-semibold text-gray-800 mb-2">Feedback Summary</h2>
             
             {/* Chart */}
-            <div className="mb-8 max-w-[300px] h-[300px] mx-auto">
+            <div className="mb-2 max-w-[180px] h-[150px] mx-auto flex-shrink-0">
               <Pie data={chartData} options={chartOptions} />
             </div>
 
             {/* Recent Comments */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Comments</h3>
-              <ul className="space-y-4">
-                <li className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-gray-700">The math classes are great!</p>
+            <div className="flex-1 flex flex-col">
+              <h3 className="text-xs font-semibold text-gray-800 mb-1">Recent Comments</h3>
+              <ul className="space-y-1 flex-1">
+                <li className="bg-gray-50 p-2 rounded-lg">
+                  <p className="text-gray-700 text-sm">The math classes are great!</p>
                 </li>
-                <li className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-gray-700">Would love more updates about homework</p>
+                <li className="bg-gray-50 p-2 rounded-lg">
+                  <p className="text-gray-700 text-sm">Would love more updates about homework</p>
                 </li>
               </ul>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

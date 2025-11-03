@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ScrollAnimator } from './components/ScrollAnimator';
 import { Attendance } from './sections/Attendance';
 import TaskSection from './sections/task';
+import Feedback from './sections/feedback';
 import { 
   ChevronDown, 
   ChevronUp,
@@ -325,109 +326,71 @@ export default function ParentDashboard() {
                   </div>
                 </div>
 
-                {/* Upcoming Events Section */}
-                <div className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-shrink-0">
+                {/* Performance Section (from Student Dashboard) */}
+                <div className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-1">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold text-[#1A1A1A]">Upcoming events</h2>
-                    <a href="#" className="text-[#5D5FEF] text-sm font-medium hover:underline">
-                      See all
-                    </a>
-                  </div>
-
-                  <div className="space-y-3">
-                    {/* Event Card 1 */}
-                    <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-red-400 flex-shrink-0 flex items-center justify-center">
-                        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-[#1A1A1A] mb-1 text-sm leading-snug">
-                          The main event in your life &quot;Robot Fest&quot; will coming soon in...
+                    <h3 className="text-lg font-semibold text-[#1A1A1A]">Performance</h3>
+                    <div className="flex items-center gap-2 rounded-lg px-3 py-1 cursor-pointer transition border border-gray-200">
+                      <span className="text-gray-700 text-sm">October</span>
+                      <ChevronDown className="w-4 h-4 text-gray-700" />
                         </div>
-                        <div className="text-xs text-[#6B7280]">14 December 2023 12.00 pm</div>
-                      </div>
-                      <button className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0">
-                        <MoreVertical className="w-5 h-5" />
-                      </button>
                     </div>
-
-                    {/* Event Card 2 */}
-                    <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-emerald-400 flex-shrink-0 flex items-center justify-center">
-                        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7.01 5 5 7.01 5 9.5S7.01 14 9.5 14 14 11.99 14 9.5 11.99 5 9.5 5z"/>
-                        </svg>
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                  <div>
+                        <span className="text-3xl font-bold text-[#1A1A1A]">95.4</span>
+                        <p className="text-[#6B7280] text-xs mt-1">Introduction to programming</p>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-[#1A1A1A] mb-1 text-sm">
-                          Webinar of new tools in Minecraft
-                        </div>
-                        <div className="text-xs text-[#6B7280]">21 December 2023 11.00 pm</div>
-                      </div>
-                      <button className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0">
-                        <MoreVertical className="w-5 h-5" />
+                      <button className="bg-[#3B82F6] text-white px-3 py-1.5 rounded-lg hover:bg-blue-600 transition text-xs font-medium">
+                        All lessons
                       </button>
-                    </div>
+                            </div>
+                          </div>
+                  <div className="h-56">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={performanceData.map(item => ({
+                          ...item,
+                          remaining: 100 - item.score
+                        }))}
+                        barSize={70}
+                        margin={{ top: 30, right: 30, left: 20, bottom: 65 }}
+                      >
+                        <XAxis
+                          dataKey="name"
+                          height={0.5}
+                          fontSize={10}
+                          tick={{ fill: '#1F2937' }}
+                          tickLine={false}
+                          interval={0}
+                        />
+                        <YAxis
+                          domain={[0, 100]}
+                          fontSize={11}
+                          tick={{ fill: '#1F2937' }}
+                          tickLine={false}
+                        />
+                        <Bar dataKey="score" stackId="a" fill="#3B82F6" radius={[0, 0, 0, 0]} />
+                        <Bar dataKey="remaining" stackId="a" fill="#93C5FD" radius={[4, 4, 0, 0]}>
+                          <LabelList
+                            dataKey="score"
+                            position="top"
+                            style={{ fill: '#1F2937', fontSize: '12px', fontWeight: 'bold' }}
+                            formatter={(value: number) => `${value}%`}
+                          />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
                   </div>
                 </div>
 
-                {/* Linked Teachers Section */}
-                <div className="bg-white rounded-2xl p-5 shadow-sm dashboard-card">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold text-[#1A1A1A]">Linked Teachers</h2>
-                    <a href="#" className="text-[#5D5FEF] text-sm font-medium hover:underline">
-                      See all
-                    </a>
-                  </div>
-
-                  <div className="space-y-3">
-                    {/* Teacher Card 1 */}
-                    <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors teacher-card interactive-element">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex-shrink-0 flex items-center justify-center text-white font-semibold text-sm">
-                        MJ
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-[#1A1A1A] mb-1 text-base">Mary Johnson (mentor)</div>
-                        <div className="text-sm text-[#6B7280]">Science</div>
-                      </div>
-                      <div className="flex items-center gap-3 flex-shrink-0">
-                        <button className="text-gray-600 hover:text-[#5D5FEF] transition-colors" title="Message">
-                          <Mail className="w-5 h-5" />
-                        </button>
-                        <button className="text-gray-600 hover:text-[#5D5FEF] transition-colors" title="Contact">
-                          <Phone className="w-5 h-5" />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Teacher Card 2 */}
-                    <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors teacher-card interactive-element">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex-shrink-0 flex items-center justify-center text-white font-semibold text-sm">
-                        JB
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-[#1A1A1A] mb-1 text-base">James Brown</div>
-                        <div className="text-sm text-[#6B7280]">Foreign language (Chinese)</div>
-                      </div>
-                      <div className="flex items-center gap-3 flex-shrink-0">
-                        <button className="text-gray-600 hover:text-[#5D5FEF] transition-colors" title="Message">
-                          <Mail className="w-5 h-5" />
-                        </button>
-                        <button className="text-gray-600 hover:text-[#5D5FEF] transition-colors" title="Contact">
-                          <Phone className="w-5 h-5" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {/* Linked Teachers removed as requested */}
               </div>
 
               {/* Right Column - Calendar & Events */}
-              <div className="flex flex-col gap-3 h-full">
+              <div className="flex flex-col gap-3 h-full min-h-0">
                 {/* Calendar Section */}
-                <div className="bg-white rounded-2xl p-5 shadow-sm dashboard-card h-full overflow-y-auto">
+                <div className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-1 min-h-0 overflow-y-auto">
                   <div className="flex items-center justify-between mb-3 flex-shrink-0">
                     <h2 className="text-lg font-semibold text-[#1A1A1A]">Calendar</h2>
                     <div className="relative dropdown-container">
@@ -478,7 +441,7 @@ export default function ParentDashboard() {
                                       {event.title}
                                     </div>
                                     <div className={`text-xs ${event.active ? 'text-white/80' : 'text-[#6B7280]'}`}>
-                                      {event.displayTime}, {event.lesson}
+                                      {event.lesson}
                                     </div>
                                   </div>
                                 </div>
@@ -490,19 +453,54 @@ export default function ParentDashboard() {
                             </div>
                           );
                         }
-                        return (
-                          <div key={time} className="relative">
-                            <div className="absolute -left-4 top-1">
-                              <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-                            </div>
-                            <div className="text-xs text-gray-400 ml-6 mb-2">{time}</div>
-                          </div>
-                        );
+                        return null;
                       })}
                     </div>
                   </div>
                 </div>
-
+                {/* Upcoming Events Section (moved from left column) */}
+                <div className="bg-white rounded-2xl p-5 shadow-sm dashboard-card flex-shrink-0">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold text-[#1A1A1A]">Upcoming events</h2>
+                    <a href="#" className="text-[#5D5FEF] text-sm font-medium hover:underline">
+                      See all
+                    </a>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-red-400 flex-shrink-0 flex items-center justify-center">
+                        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-[#1A1A1A] mb-1 text-sm leading-snug">
+                          The main event in your life &quot;Robot Fest&quot; will coming soon in...
+                        </div>
+                        <div className="text-xs text-[#6B7280]">14 December 2023 12.00 pm</div>
+                      </div>
+                      <button className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0">
+                        <MoreVertical className="w-5 h-5" />
+                      </button>
+                    </div>
+                    <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-emerald-400 flex-shrink-0 flex items-center justify-center">
+                        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7.01 5 5 7.01 5 9.5S7.01 14 9.5 14 14 11.99 14 9.5 11.99 5 9.5 5z"/>
+                        </svg>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-[#1A1A1A] mb-1 text-sm">
+                          Webinar of new tools in Minecraft
+                        </div>
+                        <div className="text-xs text-[#6B7280]">21 December 2023 11.00 pm</div>
+                      </div>
+                      <button className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0">
+                        <MoreVertical className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -514,7 +512,7 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['tasks'] = el; }}
         >
-          <div className="w-full px-4 py-4 h-full">
+          <div className="w-full px-2 py-1 h-full flex items-center">
             {/* TaskSection already contains its own white cards and max-width container */}
             <TaskSection />
           </div>
@@ -713,10 +711,10 @@ export default function ParentDashboard() {
                             loop={true}
                             className="w-full h-full"
                           />
-                        </div>
+                </div>
                       </motion.div>
                     )}
-                  </div>
+              </div>
                 </motion.div>
 
                 {/* Subject-wise Performance Table */}
@@ -782,8 +780,8 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['attendance'] = el; }}
         >
-          <div className="max-w-[1920px] mx-auto px-6 py-4">
-            <div className="bg-white rounded-2xl p-8 shadow-sm dashboard-card">
+          <div className="w-full px-2 py-1 h-full flex items-center">
+            <div className="bg-white rounded-2xl p-2 shadow-sm dashboard-card w-full h-full flex flex-col">
               {/* Import and use Attendance component */}
               <Attendance />
             </div>
@@ -796,110 +794,10 @@ export default function ParentDashboard() {
           className="dashboard-section"
           ref={(el) => { sectionsRef.current['feedback'] = el; }}
         >
-          <div className="max-w-[1920px] mx-auto px-6 py-4">
-            <div className="bg-white rounded-2xl shadow-sm dashboard-card">
+          <div className="w-full px-2 py-1 h-full flex items-center">
+            <div className="bg-white rounded-2xl shadow-sm dashboard-card h-full w-full">
               {/* Import and use the Feedback component */}
-              <div className="feedback-section">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
-                  {/* Left side - Feedback Form */}
-                  <div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-6">Feedback & Suggestions</h2>
-                    <p className="text-gray-600 mb-8">
-                      Share your thoughts to help us improve your child's learning experience
-                    </p>
-                    <div className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Parent's Name</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Student's Name</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                          placeholder="Student's name"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Class/Grade</label>
-                        <input
-                          type="text"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                          placeholder="Class/Grade"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Feedback Category</label>
-                        <select className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                          <option value="">Select a category</option>
-                          <option value="teaching">Teaching</option>
-                          <option value="communication">Communication</option>
-                          <option value="infrastructure">Infrastructure</option>
-                          <option value="others">Others</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                        <textarea
-                          rows={4}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                          placeholder="Your feedback message"
-                        ></textarea>
-                      </div>
-                      <button className="w-full bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors">
-                        Submit Feedback
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Right side - Feedback Summary */}
-                  <div>
-                    <div className="bg-gray-50 rounded-xl p-8">
-                      <h3 className="text-2xl font-semibold text-gray-900 mb-6">Feedback Summary</h3>
-                      {/* Chart will be added here */}
-                      <div className="aspect-square max-w-md mx-auto mb-8 bg-white rounded-lg p-4">
-                        <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
-                            <span>Teaching (40%)</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-teal-500"></div>
-                            <span>Communication (30%)</span>
-                          </div>
-                        </div>
-                        <div className="flex justify-between items-center text-sm text-gray-600">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                            <span>Infrastructure (20%)</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-indigo-400"></div>
-                            <span>Others (10%)</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Recent Comments */}
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Recent Comments</h4>
-                        <div className="space-y-4">
-                          <div className="bg-white p-4 rounded-lg">
-                            <p className="text-gray-700">The math classes are great!</p>
-                          </div>
-                          <div className="bg-white p-4 rounded-lg">
-                            <p className="text-gray-700">Would love more updates about homework</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Feedback />
             </div>
           </div>
         </section>

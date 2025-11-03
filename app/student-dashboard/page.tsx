@@ -22,6 +22,7 @@ import {
 } from 'recharts';
 
 import Navbar from './navbar'; 
+import '../parent-dashboard/dashboard.css';
 import SlideIn from './components/SlideIn';
 import ParticlesBackground from './components/ParticlesBackground';
 
@@ -100,7 +101,7 @@ export default function StudentDashboard() {
       <div className="pt-24 relative z-0">
         
         {/* === START OF EXISTING LAYOUT === */}
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="section-inner">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Left Column - Spans 2 columns */}
