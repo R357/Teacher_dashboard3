@@ -73,17 +73,13 @@ export default function TaskSection() {
       {/* Recent Tasks and Recent Practice Section (copied exactly) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 h-full">
         {/* Recent Tasks - Left Side */}
-<<<<<<< HEAD
         <motion.div 
-          className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto"
+          className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto h-full"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5 }}
         >
-=======
-        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto h-full">
->>>>>>> 79a663ffb9bef9e24f4c11aca6ae091ea88a9595
           <h3 className="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
             <Clock className="w-4 h-4 text-blue-600" />
             Recent Tasks
@@ -149,17 +145,13 @@ export default function TaskSection() {
         </motion.div>
 
         {/* Recent Practice - Right Side */}
-<<<<<<< HEAD
         <motion.div 
-          className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto"
+          className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto h-full"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-=======
-        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto h-full">
->>>>>>> 79a663ffb9bef9e24f4c11aca6ae091ea88a9595
           <h3 className="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
             <PlayCircle className="w-4 h-4 text-green-600" />
             Recent Practice
