@@ -41,7 +41,7 @@ import './dashboard.css';
 let reportCardAnimation: any = null;
 try {
   // @ts-ignore - Dynamic import for optional file
-  reportCardAnimation = require('../../login(animations)/parent.json');
+  reportCardAnimation = require('../../login(animations)/note.json');
 } catch (e) {
   // File will be loaded when available
 }
