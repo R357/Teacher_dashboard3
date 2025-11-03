@@ -584,7 +584,7 @@ export default function StudentSection() {
             {/* Header */}
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
-                Student Management
+                Student Directory
               </h2>
               <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
                 View all students and access parent information

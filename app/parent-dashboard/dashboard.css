@@ -11,7 +11,7 @@ html { scroll-behavior: smooth; }
 .dashboard-section { padding:0.5rem 0; min-height:calc(100vh - 70px); max-height:calc(100vh - 70px); background:#F8F9FA; display:flex; flex-direction:column; overflow:hidden }
 
 /* Consistent inner width for all sections, matching performance/report-card scale */
-.section-inner { width:100%; max-width:1200px; margin:0 auto; padding:0 0.5rem; height:100%; display:flex; flex-direction:column; }
+.section-inner { width:100%; max-width:1200px; margin:0 auto; padding:0 1.5rem; height:100%; display:flex; flex-direction:column; }
 
 /* Fixed navbar - will be hidden by toggling .hidden */
 .fixed-navbar { position:fixed; top:0; left:0; right:0; z-index:1000; background:#fff; border-bottom:1px solid #E6EDF3; transition:transform 220ms ease }
@@ -391,6 +391,9 @@ html {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
+/* Parent Dashboard overrides for Tasks section: make it use full width/height */
+.parent-dashboard #tasks .section-inner { max-width: 100%; padding-left: 1.5rem; padding-right: 1.5rem; }
+.parent-dashboard #tasks .grid { height: 100%; }
 /* Custom styles for parent dashboard - pixel perfect matching */
 
 /* Smooth scroll behavior */

@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { motion } from "framer-motion";
 import { CheckCircle2, Clock, PlayCircle } from "lucide-react";
 
 // Recent Tasks Data (identical to Student Dashboard)
@@ -72,17 +73,31 @@ export default function TaskSection() {
       {/* Recent Tasks and Recent Practice Section (copied exactly) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 h-full">
         {/* Recent Tasks - Left Side */}
-        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto">
+<<<<<<< HEAD
+        <motion.div 
+          className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+        >
+=======
+        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto h-full">
+>>>>>>> 79a663ffb9bef9e24f4c11aca6ae091ea88a9595
           <h3 className="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
             <Clock className="w-4 h-4 text-blue-600" />
             Recent Tasks
           </h3>
 
           <div className="space-y-2">
-            {recentTasks.map((task) => (
-              <div
+            {recentTasks.map((task, idx) => (
+              <motion.div
                 key={task.id}
                 className="flex items-start gap-2 p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition border border-gray-200"
+                initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
               >
                 <div className={`mt-0.5 ${
                   task.status === "completed" ? "text-green-600" : 
@@ -128,13 +143,23 @@ export default function TaskSection() {
                    task.status === "in-progress" ? "In Progress" :
                    "Pending"}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Recent Practice - Right Side */}
-        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto">
+<<<<<<< HEAD
+        <motion.div 
+          className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+=======
+        <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-200 flex flex-col min-h-0 overflow-y-auto h-full">
+>>>>>>> 79a663ffb9bef9e24f4c11aca6ae091ea88a9595
           <h3 className="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
             <PlayCircle className="w-4 h-4 text-green-600" />
             Recent Practice
@@ -145,9 +170,13 @@ export default function TaskSection() {
               const percentage = Math.round((practice.covered / practice.total) * 100);
               
               return (
-                <div
+                <motion.div
                   key={index}
                   className="p-2 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.4, delay: index * 0.06 }}
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <div className="text-xl">{practice.icon}</div>
@@ -169,11 +198,11 @@ export default function TaskSection() {
                   </div>
                   
                   <p className="text-[10px] text-gray-600 text-right">{percentage}% completed</p>
-                </div>
+                </motion.div>
               );
             })}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

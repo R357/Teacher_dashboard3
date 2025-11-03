@@ -378,6 +378,10 @@ export default function Subjects() {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
+  // Derive task lists for display
+  const completedTasks = recentTasks.filter((t) => t.status === "completed").slice(0, 3);
+  const pendingTasks = recentTasks.filter((t) => t.status === "pending").slice(0, 3);
+
   const checkScrollButtons = () => {
     if (scrollContainerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
@@ -468,17 +472,17 @@ export default function Subjects() {
           `}</style>
         </div>
 
-        {/* Recent Tasks and Recent Practice Section */}
+        {/* Recently Completed Tasks and Pending Tasks Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Recent Tasks - Left Side */}
+          {/* Recently Completed Tasks - Left Side */}
           <div className="backdrop-blur-xl bg-white/10 rounded-xl p-6 shadow-lg border border-white/30">
             <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-              <Clock className="w-6 h-6 text-white" />
-              Recent Tasks
+              <CheckCircle2 className="w-6 h-6 text-white" />
+              Recently Completed Tasks
             </h3>
             
             <div className="space-y-4">
-              {recentTasks.map((task) => (
+              {completedTasks.map((task) => (
                 <div
                   key={task.id}
                   className="flex items-start gap-4 p-4 backdrop-blur-md bg-white/10 rounded-lg hover:bg-white/40 transition border border-white/20"
@@ -501,14 +505,6 @@ export default function Subjects() {
                     </div>
                     <p className="text-sm text-white mb-1">{task.subject}</p>
                     <p className="text-xs text-white">Due: {task.dueDate}</p>
-                    {task.status === "in-progress" && (
-                      <div className="mt-2">
-                        <button className="text-xs text-white hover:text-white font-medium flex items-center gap-1">
-                          <PlayCircle className="w-3 h-3" />
-                          Continue
-                        </button>
-                      </div>
-                    )}
                   </div>
                   
                   <div className="flex flex-col items-end gap-2 ml-2">
@@ -534,45 +530,45 @@ export default function Subjects() {
             </div>
           </div>
 
-          {/* Recent Practice - Right Side */}
+          {/* Pending Tasks - Right Side */}
           <div className="backdrop-blur-xl bg-white/10 rounded-xl p-6 shadow-lg border border-white/30">
             <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-              <PlayCircle className="w-6 h-6 text-white" />
-              Recent Practice
+              <Clock className="w-6 h-6 text-white" />
+              Pending Tasks
             </h3>
             
-            <div className="space-y-6">
-              {recentPractice.map((practice, index) => {
-                const percentage = Math.round((practice.covered / practice.total) * 100);
-                
-                return (
-                  <div
-                    key={index}
-                    className="p-4 backdrop-blur-md bg-white/10 rounded-lg border border-white/20 hover:bg-white/40 transition"
-                  >
-                    <div className="flex items-center gap-4 mb-3">
-                      <div className="text-4xl">{practice.icon}</div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-white mb-1">{practice.subject}</h4>
-                        <p className="text-sm text-white">
-                          <span className="font-bold text-white">{practice.covered}</span> of{" "}
-                          <span className="text-white">{practice.total}</span> topics covered
-                        </p>
-                      </div>
-                    </div>
-                    
-                    {/* Progress Bar */}
-                    <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                      <div
-                        className="bg-blue-600 h-3 rounded-full transition-all duration-300"
-                        style={{ width: `${percentage}%` }}
-                      ></div>
-                    </div>
-                    
-                    <p className="text-xs text-white text-right">{percentage}% completed</p>
+            <div className="space-y-4">
+              {pendingTasks.map((task) => (
+                <div
+                  key={task.id}
+                  className="flex items-start gap-4 p-4 backdrop-blur-md bg-white/10 rounded-lg hover:bg-white/40 transition border border-white/20"
+                >
+                  <div className="mt-1 text-white">
+                    <Clock className="w-5 h-5" />
                   </div>
-                );
-              })}
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-semibold text-white">{task.title}</h4>
+                    </div>
+                    <p className="text-sm text-white mb-1">{task.subject}</p>
+                    <p className="text-xs text-white">Due: {task.dueDate}</p>
+                  </div>
+                  
+                  <div className="flex flex-col items-end gap-2 ml-2">
+                    <span className={`text-xs px-2 py-0.5 rounded-full shadow-sm ${
+                      task.priority === "high" ? "bg-red-500/90 text-white" :
+                      task.priority === "medium" ? "bg-yellow-500/90 text-white" :
+                      "bg-blue-500/90 text-white"
+                    }`}>
+                      {task.priority}
+                    </span>
+                    <div className="px-3 py-1 rounded-full text-xs font-medium shadow-sm bg-gray-500/90 text-white">
+                      Pending
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

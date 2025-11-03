@@ -115,8 +115,8 @@ export default function Navbar() {
             onClick={() => setShowProfileDropdown(!showProfileDropdown)}
             className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-              AU
+            <div className="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold">
+              A
             </div>
             <ChevronDown className="w-4 h-4 text-gray-600 hidden sm:block" />
           </button>
