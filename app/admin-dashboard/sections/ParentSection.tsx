@@ -285,7 +285,7 @@ export default function ParentSection() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div>  
               <div className="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-2 shadow-sm border border-gray-100 flex-1 sm:flex-none">
                 <div className="flex items-center gap-2">
                   <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
