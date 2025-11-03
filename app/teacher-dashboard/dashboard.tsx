@@ -241,9 +241,10 @@ export default function TeacherDashboard() {
           <div className="max-w-9x1 mx-auto">
             {/* Welcome Section and Classes - Side by Side */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-              {/* Welcome Card - Takes 2 columns */}
+              {/* Welcome Card - Takes 2 columns WITH ANIMATED SPLIT TEXT (NO BLUR) */}
               <motion.div 
                 className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6"
+                style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}
                 initial={{ opacity: 0, x: -100 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ 
@@ -253,21 +254,62 @@ export default function TeacherDashboard() {
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-3">
-                      Hello {teacherData.name}!
+                    {/* ANIMATED SPLIT TEXT - Character by Character - NO BLUR */}
+                    <h1 className="text-4xl font-bold text-gray-900 mb-3 h-16 flex items-center flex-wrap">
+                      {`Hello ${teacherData.name}!`.split('').map((char, index) => (
+                        <motion.span
+                          key={index}
+                          className="inline-block"
+                          initial={{ 
+                            opacity: 0, 
+                            y: 20
+                          }}
+                          animate={{ 
+                            opacity: 1, 
+                            y: 0
+                          }}
+                          transition={{
+                            duration: 0.5,
+                            delay: index * 0.04,
+                            ease: 'easeOut'
+                          }}
+                        >
+                          {char === ' ' ? '\u00A0' : char}
+                        </motion.span>
+                      ))}
                     </h1>
-                    <p className="text-gray-600 mb-4 text-base">
+
+                    <motion.p 
+                      className="text-gray-600 mb-4 text-base"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.5, ease: 'easeOut' }}
+                    >
                       You have <span className="font-semibold text-gray-900">{teacherData.pendingTasks} new tasks</span>. It is a lot of work for today! So let's start!
-                    </p>
+                    </motion.p>
                   </div>
                   
                   <div className="hidden md:block ml-4">
-                    <div className="w-32 h-32 relative rounded-lg overflow-hidden flex items-center justify-center bg-blue-50">
+                    <motion.div 
+                      className="w-32 h-32 relative rounded-lg overflow-hidden flex items-center justify-center bg-blue-50"
+                      initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                      transition={{ 
+                        duration: 0.7, 
+                        delay: 0.3,
+                        type: 'spring',
+                        stiffness: 100
+                      }}
+                    >
                       <motion.div
                         className="relative w-full h-full"
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
+                        whileHover={{
+                          scale: 1.05,
+                          transition: { duration: 0.3, type: 'tween' }
+                        }}
                       >
                         <Lottie
                           animationData={teacherDashboardAnimation}
@@ -276,14 +318,15 @@ export default function TeacherDashboard() {
                           className="w-full h-full"
                         />
                       </motion.div>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Classes Card - Takes 1 column (Right Side) - WITH SCROLL ANIMATION */}
+              {/* Classes Card - Takes 1 column (Right Side) */}
               <motion.div 
                 className="bg-white rounded-xl shadow-sm p-6"
+                style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}
                 initial={{ opacity: 0, x: 100 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ amount: 0.3 }}
@@ -309,7 +352,8 @@ export default function TeacherDashboard() {
                     currentClasses.map((cls, index) => (
                       <motion.div
                         key={cls.id}
-                        className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg p-4 hover:shadow-lg transition-all cursor-pointer relative overflow-hidden group"
+                        className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg p-4 cursor-pointer relative overflow-hidden group border border-transparent hover:border-blue-400"
+                        style={{ willChange: 'box-shadow, border-color', backfaceVisibility: 'hidden' }}
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ amount: 0.5 }}
@@ -319,10 +363,9 @@ export default function TeacherDashboard() {
                           ease: [0.34, 1.56, 0.64, 1]
                         }}
                         whileHover={{
-                          scale: 1.02,
                           y: -2,
                           boxShadow: "0 10px 25px rgba(59, 130, 246, 0.3)",
-                          transition: { duration: 0.2 }
+                          transition: { duration: 0.2, type: 'tween' }
                         }}
                       >
                         <motion.div
@@ -378,15 +421,15 @@ export default function TeacherDashboard() {
                 {/* Class Performance with Bar Graph */}
                 <motion.div 
                   className="bg-white rounded-xl shadow-sm p-6 cursor-pointer relative overflow-hidden"
-                  whileHover={{
-                    scale: 1.02,
-                    y: -5,
-                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                    transition: { duration: 0.3, ease: "easeOut" }
-                  }}
+                  style={{ willChange: 'transform, box-shadow', backfaceVisibility: 'hidden' }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
+                  whileHover={{
+                    y: -5,
+                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                    transition: { duration: 0.2, type: 'tween' }
+                  }}
                 >
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-br from-blue-50/0 to-indigo-50/0 pointer-events-none z-0"
@@ -406,7 +449,7 @@ export default function TeacherDashboard() {
                         <span className="text-sm text-gray-500 ml-2">in Algorithms</span>
                       </div>
                     </div>
-                    <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50">
+                    <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors duration-200">
                       All classes
                     </button>
                   </div>
@@ -429,6 +472,7 @@ export default function TeacherDashboard() {
                           <div className="w-full h-48 bg-jetblack-100 rounded-t-lg flex items-end relative overflow-hidden">
                             <motion.div
                               className="w-full bg-gradient-to-t from-blue-600 via-blue-500 to-blue-400 rounded-t-lg cursor-pointer relative shadow-lg hover:shadow-xl group/bar"
+                              style={{ willChange: 'height', backfaceVisibility: 'hidden' }}
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ 
                                 height: `${cls.score}%`,
@@ -440,8 +484,8 @@ export default function TeacherDashboard() {
                                 ease: [0.34, 1.56, 0.64, 1]
                               }}
                               whileHover={{
-                                scaleY: 1.05,
-                                transition: { duration: 0.2 }
+                                y: -3,
+                                transition: { duration: 0.2, type: 'tween' }
                               }}
                               style={{ 
                                 minHeight: '20px',
@@ -482,8 +526,7 @@ export default function TeacherDashboard() {
                             }}
                             whileHover={{ 
                               color: '#3b82f6',
-                              scale: 1.05,
-                              transition: { duration: 0.2 }
+                              transition: { duration: 0.2, type: 'tween' }
                             }}
                           >
                             {cls.subject}
@@ -502,7 +545,7 @@ export default function TeacherDashboard() {
                 </motion.div>
 
                 {/* Pending Approvals - React Vertical Timeline Style */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="bg-white rounded-xl shadow-sm p-6" style={{ backfaceVisibility: 'hidden' }}>
                   <h2 className="text-xl font-bold text-gray-900 mb-8">Pending Approvals</h2>
                   
                   <div className="relative">
@@ -527,37 +570,38 @@ export default function TeacherDashboard() {
                           {/* Left side - Card */}
                           <div className="w-1/2 pr-8">
                             <motion.div 
-                              className="bg-gradient-to-br from-blue-50 to-blue-200 border-2 border-blue-400 rounded-lg p-4 hover:shadow-lg transition-all cursor-pointer"
+                              className="bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-300 rounded-lg p-4 cursor-pointer"
+                              style={{ willChange: 'transform, box-shadow', backfaceVisibility: 'hidden' }}
                               whileHover={{ 
-                                scale: 1.03,
-                                boxShadow: "0 20px 25px -5px rgba(60, 175, 251, 0.47)",
-                                transition: { duration: 0.2 }
+                                y: -3,
+                                boxShadow: "0 10px 25px -5px rgba(251, 146, 60, 0.2)",
+                                transition: { duration: 0.2, type: 'tween' }
                               }}
                             >
                               <div className="flex items-start justify-between mb-3">
                                 <div>
-                                  <h3 className="font-semibold text-jetblack-900 text-sm">Notes</h3>
-                                  <p className="text-xs text-jetblack-600 mt-0.5">ID: CS301</p>
+                                  <h3 className="font-semibold text-gray-900 text-sm">Notes</h3>
+                                  <p className="text-xs text-gray-600 mt-0.5">ID: CS301</p>
                                 </div>
-                                <span className="px-2 py-1 bg-blue-200 text-blue-700 text-xs font-medium rounded-full">
+                                <span className="px-2 py-1 bg-orange-200 text-orange-700 text-xs font-medium rounded-full">
                                   Pending
                                 </span>
                               </div>
-                              <p className="text-sm text-jetblack-700 mb-3 font-medium">
+                              <p className="text-sm text-gray-700 mb-3 font-medium">
                                 Notes to Review
                               </p>
                               <div className="flex items-center gap-2">
-                                <span className="text-xs text-jetblack-600">Progress:</span>
-                                <div className="flex-1 bg-jetblack-300 rounded-full h-2 overflow-hidden">
+                                <span className="text-xs text-gray-600">Progress:</span>
+                                <div className="flex-1 bg-gray-300 rounded-full h-2 overflow-hidden">
                                   <motion.div 
-                                    className="bg-blue-500 h-2 rounded-full"
+                                    className="bg-orange-500 h-2 rounded-full"
                                     initial={{ width: 0 }}
                                     whileInView={{ width: `${(teacherData.pendingApprovals.notes / 10) * 100}%` }}
                                     viewport={{ amount: 0.3 }}
                                     transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
                                   />
                                 </div>
-                                <span className="text-xs text-jetblack-600 font-medium">{teacherData.pendingApprovals.notes}/10</span>
+                                <span className="text-xs text-gray-600 font-medium">{teacherData.pendingApprovals.notes}/10</span>
                               </div>
                             </motion.div>
                           </div>
@@ -566,6 +610,7 @@ export default function TeacherDashboard() {
                           <div className="w-0 flex justify-center">
                             <motion.div 
                               className="w-14 h-14 rounded-full bg-white border-4 border-blue-500 flex items-center justify-center shadow-lg relative z-10"
+                              style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
                               initial={{ scale: 0, rotate: -180 }}
                               whileInView={{ scale: 1, rotate: 0 }}
                               viewport={{ amount: 0.3 }}
@@ -575,7 +620,7 @@ export default function TeacherDashboard() {
                                 type: "spring",
                                 stiffness: 200
                               }}
-                              whileHover={{ scale: 1.1 }}
+                              whileHover={{ scale: 1.1, transition: { duration: 0.2, type: 'tween' } }}
                             >
                               <FileText className="w-7 h-7 text-blue-500" />
                             </motion.div>
@@ -605,6 +650,7 @@ export default function TeacherDashboard() {
                           <div className="w-0 flex justify-center">
                             <motion.div 
                               className="w-14 h-14 rounded-full bg-white border-4 border-blue-500 flex items-center justify-center shadow-lg relative z-10"
+                              style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
                               initial={{ scale: 0, rotate: -180 }}
                               whileInView={{ scale: 1, rotate: 0 }}
                               viewport={{ amount: 0.3 }}
@@ -614,7 +660,7 @@ export default function TeacherDashboard() {
                                 type: "spring",
                                 stiffness: 200
                               }}
-                              whileHover={{ scale: 1.1 }}
+                              whileHover={{ scale: 1.1, transition: { duration: 0.2, type: 'tween' } }}
                             >
                               <CheckCircle className="w-7 h-7 text-blue-500" />
                             </motion.div>
@@ -623,11 +669,12 @@ export default function TeacherDashboard() {
                           {/* Right side - Card */}
                           <div className="w-1/2 pl-8">
                             <motion.div 
-                              className="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-300 rounded-lg p-4 hover:shadow-lg transition-all cursor-pointer"
+                              className="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-300 rounded-lg p-4 cursor-pointer"
+                              style={{ willChange: 'transform, box-shadow', backfaceVisibility: 'hidden' }}
                               whileHover={{ 
-                                scale: 1.03,
-                                boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.2)",
-                                transition: { duration: 0.2 }
+                                y: -3,
+                                boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.2)",
+                                transition: { duration: 0.2, type: 'tween' }
                               }}
                             >
                               <div className="flex items-start justify-between mb-3">
@@ -675,11 +722,12 @@ export default function TeacherDashboard() {
                           {/* Left side - Card */}
                           <div className="w-1/2 pr-8">
                             <motion.div 
-                              className="bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-300 rounded-lg p-4 hover:shadow-lg transition-all cursor-pointer"
+                              className="bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-300 rounded-lg p-4 cursor-pointer"
+                              style={{ willChange: 'transform, box-shadow', backfaceVisibility: 'hidden' }}
                               whileHover={{ 
-                                scale: 1.03,
-                                boxShadow: "0 20px 25px -5px rgba(168, 85, 247, 0.2)",
-                                transition: { duration: 0.2 }
+                                y: -3,
+                                boxShadow: "0 10px 25px -5px rgba(168, 85, 247, 0.2)",
+                                transition: { duration: 0.2, type: 'tween' }
                               }}
                             >
                               <div className="flex items-start justify-between mb-3">
@@ -714,6 +762,7 @@ export default function TeacherDashboard() {
                           <div className="w-0 flex justify-center">
                             <motion.div 
                               className="w-14 h-14 rounded-full bg-white border-4 border-blue-500 flex items-center justify-center shadow-lg relative z-10"
+                              style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
                               initial={{ scale: 0, rotate: -180 }}
                               whileInView={{ scale: 1, rotate: 0 }}
                               viewport={{ amount: 0.3 }}
@@ -723,7 +772,7 @@ export default function TeacherDashboard() {
                                 type: "spring",
                                 stiffness: 200
                               }}
-                              whileHover={{ scale: 1.1 }}
+                              whileHover={{ scale: 1.1, transition: { duration: 0.2, type: 'tween' } }}
                             >
                               <AlertCircle className="w-7 h-7 text-blue-500" />
                             </motion.div>
@@ -740,6 +789,7 @@ export default function TeacherDashboard() {
                 {/* Recent Activities - SLIDE IN FROM LEFT ON SCROLL */}
                 <motion.div 
                   className="bg-white rounded-xl shadow-sm p-6"
+                  style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}
                   initial={{ opacity: 0, x: -100 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ amount: 0.3 }}
@@ -750,7 +800,7 @@ export default function TeacherDashboard() {
                 >
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-bold text-gray-900">Recent Activities</h2>
-                    <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+                    <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 transition-colors duration-200">
                       View All
                       <ArrowRight className="w-4 h-4" />
                     </button>
@@ -759,7 +809,8 @@ export default function TeacherDashboard() {
                     {teacherData.recentActivities.map((activity, index) => (
                       <motion.div 
                         key={activity.id}
-                        className="flex items-start gap-4 p-4 bg-gradient-to-r from-gray-50 to-transparent rounded-lg border border-gray-100 hover:border-blue-200 transition-all cursor-pointer group"
+                        className="flex items-start gap-4 p-4 bg-gradient-to-r from-gray-50 to-transparent rounded-lg border border-gray-100 cursor-pointer group transition-colors duration-200"
+                        style={{ willChange: 'border-color, background-color', backfaceVisibility: 'hidden' }}
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ amount: 0.5 }}
@@ -769,16 +820,18 @@ export default function TeacherDashboard() {
                           ease: [0.22, 1, 0.36, 1]
                         }}
                         whileHover={{
-                          x: -5,
-                          transition: { duration: 0.2 }
+                          borderColor: '#bfdbfe',
+                          transition: { duration: 0.2, type: 'tween' }
                         }}
                       >
                         <motion.div 
-                          className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${activity.color} group-hover:scale-110 transition-transform`}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${activity.color}`}
+                          style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
                           initial={{ scale: 0 }}
                           whileInView={{ scale: 1 }}
                           viewport={{ amount: 0.5 }}
                           transition={{ duration: 0.4, delay: 0.1 + (index * 0.1) }}
+                          whileHover={{ scale: 1.1, transition: { duration: 0.2, type: 'tween' } }}
                         >
                           <div className="text-gray-700">
                             {getActivityIcon(activity.icon)}
@@ -817,9 +870,9 @@ export default function TeacherDashboard() {
 
                         <motion.div 
                           className="flex-shrink-0"
-                          whileHover={{ x: -5 }}
+                          style={{ willChange: 'color', backfaceVisibility: 'hidden' }}
                         >
-                          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 transition-colors" />
+                          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 transition-colors duration-200" />
                         </motion.div>
                       </motion.div>
                     ))}
@@ -832,6 +885,7 @@ export default function TeacherDashboard() {
                 {/* Full Schedule with View More - SLIDE IN FROM RIGHT ON SCROLL */}
                 <motion.div 
                   className="bg-white rounded-xl shadow-sm p-6"
+                  style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}
                   initial={{ opacity: 0, x: 100 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ amount: 0.3 }}
@@ -845,7 +899,8 @@ export default function TeacherDashboard() {
                     {teacherData.allClasses.slice(0, 4).map((cls, index) => (
                       <motion.div
                         key={cls.id}
-                        className="border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-colors cursor-pointer"
+                        className="border border-gray-200 rounded-lg p-4 cursor-pointer transition-colors duration-200"
+                        style={{ willChange: 'border-color', backfaceVisibility: 'hidden' }}
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ amount: 0.5 }}
@@ -853,6 +908,10 @@ export default function TeacherDashboard() {
                           duration: 0.5, 
                           delay: 0.1 + (index * 0.1),
                           ease: [0.22, 1, 0.36, 1]
+                        }}
+                        whileHover={{
+                          borderColor: '#3b82f6',
+                          transition: { duration: 0.2, type: 'tween' }
                         }}
                       >
                         <h3 className="font-semibold text-jetblack-900 mb-2">{cls.subject}</h3>
@@ -868,7 +927,7 @@ export default function TeacherDashboard() {
                     ))}
                   </div>
                   
-                  <button className="w-full mt-4 py-2 text-blue-600 hover:text-blue-700 font-medium border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
+                  <button className="w-full mt-4 py-2 text-blue-600 hover:text-blue-700 font-medium border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors duration-200">
                     View More Classes
                   </button>
                 </motion.div>
@@ -876,6 +935,7 @@ export default function TeacherDashboard() {
                 {/* Announcements - SLIDE IN FROM RIGHT ON SCROLL */}
                 <motion.div 
                   className="bg-white rounded-xl shadow-sm p-6"
+                  style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}
                   initial={{ opacity: 0, x: 100 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ amount: 0.3 }}
@@ -890,7 +950,7 @@ export default function TeacherDashboard() {
                       <h2 className="text-xl font-bold text-jetblack-900">Announcements</h2>
                     </div>
                     <Link href="/teacher-dashboard/announcements">
-                      <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                      <button className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
                         See all
                       </button>
                     </Link>
@@ -899,7 +959,8 @@ export default function TeacherDashboard() {
                     {teacherData.announcements.map((announcement, index) => (
                       <motion.div
                         key={announcement.id}
-                        className="flex items-start space-x-4 pb-4 border-b border-jetblack-100 last:border-0 cursor-pointer hover:bg-jetblack-50 p-2 rounded-lg transition-all group"
+                        className="flex items-start space-x-4 pb-4 border-b border-jetblack-100 last:border-0 cursor-pointer p-2 rounded-lg transition-colors duration-200 group"
+                        style={{ willChange: 'background-color', backfaceVisibility: 'hidden' }}
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ amount: 0.5 }}
@@ -909,8 +970,8 @@ export default function TeacherDashboard() {
                           ease: [0.22, 1, 0.36, 1]
                         }}
                         whileHover={{
-                          x: 5,
-                          transition: { duration: 0.2 }
+                          backgroundColor: '#f3f4f6',
+                          transition: { duration: 0.2, type: 'tween' }
                         }}
                       >
                         <motion.div 
@@ -919,6 +980,7 @@ export default function TeacherDashboard() {
                               ? 'bg-red-100' 
                               : 'bg-blue-100'
                           }`}
+                          style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
                           initial={{ scale: 0, rotate: -180 }}
                           whileInView={{ scale: 1, rotate: 0 }}
                           viewport={{ amount: 0.5 }}
@@ -928,7 +990,7 @@ export default function TeacherDashboard() {
                             type: "spring",
                             stiffness: 200
                           }}
-                          whileHover={{ scale: 1.1 }}
+                          whileHover={{ scale: 1.1, transition: { duration: 0.2, type: 'tween' } }}
                         >
                           <Bell className={`w-6 h-6 ${
                             announcement.priority === 'high' 
@@ -969,8 +1031,9 @@ export default function TeacherDashboard() {
                           )}
                         </div>
                         <motion.button 
-                          className="text-gray-400 hover:text-gray-600 group-hover:text-blue-600 transition-colors"
-                          whileHover={{ scale: 1.2 }}
+                          className="text-gray-400 hover:text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+                          style={{ willChange: 'color', backfaceVisibility: 'hidden' }}
+                          whileHover={{ scale: 1.1, transition: { duration: 0.2, type: 'tween' } }}
                         >
                           <span className="text-xl">⋮</span>
                         </motion.button>
@@ -982,6 +1045,7 @@ export default function TeacherDashboard() {
                 {/* Quick Stats - SLIDE IN FROM RIGHT ON SCROLL */}
                 <motion.div 
                   className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200"
+                  style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}
                   initial={{ opacity: 0, x: 100 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ amount: 0.3 }}
@@ -1013,6 +1077,7 @@ export default function TeacherDashboard() {
                     </motion.div>
                     <motion.div 
                       className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden"
+                      style={{ backfaceVisibility: 'hidden' }}
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
                       viewport={{ amount: 0.3 }}
@@ -1020,6 +1085,7 @@ export default function TeacherDashboard() {
                     >
                       <motion.div 
                         className="bg-blue-600 h-1.5 rounded-full"
+                        style={{ willChange: 'width' }}
                         initial={{ width: 0 }}
                         whileInView={{ width: '100%' }}
                         viewport={{ amount: 0.3 }}
@@ -1040,6 +1106,7 @@ export default function TeacherDashboard() {
                     </motion.div>
                     <motion.div 
                       className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden"
+                      style={{ backfaceVisibility: 'hidden' }}
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
                       viewport={{ amount: 0.3 }}
@@ -1047,6 +1114,7 @@ export default function TeacherDashboard() {
                     >
                       <motion.div 
                         className="bg-green-600 h-1.5 rounded-full"
+                        style={{ willChange: 'width' }}
                         initial={{ width: 0 }}
                         whileInView={{ width: '92%' }}
                         viewport={{ amount: 0.3 }}
@@ -1067,6 +1135,7 @@ export default function TeacherDashboard() {
                     </motion.div>
                     <motion.div 
                       className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden"
+                      style={{ backfaceVisibility: 'hidden' }}
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
                       viewport={{ amount: 0.3 }}
@@ -1074,6 +1143,7 @@ export default function TeacherDashboard() {
                     >
                       <motion.div 
                         className="bg-purple-600 h-1.5 rounded-full"
+                        style={{ willChange: 'width' }}
                         initial={{ width: 0 }}
                         whileInView={{ width: '78%' }}
                         viewport={{ amount: 0.3 }}
@@ -1087,6 +1157,7 @@ export default function TeacherDashboard() {
           </div>
         </div>
       </div>
+      HEAD
       <div className="mt-8">
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 ml-10">Your Courses</h2>
@@ -1436,7 +1507,7 @@ export default function TeacherDashboard() {
                 </Link>
               </div>
             </div>
+             b5d3eb409b96f4b1aa82b64875dc264abb66fe7a
     </>
-
   );
 }
