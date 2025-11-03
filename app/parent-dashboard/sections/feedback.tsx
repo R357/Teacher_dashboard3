@@ -60,7 +60,7 @@ export default function Feedback() {
 
   return (
     <section id="feedback" className="py-1 bg-gray-50 h-full flex flex-col">
-      <div className="max-w-7xl mx-auto px-2 sm:px-2 lg:px-2 h-full flex flex-col">
+      <div className="section-inner">
         <div className="text-center mb-2 flex-shrink-0">
           <h2 className="text-base font-bold text-gray-900">Feedback & Suggestions</h2>
           <p className="mt-0.5 text-xs text-gray-600">
@@ -68,9 +68,9 @@ export default function Feedback() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 flex-1 min-h-0">
           {/* Feedback Form */}
-          <div className="bg-white rounded-xl shadow-lg p-2 flex flex-col">
+          <div className="bg-white rounded-xl shadow-lg p-2 flex flex-col min-h-0 overflow-y-auto">
             <h2 className="text-sm font-semibold text-gray-800 mb-2">Feedback Form</h2>
             <form onSubmit={handleSubmit} className="space-y-2 flex-1 flex flex-col">
               <div>
@@ -159,7 +159,7 @@ export default function Feedback() {
           </div>
 
           {/* Feedback Summary */}
-          <div className="bg-white rounded-xl shadow-lg p-2 flex flex-col">
+          <div className="bg-white rounded-xl shadow-lg p-2 flex flex-col min-h-0 overflow-y-auto">
             <h2 className="text-sm font-semibold text-gray-800 mb-2">Feedback Summary</h2>
             
             {/* Chart */}
@@ -182,7 +182,7 @@ export default function Feedback() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

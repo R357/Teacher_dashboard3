@@ -49,7 +49,7 @@ const Index = () => {
 
   return (
     <section id="attendance" className="py-1 h-full flex flex-col">
-      <div className="container mx-auto px-2 py-1 max-w-7xl h-full flex flex-col">
+      <div className="section-inner py-1">
         {/* Header */}
         <h1 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2 text-center tracking-tight">
           Attendance Dashboard
@@ -88,7 +88,7 @@ const Index = () => {
         </div>
 
         {/* Bar Graph Section */}
-        <div className="bg-white border border-blue-200 rounded-xl p-2 shadow-lg flex-1 flex flex-col" ref={chartRef}>
+        <div className="bg-white border border-blue-200 rounded-xl p-2 shadow-lg flex-1 flex flex-col min-h-0 overflow-y-auto" ref={chartRef}>
           <h2 className="text-sm font-bold text-gray-800 mb-2 text-center">
             Subject-wise Attendance
           </h2>
