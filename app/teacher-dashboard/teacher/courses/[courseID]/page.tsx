@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+
 // Types
 interface Student {
   id: string;
@@ -65,8 +66,7 @@ const CourseDetailPage = () => {
   // Quiz Form State
   const [quizForm, setQuizForm] = useState({
     title: '',
-    startDate: '',
-    startTime: '',
+    startDateTime: "",
     link: ''
   });
 
@@ -294,7 +294,7 @@ const CourseDetailPage = () => {
   const handleQuizSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Quiz:', quizForm);
-    setQuizForm({ title: '', startDate: '', startTime: '', link: '' });
+    setQuizForm({ title: '', startDateTime: '', link: '' });
     alert('Quiz uploaded successfully!');
   };
 
@@ -336,9 +336,9 @@ const CourseDetailPage = () => {
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="max-w-9xl mx-auto mb-8"
+        className="max-w-9xl mx-auto mb-8 mt-20"
       >
-        <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-8 overflow-hidden shadow-2xl">
+        <div className="relative bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-8 overflow-hidden shadow-2xl">
           {/* Background Animation */}
           <div className="absolute inset-0 opacity-10">
             <motion.div 
@@ -398,15 +398,15 @@ const CourseDetailPage = () => {
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-white/80 backdrop-blur-sm rounded-2xl border-2 border-gray-100 p-6"
+          className="bg-black/10 backdrop-blur-sm rounded-2xl border-2 border-gray-100 p-6"
         >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 mb-1">Total Students</p>
-              <p className="text-3xl font-bold text-indigo-600">{stats.totalStudents}</p>
+              <p className="text-3xl font-bold text-black-600">{stats.totalStudents}</p>
             </div>
-            <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
               </svg>
             </div>
@@ -417,15 +417,15 @@ const CourseDetailPage = () => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="bg-white/80 backdrop-blur-sm rounded-2xl border-2 border-gray-100 p-6"
+          className="bg-black/10 backdrop-blur-sm rounded-2xl border-2 border-gray-100 p-6"
         >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 mb-1">Avg Attendance</p>
-              <p className="text-3xl font-bold text-green-600">{stats.avgAttendance}%</p>
+              <p className="text-3xl font-bold text-black-600">{stats.avgAttendance}%</p>
             </div>
-            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
               </svg>
             </div>
@@ -436,15 +436,15 @@ const CourseDetailPage = () => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="bg-white/80 backdrop-blur-sm rounded-2xl border-2 border-gray-100 p-6"
+          className="bg-black/10 backdrop-blur-sm rounded-2xl border-2 border-gray-100 p-6"
         >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 mb-1">Assignments</p>
-              <p className="text-3xl font-bold text-purple-600">{stats.assignments}</p>
+              <p className="text-3xl font-bold text-black-600">{stats.assignments}</p>
             </div>
-            <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd"/>
               </svg>
             </div>
@@ -468,7 +468,7 @@ const CourseDetailPage = () => {
                 whileTap={{ scale: 0.95 }}
                 className={`px-4 py-2 rounded-xl font-medium transition-all flex items-center gap-2 ${
                   activeTab === tab.id
-                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
@@ -520,10 +520,10 @@ const CourseDetailPage = () => {
                                 transition={{ duration: 1, delay: idx * 0.05 }}
                                 className={`h-2 rounded-full ${
                                   student.attendance >= 90
-                                    ? 'bg-green-500'
+                                    ? 'bg-blue-500'
                                     : student.attendance >= 75
-                                    ? 'bg-yellow-500'
-                                    : 'bg-red-500'
+                                    ? 'bg-blue-400'
+                                    : 'bg-blue-300'
                                 }`}
                               ></motion.div>
                             </div>
@@ -618,7 +618,7 @@ const CourseDetailPage = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700"
+                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700"
                 >
                   Post Assignment
                 </motion.button>
@@ -648,29 +648,16 @@ const CourseDetailPage = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Start Date</label>
-                    <input
-                      type="date"
-                      value={quizForm.startDate}
-                      onChange={(e) => setQuizForm({ ...quizForm, startDate: e.target.value })}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Start Time</label>
-                    <input
-                      type="time"
-                      value={quizForm.startTime}
-                      onChange={(e) => setQuizForm({ ...quizForm, startTime: e.target.value })}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
-                      required
-                    />
-                  </div>
-                </div>
+                <div>
+  <label className="block text-sm font-semibold text-gray-700 mb-2">Start Date & Time</label>
+  <input
+    type="datetime-local"
+    value={quizForm.startDateTime}
+    onChange={(e) => setQuizForm({ ...quizForm, startDateTime: e.target.value })}
+    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
+    required
+  />
+</div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Quiz Link</label>
@@ -688,7 +675,7 @@ const CourseDetailPage = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700"
+                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700"
                 >
                   Upload Quiz
                 </motion.button>
@@ -719,28 +706,15 @@ const CourseDetailPage = () => {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Topic</label>
-                      <input
-                        type="text"
-                        value={notesForm.topic}
-                        onChange={(e) => setNotesForm({ ...notesForm, topic: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Chapter</label>
-                      <input
-                        type="text"
-                        value={notesForm.chapter}
-                        onChange={(e) => setNotesForm({ ...notesForm, chapter: e.target.value })}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
-                        required
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Topic</label>
+                     <input
+                      type="text"
+                      value={notesForm.topic}
+                      onChange={(e) => setNotesForm({ ...notesForm, topic: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
+                      required
+                    />
                   </div>
 
                   <div>
@@ -779,7 +753,7 @@ const CourseDetailPage = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
-                    className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700"
+                    className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800"
                   >
                     Upload Notes
                   </motion.button>
@@ -820,8 +794,8 @@ const CourseDetailPage = () => {
                               transition={{ delay: idx * 0.05 }}
                               className={`px-3 py-1 rounded-full text-xs font-semibold ${
                                 note.status === 'Approved'
-                                  ? 'bg-green-100 text-green-700'
-                                  : 'bg-yellow-100 text-yellow-700'
+                                  ? 'bg-blue-100 text-blue-700'
+                                  : 'bg-blue-100 text-blue-500'
                               }`}
                             >
                               {note.status}
@@ -899,7 +873,7 @@ const CourseDetailPage = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={startMeeting}
-                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-4 rounded-lg font-semibold hover:shadow-lg transition-all"
+                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-600 text-white py-4 rounded-lg font-semibold hover:shadow-lg transition-all"
                     >
                       Start Meeting
                     </motion.button>
@@ -998,8 +972,8 @@ const CourseDetailPage = () => {
                             transition={{ delay: idx * 0.05 }}
                             className={`px-3 py-1 rounded-full text-xs font-semibold ${
                               submission.attendance === 'Marked'
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-orange-100 text-orange-700'
+                                ? 'bg-blue-100 text-blue-700'
+                                : 'bg-blue-100 text-blue-500'
                             }`}
                           >
                             {submission.attendance}

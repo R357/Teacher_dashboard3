@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Lottie from 'lottie-react';
-import { Calendar, Clock, Users, FileText, CheckCircle, AlertCircle, TrendingUp, BookOpen, Bell, ArrowRight, User, MessageSquare, Award } from 'lucide-react';
+import { Calendar, Clock, Users, FileText, CheckCircle, AlertCircle, TrendingUp, Bell, ArrowRight, User, MessageSquare, Award,Bot, BookOpen, Lightbulb, Sparkles } from "lucide-react";
 import Link from 'next/link';
 import Navbar from './navbar';
 import teacherDashboardAnimation from '../../login(animations)/TeacherDashboard.json';
@@ -14,7 +14,7 @@ export default function TeacherDashboard() {
   const [isLoaded, setIsLoaded] = useState(true);
 
   const teacherData = {
-    name: 'Grace',
+    name: 'Raghav',
     pendingTasks: 3,
     scheduleByDay: {
       'Today': [
@@ -126,7 +126,7 @@ export default function TeacherDashboard() {
         description: 'IN001 Kumar submitted "Quadratic Equations"',
         time: '2 hours ago',
         icon: 'FileText',
-        color: 'bg-blue-100'
+        color: 'bg-myblue'
       },
       {
         id: 2,
@@ -135,7 +135,7 @@ export default function TeacherDashboard() {
         description: 'Mathematics notes uploaded',
         time: '4 hours ago',
         icon: 'MessageSquare',
-        color: 'bg-purple-100'
+        color: 'bg-myblue'
       },
       {
         id: 3,
@@ -144,7 +144,7 @@ export default function TeacherDashboard() {
         description: '90% of students passed recent test',
         time: 'recently',
         icon: 'Award',
-        color: 'bg-green-100'
+        color: 'bg-myblue'
       },
       {
         id: 4,
@@ -153,7 +153,7 @@ export default function TeacherDashboard() {
         description: 'RAMU joined Mathematics Class',
         time: '1 days ago',
         icon: 'User',
-        color: 'bg-orange-100'
+        color: 'bg-myblue'
       }
     ],
     pendingApprovals: {
@@ -236,97 +236,123 @@ export default function TeacherDashboard() {
   return (
     <>
       <Navbar />
-      {/* Blue Gradient Background to match Student Dashboard */}
-      <div className="fixed inset-0 -z-10 w-full h-full bg-gradient-to-br from-blue-900 via-blue-900 to-blue-900"></div>
-      <ParticlesBackground />
+      
 
-      <div className="min-h-screen pt-20">
-        <div className="p-6">
-          <div className="max-w-9x1 mx-auto">
-            {/* Welcome Section and Classes - Side by Side */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-2">
-              {/* Welcome Card - Takes 2 columns WITH ANIMATED SPLIT TEXT (NO BLUR) */}
-              <motion.div 
-                className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6"
-                style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}
-                initial={{ opacity: 0, x: -100 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ 
-                  duration: 0.6,
-                  ease: [0.22, 1, 0.36, 1]
+<div className="min-h-screen pt-20 overflow-x-hidden">
+  <div className="p-6">
+    <div className="max-w-9xl mx-auto">
+      {/* Welcome Section and Classes - Side by Side */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-2">
+        {/* Welcome Card */}
+        <motion.div 
+          className="relative lg:col-span-2 bg-white rounded-xl shadow-sm p-4 max-h-40 overflow-hidden"
+          style={{ willChange: "transform, opacity", backfaceVisibility: "hidden" }}
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {/* Floating Animated Lucide Icons */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            {[
+              { Icon: Clock, color: "text-blue-700" },
+              { Icon: TrendingUp, color: "text-blue-700" },
+              { Icon: Bot, color: "text-sky-700" },
+              { Icon: BookOpen, color: "text-green-700" },
+              { Icon: Lightbulb, color: "text-yellow-700" },
+              { Icon: Sparkles, color: "text-purple-700" },
+            ].map(({ Icon, color }, index) => (
+              <motion.div
+                key={index}
+                className={`absolute ${color} opacity-1`}
+                style={{
+                  top: `${Math.random() * 80}%`,
+                  left: `${Math.random() * 80}%`,
+                }}
+                animate={{
+                  y: [0, -20, 0],
+                  opacity: [0.2, 0.5, 0.2],
+                  rotate: [0, 8, -8, 0],
+                }}
+                transition={{
+                  duration: 5 + index,
+                  repeat: Infinity,
+                  ease: "easeInOut",
                 }}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    {/* ANIMATED SPLIT TEXT - Character by Character - NO BLUR */}
-                    <h1 className="text-4xl font-bold text-gray-900 mb-3 h-16 flex items-center flex-wrap">
-                      {`Hello ${teacherData.name}!`.split('').map((char, index) => (
-                        <motion.span
-                          key={index}
-                          className="inline-block"
-                          initial={{ 
-                            opacity: 0, 
-                            y: 20
-                          }}
-                          animate={{ 
-                            opacity: 1, 
-                            y: 0
-                          }}
-                          transition={{
-                            duration: 0.5,
-                            delay: index * 0.04,
-                            ease: 'easeOut'
-                          }}
-                        >
-                          {char === ' ' ? '\u00A0' : char}
-                        </motion.span>
-                      ))}
-                    </h1>
-
-                    <motion.p 
-                      className="text-gray-600 mb-4 text-base"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.5, ease: 'easeOut' }}
-                    >
-                      You have <span className="font-semibold text-gray-900">{teacherData.pendingTasks} new tasks</span>. It is a lot of work for today! So let's start!
-                    </motion.p>
-                  </div>
-                  
-                  <div className="hidden md:block ml-4">
-                    <motion.div 
-                      className="w-32 h-32 relative rounded-lg overflow-hidden flex items-center justify-center bg-blue-50"
-                      initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                      transition={{ 
-                        duration: 0.7, 
-                        delay: 0.3,
-                        type: 'spring',
-                        stiffness: 100
-                      }}
-                    >
-                      <motion.div
-                        className="relative w-full h-full"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        whileHover={{
-                          scale: 1.05,
-                          transition: { duration: 0.3, type: 'tween' }
-                        }}
-                      >
-                        <Lottie
-                          animationData={teacherDashboardAnimation}
-                          loop={true}
-                          autoplay={true}
-                          className="w-full h-full"
-                        />
-                      </motion.div>
-                    </motion.div>
-                  </div>
-                </div>
+                <Icon size={28} strokeWidth={1.5} />
               </motion.div>
+            ))}
+          </motion.div>
 
+          <div className="flex items-start justify-between relative z-10">
+            <div className="flex-1">
+              {/* ANIMATED SPLIT TEXT */}
+              <h1 className="text-3xl font-bold text-gray-900 mb-2 h-14 flex items-center flex-wrap  ml-8">
+                {`Hello ${teacherData.name}!`.split("").map((char, index) => (
+                  <motion.span
+                    key={index}
+                    className="inline-block"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: index * 0.04,
+                      ease: "easeOut",
+                    }}
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </motion.span>
+                ))}
+              </h1>
+
+              <motion.p
+                className="text-gray-600 mb-2 text-xl ml-8 -mt-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+              >
+                You have{" "}
+                <span className="font-semibold text-gray-900 ">
+                  {teacherData.pendingTasks} new classes
+                </span>
+                . It’s a lot of work for today! Let’s begin! <br />
+                <input
+                  type="button"
+                  value="Get Started"
+                  className="px-4 py-2 bg-topblue-600 text-white rounded-lg hover:bg-topblue-500 transition-colors duration-200 cursor-pointer mt-3"
+                />
+              </motion.p>
+            </div>
+
+            {/* Right Lottie Animation */}
+            <div className="hidden md:block ml-4">
+              <motion.div
+                className="w-48 h-32 relative rounded-lg overflow-hidden flex items-center justify-center bg-blue-50"
+                initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.3,
+                  type: "spring",
+                  stiffness: 100,
+                }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <Lottie
+                  animationData={teacherDashboardAnimation}
+                  loop
+                  autoplay
+                  className="w-full h-full"
+                />
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+      
               {/* Classes Card - Takes 1 column (Right Side) */}
               <motion.div 
                 className="bg-white rounded-xl shadow-sm p-6"
@@ -344,7 +370,7 @@ export default function TeacherDashboard() {
                   <select
                     value={selectedDay}
                     onChange={(e) => setSelectedDay(e.target.value as 'Today' | 'Tomorrow' | 'Wednesday')}
-                    className="text-sm text-blue-600 bg-transparent border-none cursor-pointer font-medium focus:outline-none"
+                    className="text-sm text-topblue-600 bg-transparent border-none cursor-pointer font-medium focus:outline-none"
                   >
                     <option value="Today">Today</option>
                     <option value="Tomorrow">Tomorrow</option>
@@ -356,7 +382,7 @@ export default function TeacherDashboard() {
                     currentClasses.map((cls, index) => (
                       <motion.div
                         key={cls.id}
-                        className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg p-4 cursor-pointer relative overflow-hidden group border border-transparent hover:border-blue-400"
+                        className="bg-gradient-to-r from-topblue-600 to-topblue-600 text-white rounded-lg p-4 cursor-pointer relative overflow-hidden group border border-transparent hover:border-blue-400"
                         style={{ willChange: 'box-shadow, border-color', backfaceVisibility: 'hidden' }}
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -421,10 +447,10 @@ export default function TeacherDashboard() {
             {/* Main Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {/* Left Column - Performance & Progress */}
-              <div className="lg:col-span-2 space-y-6">
+              <div className="lg:col-span-2 space-y-6 -mt-20">
                 {/* Class Performance with Bar Graph */}
                 <motion.div 
-                  className="bg-white rounded-xl shadow-sm p-6 cursor-pointer relative overflow-hidden"
+                  className="bg-white rounded-xl shadow-sm p-6 cursor-pointer relative overflow-hidden -mt-10"
                   style={{ willChange: 'transform, box-shadow', backfaceVisibility: 'hidden' }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -475,7 +501,7 @@ export default function TeacherDashboard() {
                         >
                           <div className="w-full h-48 bg-jetblack-100 rounded-t-lg flex items-end relative overflow-hidden">
                             <motion.div
-                              className="w-full bg-gradient-to-t from-blue-600 via-blue-500 to-blue-400 rounded-t-lg cursor-pointer relative shadow-lg hover:shadow-xl group/bar"
+                              className="w-full bg-gradient-to-t from-topblue-600 via-topblue-500 to-blue-400 rounded-t-lg cursor-pointer relative shadow-lg hover:shadow-xl group/bar"
                               style={{ willChange: 'height', backfaceVisibility: 'hidden' }}
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ 
@@ -931,7 +957,7 @@ export default function TeacherDashboard() {
                     ))}
                   </div>
                   
-                  <button className="w-full mt-4 py-2 text-blue-600 hover:text-blue-700 font-medium border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors duration-200">
+                  <button className="w-full mt-4 py-2 text-topblue-600 hover:text-byblue-600 font-medium border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors duration-200">
                     View More Classes
                   </button>
                 </motion.div>
@@ -950,11 +976,11 @@ export default function TeacherDashboard() {
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
-                      <Bell className="w-5 h-5 text-blue-600 mr-2" />
+                      <Bell className="w-5 h-5 text-topblue-600 mr-2" />
                       <h2 className="text-xl font-bold text-jetblack-900">Announcements</h2>
                     </div>
                     <Link href="/teacher-dashboard/announcements">
-                      <button className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
+                      <button className="text-sm text-myblue hover:text-topblue font-medium transition-colors duration-200">
                         See all
                       </button>
                     </Link>
@@ -981,7 +1007,7 @@ export default function TeacherDashboard() {
                         <motion.div 
                           className={`w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center ${
                             announcement.priority === 'high' 
-                              ? 'bg-red-100' 
+                              ? 'bg-blue-100' 
                               : 'bg-blue-100'
                           }`}
                           style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
@@ -998,8 +1024,8 @@ export default function TeacherDashboard() {
                         >
                           <Bell className={`w-6 h-6 ${
                             announcement.priority === 'high' 
-                              ? 'text-red-600' 
-                              : 'text-blue-600'
+                              ? 'text-topblue-600' 
+                              : 'text-topblue-600'
                           }`} />
                         </motion.div>
                         <div className="flex-1">
@@ -1024,7 +1050,7 @@ export default function TeacherDashboard() {
                           </motion.div>
                           {announcement.priority === 'high' && (
                             <motion.span 
-                              className="inline-block mt-2 px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded"
+                              className="inline-block mt-2 px-2 py-1 bg-myblue-500 text-myblue text-xs font-medium rounded"
                               initial={{ opacity: 0, scale: 0.8 }}
                               whileInView={{ opacity: 1, scale: 1 }}
                               viewport={{ amount: 0.5 }}
@@ -1035,7 +1061,7 @@ export default function TeacherDashboard() {
                           )}
                         </div>
                         <motion.button 
-                          className="text-gray-400 hover:text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+                          className="text-gray-400 hover:text-gray-600 group-hover:text-topblue-600 transition-colors duration-200"
                           style={{ willChange: 'color', backfaceVisibility: 'hidden' }}
                           whileHover={{ scale: 1.1, transition: { duration: 0.2, type: 'tween' } }}
                         >
@@ -1088,7 +1114,64 @@ export default function TeacherDashboard() {
                       transition={{ duration: 0.4, delay: 0.2 }}
                     >
                       <motion.div 
-                        className="bg-blue-600 h-1.5 rounded-full"
+                        className="bg-myblue h-1.5 rounded-full"
+                        style={{ willChange: 'width' }}
+                        initial={{ width: 0 }}
+                        whileInView={{ width: '100%' }}
+                        viewport={{ amount: 0.3 }}
+                        transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
+                      />
+                    </motion.div>
+
+                    {/* Total  Students */}
+                    <motion.div 
+                      className="flex items-center justify-between"
+                      initial={{ opacity: 0, x: 50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ amount: 0.3 }}
+                      transition={{ duration: 0.5, delay: 0.15 }}
+                    >
+                      <span className="text-sm text-jetblack-700">Total Students</span>
+                      <span className="font-bold text-jetblack-900">43</span>
+                    </motion.div>
+                    <motion.div 
+                      className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden"
+                      style={{ backfaceVisibility: 'hidden' }}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ amount: 0.3 }}
+                      transition={{ duration: 0.4, delay: 0.2 }}
+                    >
+                      <motion.div 
+                        className="bg-myblue h-1.5 rounded-full"
+                        style={{ willChange: 'width' }}
+                        initial={{ width: 0 }}
+                        whileInView={{ width: '100%' }}
+                        viewport={{ amount: 0.3 }}
+                        transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
+                      />
+                    </motion.div>
+                    {/* Total Assignments */}
+                    <motion.div 
+                      className="flex items-center justify-between"
+                      initial={{ opacity: 0, x: 50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ amount: 0.3 }}
+                      transition={{ duration: 0.5, delay: 0.15 }}
+                    >
+                      <span className="text-sm text-jetblack-700">Total Assignments</span>
+                      <span className="font-bold text-jetblack-900">20</span>
+                    </motion.div>
+                    <motion.div 
+                      className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden"
+                      style={{ backfaceVisibility: 'hidden' }}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ amount: 0.3 }}
+                      transition={{ duration: 0.4, delay: 0.2 }}
+                    >
+                      <motion.div 
+                        className="bg-myblue h-1.5 rounded-full"
                         style={{ willChange: 'width' }}
                         initial={{ width: 0 }}
                         whileInView={{ width: '100%' }}
@@ -1117,7 +1200,7 @@ export default function TeacherDashboard() {
                       transition={{ duration: 0.4, delay: 0.3 }}
                     >
                       <motion.div 
-                        className="bg-green-600 h-1.5 rounded-full"
+                        className="bg-myblue h-1.5 rounded-full"
                         style={{ willChange: 'width' }}
                         initial={{ width: 0 }}
                         whileInView={{ width: '92%' }}
@@ -1125,7 +1208,90 @@ export default function TeacherDashboard() {
                         transition={{ duration: 0.8, delay: 0.35, ease: "easeOut" }}
                       />
                     </motion.div>
-
+                    {/* Pending reviews */}  
+                    <motion.div 
+                      className="flex items-center justify-between"
+                      initial={{ opacity: 0, x: 50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ amount: 0.3 }}
+                      transition={{ duration: 0.5, delay: 0.15 }}
+                    >
+                      <span className="text-sm text-jetblack-700">Pending Reviews</span>
+                      <span className="font-bold text-jetblack-900">6</span>
+                    </motion.div>
+                    <motion.div 
+                      className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden"
+                      style={{ backfaceVisibility: 'hidden' }}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ amount: 0.3 }}
+                      transition={{ duration: 0.4, delay: 0.2 }}
+                    >
+                      <motion.div 
+                        className="bg-myblue h-1.5 rounded-full"
+                        style={{ willChange: 'width' }}
+                        initial={{ width: 0 }}
+                        whileInView={{ width: '100%' }}
+                        viewport={{ amount: 0.3 }}
+                        transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
+                      />
+                    </motion.div>
+                      {/* Avg Submission rate */}
+                    <motion.div 
+                      className="flex items-center justify-between pt-2"
+                      initial={{ opacity: 0, x: 50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ amount: 0.3 }}
+                      transition={{ duration: 0.5, delay: 0.25 }}
+                    >
+                      <span className="text-sm text-jetblack-700">Avg Submission rate</span>
+                      <span className="font-bold text-gray-900">92%</span>
+                    </motion.div>
+                    <motion.div 
+                      className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden"
+                      style={{ backfaceVisibility: 'hidden' }}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ amount: 0.3 }}
+                      transition={{ duration: 0.4, delay: 0.3 }}
+                    >
+                      <motion.div 
+                        className="bg-myblue h-1.5 rounded-full"
+                        style={{ willChange: 'width' }}
+                        initial={{ width: 0 }}
+                        whileInView={{ width: '92%' }}
+                        viewport={{ amount: 0.3 }}
+                        transition={{ duration: 0.8, delay: 0.35, ease: "easeOut" }}
+                      />
+                    </motion.div>
+                    <motion.div 
+                      className="flex items-center justify-between"
+                      initial={{ opacity: 0, x: 50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ amount: 0.3 }}
+                      transition={{ duration: 0.5, delay: 0.15 }}
+                    >
+                      <span className="text-sm text-jetblack-700">Total Quizes</span>
+                      <span className="font-bold text-jetblack-900">10</span>
+                    </motion.div>
+                    <motion.div 
+                      className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden"
+                      style={{ backfaceVisibility: 'hidden' }}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ amount: 0.3 }}
+                      transition={{ duration: 0.4, delay: 0.2 }}
+                    >
+                      <motion.div 
+                        className="bg-myblue h-1.5 rounded-full"
+                        style={{ willChange: 'width' }}
+                        initial={{ width: 0 }}
+                        whileInView={{ width: '100%' }}
+                        viewport={{ amount: 0.3 }}
+                        transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
+                      />
+                    </motion.div>
+                     
                     {/* Assignment Rate */}
                     <motion.div 
                       className="flex items-center justify-between pt-2"
@@ -1146,7 +1312,7 @@ export default function TeacherDashboard() {
                       transition={{ duration: 0.4, delay: 0.4 }}
                     >
                       <motion.div 
-                        className="bg-purple-600 h-1.5 rounded-full"
+                        className="bg-myblue h-1.5 rounded-full"
                         style={{ willChange: 'width' }}
                         initial={{ width: 0 }}
                         whileInView={{ width: '78%' }}
