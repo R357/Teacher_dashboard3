@@ -14,7 +14,7 @@ export default function TeacherDashboard() {
   const [isLoaded, setIsLoaded] = useState(true);
 
   const teacherData = {
-    name: 'Raghav',
+    name: 'Teacher',
     pendingTasks: 3,
     scheduleByDay: {
       'Today': [
@@ -242,7 +242,7 @@ export default function TeacherDashboard() {
   <div className="p-6">
     <div className="max-w-9xl mx-auto">
       {/* Welcome Section and Classes - Side by Side */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-2">
         {/* Welcome Card */}
         <motion.div 
           className="relative lg:col-span-2 bg-white rounded-xl shadow-sm p-4 max-h-40 overflow-hidden"
