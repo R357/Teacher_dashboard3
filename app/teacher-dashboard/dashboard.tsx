@@ -764,15 +764,15 @@ export default function TeacherDashboard() {
                             >
                               <div className="flex items-start justify-between mb-3">
                                 <div>
-                                  <h3 className="font-semibold text-gray-900 text-sm">Pending Requests</h3>
+                                  <h3 className="font-semibold text-gray-900 text-sm">Grading</h3>
                                   <p className="text-xs text-gray-600 mt-0.5">ID: CS302</p>
                                 </div>
                                 <span className="px-2 py-1 bg-blue-200 text-blue-700 text-xs font-medium rounded-full">
-                                  Completed
+                                  Ongoing
                                 </span>
                               </div>
                               <p className="text-sm text-gray-700 mb-3 font-medium">
-                                Student Leave Applications
+                                Ongoing Grades
                               </p>
                               <div className="flex items-center gap-2">
                                 <span className="text-xs text-gray-600">Progress:</span>
