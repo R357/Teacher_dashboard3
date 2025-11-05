@@ -1332,7 +1332,7 @@ export default function TeacherDashboard() {
 
       <div className="mt-8">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 ml-10">Your Courses</h2>
+                <h2 className="text-2xl font-bold text-white ml-10">Your Courses</h2>
               </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mr-6 ml-6">
